@@ -2,3 +2,7 @@ baseURL = 'https://naatyu.github.io/'
 languageCode = 'en-us'
 title = 'natyu'
 theme = "archie"
+
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'
