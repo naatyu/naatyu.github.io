@@ -31,6 +31,6 @@ A memory optimization suite that eliminates the redundancy of vanilla Data Paral
 To hide the latency of ZeRO-3, systems use **Prefetching**: while Layer $N$ is computing, the system is already performing an `all-gather` for the weights of Layer $N+1$.
 
 ## Related
-- [Distributed Training MOC](/atlas/ai/distributed-training/distributed-training-moc)
+- Distributed Training MOC
 - [Data Parallelism](/atlas/ai/distributed-training/parallelism/data-parallelism)
 - PyTorch FSDP

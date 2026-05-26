@@ -1,3 +1,7 @@
 {
-  "label": "Reinforcement Learning"
+  "label": "Reinforcement Learning",
+  "link": {
+    "type": "generated-index",
+    "title": "Reinforcement Learning"
+  }
 }

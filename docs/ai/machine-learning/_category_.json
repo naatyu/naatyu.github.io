@@ -1,3 +1,7 @@
 {
-  "label": "Machine Learning"
+  "label": "Machine Learning",
+  "link": {
+    "type": "generated-index",
+    "title": "Machine Learning"
+  }
 }

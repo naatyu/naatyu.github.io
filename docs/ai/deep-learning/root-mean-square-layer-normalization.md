@@ -32,4 +32,4 @@ RMSNorm is used in **Llama 2**, **Llama 3**, and **Gemma**. It is typically appl
 ## Related
 - [Layer Normalization](/atlas/ai/deep-learning/layer-normalization)
 - [The Llama 3 Herd of Models](/atlas/ai/nlp/models/the-llama-3-herd-of-models)
-- [Transformers MOC](/atlas/ai/transformers-moc)
+- Transformers MOC

@@ -1,3 +1,7 @@
 {
-  "label": "Strategies"
+  "label": "Strategies",
+  "link": {
+    "type": "generated-index",
+    "title": "Strategies"
+  }
 }

@@ -1,3 +1,7 @@
 {
-  "label": "Statistics"
+  "label": "Statistics",
+  "link": {
+    "type": "generated-index",
+    "title": "Statistics"
+  }
 }

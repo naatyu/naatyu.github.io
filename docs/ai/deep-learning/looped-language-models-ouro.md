@@ -213,4 +213,4 @@ The key difference is that Ouro performs the extra reasoning in latent space dur
 - [Moe Looped Language Models](/atlas/ai/deep-learning/moe-looped-language-models)
 - [Frontier Small Language Models](/atlas/ai/deep-learning/frontier-small-language-models)
 - [Large Concept Models](/atlas/ai/deep-learning/large-concept-models)
-- [AI Papers MOC](/atlas/ai/ai-papers-moc)
+- AI Papers MOC

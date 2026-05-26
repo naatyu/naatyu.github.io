@@ -32,6 +32,6 @@ In **Causal Attention** (standard for LLMs), the attention matrix is lower-trian
 Unlike Tensor Parallelism, CP scales well to many nodes because it only involves exchanging KV chunks rather than weight gradients. It is the primary tool for breaking the memory wall for long sequences.
 
 ## Related
-- [Distributed Training MOC](/atlas/ai/distributed-training/distributed-training-moc)
+- Distributed Training MOC
 - [Sequence Parallelism](/atlas/ai/distributed-training/parallelism/sequence-parallelism)
 - FlashAttention

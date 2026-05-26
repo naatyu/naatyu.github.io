@@ -1,3 +1,7 @@
 {
-  "label": "Optimization"
+  "label": "Optimization",
+  "link": {
+    "type": "generated-index",
+    "title": "Optimization"
+  }
 }

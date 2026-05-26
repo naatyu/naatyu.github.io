@@ -1,3 +1,7 @@
 {
-  "label": "Parallelism"
+  "label": "Parallelism",
+  "link": {
+    "type": "generated-index",
+    "title": "Parallelism"
+  }
 }

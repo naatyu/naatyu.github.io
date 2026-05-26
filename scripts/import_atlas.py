@@ -60,6 +60,12 @@ class NoteInfo:
     tags: list[str]
 
 
+def is_moc(path: Path, title: str) -> bool:
+    normalized_parts = [normalize_lookup(part) for part in path.parts]
+    normalized_title = normalize_lookup(title)
+    return any(part.endswith(" moc") or part == "moc" for part in normalized_parts) or normalized_title.endswith(" moc")
+
+
 def slugify(value: str) -> str:
     value = value.replace("&", " and ")
     value = value.replace("'", "")
@@ -265,7 +271,19 @@ def write_category_files(directory_labels: dict[Path, str]) -> None:
         out_dir = DOCS_ROOT / directory
         out_dir.mkdir(parents=True, exist_ok=True)
         category_file = out_dir / "_category_.json"
-        category_file.write_text(json.dumps({"label": label}, indent=2) + "\n")
+        category_file.write_text(
+            json.dumps(
+                {
+                    "label": label,
+                    "link": {
+                        "type": "generated-index",
+                        "title": label,
+                    },
+                },
+                indent=2,
+            )
+            + "\n"
+        )
 
 
 def main() -> None:
@@ -276,12 +294,14 @@ def main() -> None:
 
     for source_path in all_sources:
         source_rel = source_path.relative_to(SOURCE_ROOT)
+        meta, body = split_frontmatter(source_path.read_text())
+        title = str(meta.get("title") or first_heading(body) or source_rel.stem)
+        if is_moc(source_rel, title):
+            continue
+
         target_parts = [slugify(part) for part in source_rel.parts[:-1]]
         target_file = slugify(source_rel.stem) + ".md"
         target_rel = Path(*target_parts, target_file)
-
-        meta, body = split_frontmatter(source_path.read_text())
-        title = str(meta.get("title") or first_heading(body) or source_rel.stem)
         created = str(meta.get("created") or meta.get("date") or date_string(source_path))
         lastmod = date_string(source_path)
         tags = meta.get("tags")

@@ -1,3 +1,7 @@
 {
-  "label": "NLP"
+  "label": "NLP",
+  "link": {
+    "type": "generated-index",
+    "title": "NLP"
+  }
 }

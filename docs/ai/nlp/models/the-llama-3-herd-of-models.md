@@ -44,5 +44,5 @@ They did not train on 128k tokens from the start due to $O(N^2)$ attention costs
 ## Related
 - [Scaling Laws](/atlas/ai/deep-learning/scaling-laws)
 - [RoPE Scaling](/atlas/ai/deep-learning/rope-scaling)
-- [Distributed Training MOC](/atlas/ai/distributed-training/distributed-training-moc)
+- Distributed Training MOC
 - [Attention Mechanism](/atlas/ai/nlp/attention-mechanism)

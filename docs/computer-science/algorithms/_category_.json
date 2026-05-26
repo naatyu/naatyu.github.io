@@ -1,3 +1,7 @@
 {
-  "label": "Algorithms"
+  "label": "Algorithms",
+  "link": {
+    "type": "generated-index",
+    "title": "Algorithms"
+  }
 }

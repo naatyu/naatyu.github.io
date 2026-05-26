@@ -1,3 +1,7 @@
 {
-  "label": "Probability"
+  "label": "Probability",
+  "link": {
+    "type": "generated-index",
+    "title": "Probability"
+  }
 }

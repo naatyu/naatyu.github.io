@@ -1,3 +1,7 @@
 {
-  "label": "Calculus"
+  "label": "Calculus",
+  "link": {
+    "type": "generated-index",
+    "title": "Calculus"
+  }
 }

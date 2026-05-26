@@ -1,43 +1,73 @@
 import type {ReactNode} from 'react';
-import clsx from 'clsx';
 import Link from '@docusaurus/Link';
-import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
 import Layout from '@theme/Layout';
-import HomepageFeatures from '@site/src/components/HomepageFeatures';
 import Heading from '@theme/Heading';
 
 import styles from './index.module.css';
 
-function HomepageHeader() {
-  const {siteConfig} = useDocusaurusContext();
-  return (
-    <header className={clsx('hero hero--primary', styles.heroBanner)}>
-      <div className="container">
-        <Heading as="h1" className="hero__title">
-          {siteConfig.title}
-        </Heading>
-        <p className="hero__subtitle">{siteConfig.tagline}</p>
-        <div className={styles.buttons}>
-          <Link
-            className="button button--secondary button--lg"
-            to="/atlas/intro">
-            Open Atlas
-          </Link>
-        </div>
-      </div>
-    </header>
-  );
-}
+const pinnedRepos = [
+  {
+    name: 'MagNav',
+    href: 'https://github.com/naatyu/MagNav',
+    description: 'Aircraft magnetic disturbance field compensation with deep learning',
+    topics: ['deep learning', 'signal processing', 'navigation'],
+  },
+  {
+    name: 'Looped-Transformer',
+    href: 'https://github.com/naatyu/Looped-Transformer',
+    description: 'Repository to explore recurrent depth transformers (also named looped transformer)',
+    topics: ['transformers', 'research', 'architecture'],
+  },
+  {
+    name: 'SigReg-Kernel',
+    href: 'https://github.com/naatyu/SigReg-Kernel',
+    description: 'Writing GPU kernel to optimize SigReg - Sketeched Isotropic Gaussian Regularizer',
+    topics: ['gpu', 'kernels', 'optimization'],
+  },
+] as const;
 
 export default function Home(): ReactNode {
-  const {siteConfig} = useDocusaurusContext();
   return (
     <Layout
-      title={`Hello from ${siteConfig.title}`}
-      description="Description will go into a meta tag in <head />">
-      <HomepageHeader />
+      title="Projects"
+      description="Selected GitHub projects.">
       <main>
-        <HomepageFeatures />
+        <section className={styles.homeSection}>
+          <div className="container">
+            <div className={styles.headerRow}>
+              <div>
+                <p className={styles.eyebrow}>GitHub</p>
+                <Heading as="h1" className={styles.pageTitle}>
+                  Projects
+                </Heading>
+              </div>
+              <Link className="button button--secondary" href="https://github.com/naatyu">
+                View profile
+              </Link>
+            </div>
+
+            <div className={styles.repoGrid}>
+              {pinnedRepos.map((repo) => (
+                <Link key={repo.name} className={styles.repoCard} href={repo.href}>
+                  <div className={styles.repoCardHeader}>
+                    <Heading as="h2" className={styles.repoTitle}>
+                      {repo.name}
+                    </Heading>
+                    <span className={styles.repoArrow}>↗</span>
+                  </div>
+                  <p className={styles.repoDescription}>{repo.description}</p>
+                  <div className={styles.badgeRow}>
+                    {repo.topics.map((topic) => (
+                      <span key={topic} className={styles.topicBadge}>
+                        {topic}
+                      </span>
+                    ))}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
     </Layout>
   );

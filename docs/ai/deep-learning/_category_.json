@@ -1,3 +1,7 @@
 {
-  "label": "Deep Learning"
+  "label": "Deep Learning",
+  "link": {
+    "type": "generated-index",
+    "title": "Deep Learning"
+  }
 }

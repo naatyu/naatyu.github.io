@@ -42,4 +42,4 @@ The post-training pipeline is highly sophisticated:
 ## Related
 - [The Llama 3 Herd of Models](/atlas/ai/nlp/models/the-llama-3-herd-of-models)
 - [RoPE Scaling](/atlas/ai/deep-learning/rope-scaling)
-- [Distributed Training MOC](/atlas/ai/distributed-training/distributed-training-moc)
+- Distributed Training MOC

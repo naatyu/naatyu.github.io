@@ -1,3 +1,7 @@
 {
-  "label": "Mathematics"
+  "label": "Mathematics",
+  "link": {
+    "type": "generated-index",
+    "title": "Mathematics"
+  }
 }

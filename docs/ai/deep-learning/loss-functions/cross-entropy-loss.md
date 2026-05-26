@@ -78,5 +78,5 @@ In practice, cross-entropy is usually computed from logits directly rather than 
 - [Binary Cross-Entropy Loss](/atlas/ai/deep-learning/loss-functions/binary-cross-entropy-loss)
 - [Jensen-Shannon Divergence](/atlas/mathematics/probability/jensen-shannon-divergence)
 - [Kullback-Leibler Divergence](/atlas/mathematics/probability/kullback-leibler-divergence)
-- [Loss Functions MOC](/atlas/ai/deep-learning/loss-functions/loss-functions-moc)
+- Loss Functions MOC
 - [Entropy](/atlas/mathematics/probability/entropy)

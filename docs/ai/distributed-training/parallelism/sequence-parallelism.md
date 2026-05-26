@@ -31,6 +31,6 @@ SP shards the activations $X$ along the sequence dimension ($s/tp$):
 - **Communication**: SP performs two communication ops (`all-gather` and `reduce-scatter`) instead of one `all-reduce`. While the volume is technically identical, the extra synchronization points can introduce latency.
 
 ## Related
-- [Distributed Training MOC](/atlas/ai/distributed-training/distributed-training-moc)
+- Distributed Training MOC
 - [Tensor Parallelism](/atlas/ai/distributed-training/parallelism/tensor-parallelism)
 - [Context Parallelism](/atlas/ai/distributed-training/parallelism/context-parallelism)

@@ -1,3 +1,7 @@
 {
-  "label": "Leetcode Practice"
+  "label": "Leetcode Practice",
+  "link": {
+    "type": "generated-index",
+    "title": "Leetcode Practice"
+  }
 }

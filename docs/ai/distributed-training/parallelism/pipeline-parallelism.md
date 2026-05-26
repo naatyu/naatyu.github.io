@@ -31,6 +31,6 @@ By using **interleaved stages**, the pipeline can be shortened conceptually, red
 Advanced pipelines, like **DeepSeek's DualPipe**, further reduce idle time by overlapping the backward pass for activations with the backward pass for weights, effectively hiding the weight gradient computation.
 
 ## Related
-- [Distributed Training MOC](/atlas/ai/distributed-training/distributed-training-moc)
+- Distributed Training MOC
 - [Tensor Parallelism](/atlas/ai/distributed-training/parallelism/tensor-parallelism)
 - Activation Recomputation

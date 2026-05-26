@@ -1,3 +1,7 @@
 {
-  "label": "Computer Vision"
+  "label": "Computer Vision",
+  "link": {
+    "type": "generated-index",
+    "title": "Computer Vision"
+  }
 }

@@ -1,3 +1,7 @@
 {
-  "label": "Distributed Training"
+  "label": "Distributed Training",
+  "link": {
+    "type": "generated-index",
+    "title": "Distributed Training"
+  }
 }

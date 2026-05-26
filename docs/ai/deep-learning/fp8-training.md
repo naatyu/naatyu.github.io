@@ -363,6 +363,6 @@ The scaling strategy is as important as the 8-bit format itself.
 
 ## Related
 - [Transformer Scaling Rules](/atlas/ai/deep-learning/transformer-scaling-rules)
-- [Distributed Training MOC](/atlas/ai/distributed-training/distributed-training-moc)
+- Distributed Training MOC
 - [LLM Inference Economics](/atlas/ai/deep-learning/serving/llm-inference-economics)
 - [Scaling Laws](/atlas/ai/deep-learning/scaling-laws)

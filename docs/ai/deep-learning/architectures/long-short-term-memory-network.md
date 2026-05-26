@@ -111,4 +111,4 @@ For a sequence input shaped $(T, input\_size)$, the forward pass is $O(T)$ in ti
 ## Related
 - [Activation functions](/atlas/ai/deep-learning/activation-functions)
 - [Binary Cross-Entropy Loss](/atlas/ai/deep-learning/loss-functions/binary-cross-entropy-loss)
-- [Transformers MOC](/atlas/ai/transformers-moc)
+- Transformers MOC

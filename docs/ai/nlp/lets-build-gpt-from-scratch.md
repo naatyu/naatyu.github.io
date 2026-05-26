@@ -39,4 +39,4 @@ Generation is **Auto-regressive**: The model predicts the next token, appends it
 
 ## Related
 - [Attention Mechanism](/atlas/ai/nlp/attention-mechanism)
-- [Transformers MOC](/atlas/ai/transformers-moc)
+- Transformers MOC

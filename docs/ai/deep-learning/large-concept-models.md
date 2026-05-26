@@ -34,6 +34,6 @@ Because the LCM backbone operates entirely in the SONAR embedding space, it has 
 LCMs require robust sentence boundary detection. The paper uses **SaT (Sentence at Tokens)** models and **SpaCy** to ensure high-quality segmentation. If a sentence is too long, it is broken down into smaller semantic units to maintain the "atomic" nature of the concept.
 
 ## Related
-- [AI Papers MOC](/atlas/ai/ai-papers-moc)
+- AI Papers MOC
 - Scaling Test-Time Compute
 - [Byte Latent Transformer](/atlas/ai/deep-learning/byte-latent-transformer)

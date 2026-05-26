@@ -1,3 +1,7 @@
 {
-  "label": "Models"
+  "label": "Models",
+  "link": {
+    "type": "generated-index",
+    "title": "Models"
+  }
 }

@@ -35,6 +35,6 @@ TP is almost exclusively restricted to **8 GPUs (one node)**. Scaling TP across 
 Standard TP gathers full activations for LayerNorm and Dropout, which wastes memory. **Sequence Parallelism** extends TP by sharding these specific operations along the sequence dimension, further reducing the activation memory footprint.
 
 ## Related
-- [Distributed Training MOC](/atlas/ai/distributed-training/distributed-training-moc)
+- Distributed Training MOC
 - [Sequence Parallelism](/atlas/ai/distributed-training/parallelism/sequence-parallelism)
 - [Pipeline Parallelism](/atlas/ai/distributed-training/parallelism/pipeline-parallelism)

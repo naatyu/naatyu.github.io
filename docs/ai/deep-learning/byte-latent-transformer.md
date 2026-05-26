@@ -33,6 +33,6 @@ Traditional BPE tokenizers are:
 BLT models match or outperform Llama 3 (BPE) in bits-per-byte efficiency. Crucially, they become **more efficient as they scale**, because the "overhead" of the local models becomes negligible compared to the global backbone's capacity.
 
 ## Related
-- [AI Papers MOC](/atlas/ai/ai-papers-moc)
+- AI Papers MOC
 - [Byte Pair Encoding](/atlas/ai/nlp/byte-pair-encoding)
 - Self-Supervised Learning

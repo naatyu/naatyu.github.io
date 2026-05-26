@@ -371,4 +371,4 @@ For LLMs:
 - [Disaggregated Prefill-Decode Serving](/atlas/ai/deep-learning/serving/disaggregated-prefill-decode-serving)
 - [FP8 Training](/atlas/ai/deep-learning/fp8-training)
 - [Hardware Topology](/atlas/ai/distributed-training/parallelism/hardware-topology)
-- [Distributed Training MOC](/atlas/ai/distributed-training/distributed-training-moc)
+- Distributed Training MOC

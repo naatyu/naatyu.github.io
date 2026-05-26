@@ -1,3 +1,7 @@
 {
-  "label": "System Design"
+  "label": "System Design",
+  "link": {
+    "type": "generated-index",
+    "title": "System Design"
+  }
 }

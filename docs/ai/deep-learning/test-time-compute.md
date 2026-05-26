@@ -33,6 +33,6 @@ The optimal strategy depends on **Prompt Difficulty**:
 The study suggests that for difficult reasoning tasks, doubling test-time compute (e.g., more search depth) can sometimes provide performance gains equivalent to a $10 \times$ increase in pretraining compute.
 
 ## Related
-- [AI Papers MOC](/atlas/ai/ai-papers-moc)
+- AI Papers MOC
 - [Scaling Laws](/atlas/ai/deep-learning/scaling-laws)
 - [Large Concept Models](/atlas/ai/deep-learning/large-concept-models)

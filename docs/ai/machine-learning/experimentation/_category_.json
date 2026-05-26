@@ -1,3 +1,7 @@
 {
-  "label": "Experimentation"
+  "label": "Experimentation",
+  "link": {
+    "type": "generated-index",
+    "title": "Experimentation"
+  }
 }

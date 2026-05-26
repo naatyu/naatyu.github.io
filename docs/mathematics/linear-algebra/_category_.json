@@ -1,3 +1,7 @@
 {
-  "label": "Linear Algebra"
+  "label": "Linear Algebra",
+  "link": {
+    "type": "generated-index",
+    "title": "Linear Algebra"
+  }
 }

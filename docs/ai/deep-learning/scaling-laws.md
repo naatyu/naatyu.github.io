@@ -215,7 +215,7 @@ This is why models such as Llama 3 8B were trained on far more than $20$ tokens 
 - Chinchilla is about compute-optimal pretraining, not necessarily optimal serving, fine-tuning, reasoning, or test-time compute.
 
 ## Related
-- [AI Papers MOC](/atlas/ai/ai-papers-moc)
+- AI Papers MOC
 - [Transformer Scaling Rules](/atlas/ai/deep-learning/transformer-scaling-rules)
 - [Test-Time Compute](/atlas/ai/deep-learning/test-time-compute)
 - [The Llama 3 Herd of Models](/atlas/ai/nlp/models/the-llama-3-herd-of-models)

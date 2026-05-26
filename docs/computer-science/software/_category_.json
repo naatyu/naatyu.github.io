@@ -1,3 +1,7 @@
 {
-  "label": "Software"
+  "label": "Software",
+  "link": {
+    "type": "generated-index",
+    "title": "Software"
+  }
 }

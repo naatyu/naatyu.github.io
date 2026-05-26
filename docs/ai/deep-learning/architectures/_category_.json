@@ -1,3 +1,7 @@
 {
-  "label": "Architectures"
+  "label": "Architectures",
+  "link": {
+    "type": "generated-index",
+    "title": "Architectures"
+  }
 }

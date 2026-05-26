@@ -1,3 +1,7 @@
 {
-  "label": "Computer Science"
+  "label": "Computer Science",
+  "link": {
+    "type": "generated-index",
+    "title": "Computer Science"
+  }
 }

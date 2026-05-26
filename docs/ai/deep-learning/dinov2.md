@@ -36,5 +36,5 @@ A notable result of DINOv2 is that its **frozen** features (without finetuning) 
 - **Part-of-Object Layout**: Successive components identify eyes, wings, or wheels across different categories.
 
 ## Related
-- [AI Papers MOC](/atlas/ai/ai-papers-moc)
+- AI Papers MOC
 - Self-Supervised Learning

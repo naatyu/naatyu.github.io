@@ -36,4 +36,4 @@ LayerNorm stabilizes the hidden state dynamics and allows for much higher learni
 ## Related
 - [Batch Normalization](/atlas/ai/deep-learning/batch-normalization-accelerating-deep-network-training-by-reducing-internal-covariate-shift)
 - [RMSNorm](/atlas/ai/deep-learning/root-mean-square-layer-normalization)
-- [Transformers MOC](/atlas/ai/transformers-moc)
+- Transformers MOC

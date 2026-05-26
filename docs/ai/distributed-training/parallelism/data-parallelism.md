@@ -32,6 +32,6 @@ The "Sweet Spot" for LLM training is generally **4M to 60M tokens per global bat
 As the number of GPUs increases (512+), DP efficiency drops due to **Ring Latency**. The time required for a signal to propagate around the ring becomes a bottleneck, and communication can no longer be fully hidden behind computation.
 
 ## Related
-- [Distributed Training MOC](/atlas/ai/distributed-training/distributed-training-moc)
+- Distributed Training MOC
 - [ZeRO](/atlas/ai/distributed-training/optimization/zero)
 - Gradient Accumulation

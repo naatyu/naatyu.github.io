@@ -1,3 +1,7 @@
 {
-  "label": "Components"
+  "label": "Components",
+  "link": {
+    "type": "generated-index",
+    "title": "Components"
+  }
 }

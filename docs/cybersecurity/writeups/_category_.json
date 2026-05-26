@@ -1,3 +1,7 @@
 {
-  "label": "Writeups"
+  "label": "Writeups",
+  "link": {
+    "type": "generated-index",
+    "title": "Writeups"
+  }
 }

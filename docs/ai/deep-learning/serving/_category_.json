@@ -1,3 +1,7 @@
 {
-  "label": "Serving"
+  "label": "Serving",
+  "link": {
+    "type": "generated-index",
+    "title": "Serving"
+  }
 }
