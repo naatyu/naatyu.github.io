@@ -9,18 +9,21 @@ const pinnedRepos = [
   {
     name: 'MagNav',
     href: 'https://github.com/naatyu/MagNav',
+    path: 'naatyu/MagNav',
     description: 'Aircraft magnetic disturbance field compensation with deep learning',
     topics: ['deep learning', 'signal processing', 'navigation'],
   },
   {
     name: 'Looped-Transformer',
     href: 'https://github.com/naatyu/Looped-Transformer',
+    path: 'naatyu/Looped-Transformer',
     description: 'Repository to explore recurrent depth transformers (also named looped transformer)',
     topics: ['transformers', 'research', 'architecture'],
   },
   {
     name: 'SigReg-Kernel',
     href: 'https://github.com/naatyu/SigReg-Kernel',
+    path: 'naatyu/SigReg-Kernel',
     description: 'Writing GPU kernel to optimize SigReg - Sketeched Isotropic Gaussian Regularizer',
     topics: ['gpu', 'kernels', 'optimization'],
   },
@@ -36,7 +39,7 @@ export default function Home(): ReactNode {
           <div className="container">
             <div className={styles.headerRow}>
               <div>
-                <p className={styles.eyebrow}>GitHub</p>
+                <p className={styles.prompt}>naatyu@github:~$ ls pinned</p>
                 <Heading as="h1" className={styles.pageTitle}>
                   Projects
                 </Heading>
@@ -49,10 +52,18 @@ export default function Home(): ReactNode {
             <div className={styles.repoGrid}>
               {pinnedRepos.map((repo) => (
                 <Link key={repo.name} className={styles.repoCard} href={repo.href}>
+                  <div className={styles.repoChrome}>
+                    <span />
+                    <span />
+                    <span />
+                  </div>
                   <div className={styles.repoCardHeader}>
-                    <Heading as="h2" className={styles.repoTitle}>
-                      {repo.name}
-                    </Heading>
+                    <div>
+                      <p className={styles.repoPath}>{repo.path}</p>
+                      <Heading as="h2" className={styles.repoTitle}>
+                        {repo.name}
+                      </Heading>
+                    </div>
                     <span className={styles.repoArrow}>↗</span>
                   </div>
                   <p className={styles.repoDescription}>{repo.description}</p>
