@@ -9,7 +9,6 @@ import type * as Preset from '@docusaurus/preset-classic';
 const config: Config = {
   title: 'Natyu',
   tagline: 'Notes, writing, and Atlas',
-  favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
