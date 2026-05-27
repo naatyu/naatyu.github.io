@@ -96,8 +96,8 @@ iBOT++ is one of three key innovations in TIPSv2:
 | **Dense Prediction** | Strong | Weak (pixel-level focus) | Limited |
 
 ## Related
-- [DINOv2](/ai/deep-learning/dinov2)
-- [LeJEPA Loss](/ai/deep-learning/loss-functions/lejepa)
+- [DINOv2](/atlas/ai/deep-learning/dinov2)
+- [LeJEPA Loss](/atlas/ai/deep-learning/loss-functions/lejepa)
 - Self-Supervised Learning
 - Vision Transformers
 - [TIPSv2 Project Page](https://gdm-tipsv2.github.io/)
