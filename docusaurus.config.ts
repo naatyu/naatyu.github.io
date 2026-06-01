@@ -89,17 +89,10 @@ const config: Config = {
       title: 'Natyu',
       items: [
         {
-          label: 'Atlas',
+          type: 'docSidebar',
+          sidebarId: 'tutorialSidebar',
           position: 'left',
-          items: [
-            {label: 'AI', to: '/atlas/category/ai'},
-            {label: 'Systems', to: '/atlas/category/systems'},
-            {label: 'Math', to: '/atlas/category/math'},
-            {label: 'Algorithms', to: '/atlas/category/algorithms'},
-            {label: 'Tooling', to: '/atlas/category/tooling'},
-            {label: 'Security', to: '/atlas/category/security'},
-            {label: 'Interview Prep', to: '/atlas/category/interview-prep'},
-          ],
+          label: 'Atlas',
         },
         {to: '/blog', label: 'Blog', position: 'left'},
         {
