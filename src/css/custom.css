@@ -93,7 +93,42 @@ pre,
 
 .pagination-nav__link,
 .table-of-contents,
-.theme-doc-sidebar-container,
-.menu {
+.theme-doc-sidebar-container {
   background: transparent;
+}
+
+.theme-doc-sidebar-menu {
+  background: transparent;
+}
+
+.navbar-sidebar {
+  background: var(--ifm-background-surface-color);
+  border-left: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.navbar-sidebar__brand,
+.navbar-sidebar__items {
+  background: var(--ifm-background-surface-color);
+}
+
+@media (max-width: 996px) {
+  .navbar {
+    padding-inline: 0.75rem;
+  }
+
+  .navbar__brand {
+    min-width: 0;
+  }
+
+  .navbar__title {
+    font-size: 0.95rem;
+  }
+
+  .navbar__toggle {
+    margin-right: 0;
+  }
+
+  .theme-doc-sidebar-container {
+    background: var(--ifm-background-surface-color);
+  }
 }
