@@ -1,7 +1,7 @@
 ---
 title: "Batch size & Learning rate"
 date: 2026-05-11
-lastmod: 2026-05-11
+lastmod: 2026-06-02
 draft: false
 ---
 
@@ -103,6 +103,59 @@ To keep the **magnitude of update noise** constant (maintaining the "random walk
 | **Logic** | Keeps the "drift" (total distance moved) constant over the same number of epochs. | Keeps the "fluctuation" (noise/variance) of the updates constant. |
 | **Use Case** | Common in Large Scale CV (e.g., ImageNet with ResNet-50). | Common in Adaptive Optimizers (Adam) or GAN training. |
 | **Pros/Cons** | Faster convergence but risky at very high $B$. | More stable and theoretically grounded for noise preservation. |
+
+### C. Practical Rule for AdamW
+
+For **AdamW**, the square-root rule is usually the better default heuristic when increasing batch size:
+
+$$
+\eta_1 = \eta_0 \sqrt{\frac{B_1}{B_0}}
+$$
+
+where:
+
+- $B_0$ is the original batch size
+- $B_1$ is the new batch size
+- $\eta_0$ is the original learning rate
+- $\eta_1$ is the new learning rate
+
+Example:
+
+$$
+B_0 = 256,\quad B_1 = 1024
+$$
+
+Then:
+
+$$
+\eta_1 = \eta_0 \sqrt{\frac{1024}{256}} = 2\eta_0
+$$
+
+So if:
+
+$$
+\eta_0 = 10^{-4}
+$$
+
+then:
+
+$$
+\eta_1 = 2 \cdot 10^{-4}
+$$
+
+This is a good AdamW default because the optimizer is adaptive: it rescales coordinates using estimated second moments, so in practice it is often more useful to preserve the **stochastic regime of the updates** than to enforce a purely linear learning-rate increase.
+
+The square-root rule should still be treated as a **starting point**, not a law:
+
+- keep the same scheduler shape unless there is a reason to change it
+- keep or re-tune warmup for large jumps in batch size
+- validate the new learning rate empirically, especially when changing sequence length, data mix, or gradient accumulation
+
+In short:
+
+- **SGD-style linear scaling** tries to preserve drift per unit of data
+- **AdamW square-root scaling** tries to preserve update noise
+- for AdamW, the second heuristic is often the more stable default
 
 ---
 
