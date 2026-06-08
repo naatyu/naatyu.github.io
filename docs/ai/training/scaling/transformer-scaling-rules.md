@@ -238,5 +238,6 @@ Interpretation:
 
 - 30 - Atlas/AI/AI Papers MOC
 - 30 - Atlas/AI/Transformers MOC
+- [Attention Variants](/atlas/ai/architectures/transformers/attention-variants)
 - [Scaling Laws](/atlas/ai/training/scaling/scaling-laws)
 - [FP8 Training](/atlas/ai/training/precision/fp8-training)

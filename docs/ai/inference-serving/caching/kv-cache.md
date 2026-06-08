@@ -47,6 +47,7 @@ $$\text{Size} = 2 \times \text{layers} \times \text{heads} \times \text{d\_head}
 
 ## Related
 - [Attention Mechanism](/atlas/ai/foundations/attention-mechanism)
+- [Attention Variants](/atlas/ai/architectures/transformers/attention-variants)
 - [Disaggregated Prefill-Decode Serving](/atlas/ai/inference-serving/serving-architectures/disaggregated-prefill-decode-serving)
 - [LLM Inference Economics](/atlas/ai/inference-serving/performance/llm-inference-economics)
 - Throughput vs Latency

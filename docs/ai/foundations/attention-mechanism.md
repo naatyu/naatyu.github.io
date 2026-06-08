@@ -57,3 +57,8 @@ For now, we only computed the pattern to which words are relevant to which other
  In practice, we use multi-head attention to capture multiple attention patterns, where each head as a unique $W$, $K$ and $V$. In comparison to single head attention, we can see this as each head proposing a change in the embedding of the token, and then all these changes are summed to update the original embedding. There is also a change in multi head attention with the $V$ matrix, they are concatenated:
  ![Attention Mechanism 11](/attachments/ai/nlp/attention-mechanism/attention-mechanism-11.png)
  Since we have multiple block in the transformer, when we go deeper in the model, the embeddings take more and more meaning. And doing that mean that other tokens have more chance to influence the embedding of a token.
+
+## Related
+
+- [Attention Variants](/atlas/ai/architectures/transformers/attention-variants)
+- [KV Cache](/atlas/ai/inference-serving/caching/kv-cache)
