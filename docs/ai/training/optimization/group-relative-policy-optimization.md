@@ -153,6 +153,39 @@ So the optimization may shape:
 - language consistency
 - reasoning length / inference cost
 
+## 7.1 Overlong completion penalties
+
+For reasoning models, reward hacking often takes the form:
+
+- longer completions
+- more self-correction loops
+- higher verifier reward
+
+even when the target mode was supposed to stay concise.
+
+A practical fix is an overlong penalty of the form used in the DAPO line of work:
+
+$$
+R_{\text{length}}(y)=
+\begin{cases}
+0, & |y| \le L_{\max}-L_{\text{cache}} \\
+\frac{L_{\max}-L_{\text{cache}}-|y|}{L_{\text{cache}}}, & L_{\max}-L_{\text{cache}} < |y| \le L_{\max} \\
+-1, & |y| > L_{\max}
+\end{cases}
+$$
+
+where:
+
+- $L_{\max}$ is the hard completion-length budget
+- $L_{\text{cache}}$ is a soft transition region before the hard cutoff
+
+This lets you trade off:
+
+- more reward through deeper reasoning
+- against response-length explosion
+
+The Smol Training Playbook's RLVR experiments are a good example: naive GRPO on the `/no_think` mode caused responses to become much longer, and explicit overlong penalties were needed to keep the concise mode from collapsing toward long chain-of-thought behavior.
+
 ## 8. Where GRPO fits
 
 GRPO is best thought of as:

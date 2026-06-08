@@ -161,6 +161,13 @@ In practice, this often means:
 - high-quality niche sources are upweighted
 - but only up to a capped reuse budget
 
+This is also why staged training is often useful:
+
+- broad high-volume sources early
+- smaller higher-quality sources later
+
+instead of spending scarce unique tokens too aggressively from the start.
+
 ## 7. Cross-dataset interactions matter
 
 The utility of a dataset is not independent of the other datasets in the mixture.
@@ -188,6 +195,32 @@ A robust loop looks like:
 
 This is slower than naive sweeping, but it is much less likely to lock in a mixture that fails to scale.
 
+## 8.1 Annealing ablations for late-stage mixture changes
+
+When the question is not “what should stage 1 look like?” but rather “what should we inject late in training?”, a useful trick is an **annealing ablation**:
+
+1. take a late checkpoint from the baseline run
+2. keep part of the baseline mixture
+3. heavily upsample one candidate dataset
+4. run a short continuation
+5. measure whether the late-stage injection helps
+
+This is cheaper than retraining every candidate from scratch and better matches the real decision being made.
+
+## 8.2 Count tokens, not just examples
+
+In post-training or reasoning-heavy mixtures, example counts can be misleading because some examples are much longer than others.
+
+So the effective mixture is better described by token mass:
+
+$$
+\text{token share}_s
+=
+\frac{\text{tokens from source } s}{\text{total training tokens}}
+$$
+
+This matters whenever long reasoning traces, long code samples, or document-length examples are present.
+
 ## 9. What the MAI report adds
 
 The Microsoft MAI report contributes a few strong practical lessons:
@@ -198,6 +231,16 @@ The Microsoft MAI report contributes a few strong practical lessons:
 - scale-up validation is mandatory, not optional
 
 That makes data-mixture optimization look less like static dataset curation and more like model-design under uncertainty.
+
+## 10. What the Smol Training Playbook adds
+
+The Smol Training Playbook reinforces a few additional lessons:
+
+- the “best” mixture depends on the target capability balance, not just aggregate quality
+- multilingual data is a budget tradeoff against English and other domains
+- too much code early can hurt general-language performance
+- high-quality code/math datasets are often better staged later than exhausted early
+- annealing ablations are a practical way to test late-stage injections
 
 ## Related
 

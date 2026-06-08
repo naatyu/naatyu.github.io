@@ -105,6 +105,37 @@ A practical recipe looks like:
 
 This is usually a better compute tradeoff than training at the maximum context from the beginning.
 
+## 7.1 Fresh extension stages can beat “attach it at the end”
+
+The Smol Training Playbook adds a useful nuance: when extending from `4k -> 32k -> 64k`, they found that starting a **fresh learning-rate schedule** for each long-context stage over about `50B` tokens worked better than simply adding long-context training onto the tail of the main decay phase.
+
+That suggests the extension phase is not just a tiny epilogue. It may deserve its own short controlled adaptation stage.
+
+## 7.2 You may not need a special long-document mixture
+
+It is tempting to assume that long-context extension must rely on aggressively upsampled long documents or synthetic retrieval data.
+
+The SmolLM3 long-context ablations are a useful counterexample:
+
+- books, articles, and synthetic long-context examples did not outperform the baseline late-stage mixture
+- the likely reason was that the baseline already contained enough naturally long web and code documents
+
+So before curating a special extension corpus, ask whether your existing mixture already has enough long-form structure.
+
+## 7.3 Train somewhat short, extrapolate somewhat longer
+
+Another useful pattern is:
+
+- train to a strong but still affordable context length
+- extrapolate somewhat beyond it at inference
+
+SmolLM3 trained to `64k` and extrapolated to `128k` with `YaRN`, which worked better than extrapolating from a `32k` checkpoint. But the next jump to `256k` degraded.
+
+So the safe rule is:
+
+- extrapolate beyond training length
+- but not arbitrarily far
+
 ## 8. What the MAI report adds
 
 The MAI report supports three useful claims:
@@ -114,6 +145,15 @@ The MAI report supports three useful claims:
 - there is no strong reason to pay full long-context cost if a final extension phase is enough
 
 That makes progressive context extension one of the highest-leverage long-context tricks in modern pretraining.
+
+## 9. What the Smol Training Playbook adds
+
+The Smol Training Playbook adds several useful details:
+
+- extension can be staged with fresh short schedules
+- a baseline mixture may already be sufficient for long-context adaptation
+- `ABF` and `YaRN` should be tuned jointly with the extension target
+- training closer to the intended inference length improves extrapolation quality
 
 ## Related
 

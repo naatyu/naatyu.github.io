@@ -162,6 +162,30 @@ It is also:
 
 At frontier scale, a design that wins only on paper but loses on goodput is not really winning.
 
+### 9. Talk to the model, not just the dashboard
+
+One of the most practical lessons from the Smol Training Playbook is that direct interaction with intermediate checkpoints catches issues that aggregate metrics miss.
+
+This includes:
+
+- chat-template bugs
+- missing or malformed system prompts
+- style failures
+- broken multi-turn behavior
+
+So “vibe testing” is not just anecdotal model evaluation. It is a debugging tool.
+
+### 10. Treat formatting artifacts as model artifacts
+
+For assistants and reasoning models, behavior is partly determined by:
+
+- the chat template
+- assistant-only masking
+- reasoning-mode markers
+- tool-call formatting
+
+So these belong inside the recipe freeze, not outside it.
+
 ## Practical Heuristics
 
 - Set an exploration deadline before you need it.
@@ -169,6 +193,7 @@ At frontier scale, a design that wins only on paper but loses on goodput is not 
 - Prefer stable and flexible methods when results are close.
 - Freeze the recipe once uncertainty is no longer worth the delay.
 - Treat a completed run as a real asset and endless tuning as an opportunity cost.
+- Inspect real model behavior regularly, not just benchmark curves.
 
 ## Related
 
