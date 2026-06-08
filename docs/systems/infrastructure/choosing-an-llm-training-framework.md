@@ -1,7 +1,7 @@
 ---
 title: "Choosing an LLM Training Framework"
 date: 2026-06-02
-lastmod: 2026-06-02
+lastmod: 2026-06-08
 tags:
   - systems
   - llm-training
@@ -61,14 +61,22 @@ A framework is not only an execution engine. It is also the place where you will
 
 So codebase clarity has real training value. A framework that is theoretically strong but practically opaque can slow iteration more than expected.
 
+Another useful criterion is whether the abstractions remain understandable once you add:
+
+- MoE,
+- context parallelism,
+- custom numerics,
+- distributed checkpointing,
+- and restart logic.
+
 ### Throughput Is Not Enough
 
 A common mistake is to optimize only for benchmark throughput.
 
 But the true objective is closer to:
 
-$$
-\text{useful progress} = \text{throughput} \times \text{correctness} \times \text{stability}.
+$$ 
+\text{useful progress} = \text{throughput} \times \text{correctness} \times \text{stability} \times \text{recoverability}.
 $$
 
 If a faster framework causes:
@@ -88,6 +96,19 @@ That does not mean internal is always better. It means:
 - if you own the framework, you own the support burden but also the adaptation speed;
 - if you adopt an external framework, you inherit maturity and community, but also its abstractions and limitations.
 
+### Descriptive sharding is often better than magical sharding
+
+One strong design choice is to make tensor sharding annotations **descriptive**:
+
+- they state how tensors are partitioned or replicated,
+- but they do not automatically inject communication into the graph.
+
+Why this helps:
+
+- avoids accidental synchronization points
+- makes communication structure visible
+- gives more control over mixed parallelism layouts
+
 ### Practical Selection Rule
 
 If multiple frameworks support the required features, compare them on your actual setup:
@@ -106,6 +127,16 @@ The best framework is the one that minimizes the total cost of:
 
 Not just the one with the highest benchmark tokens/sec.
 
+### Determinism and restart correctness are framework features
+
+For long expensive runs, a framework should be judged on whether it supports:
+
+- deterministic or at least stable numerics
+- reproducible dataloading order
+- full-state checkpointing
+- restart correctness
+- distributed checkpoint efficiency
+
 ## Practical Heuristics
 
 - Prefer battle-tested frameworks for long, expensive runs.
@@ -119,4 +150,5 @@ Not just the one with the highest benchmark tokens/sec.
 - [Smol Training Playbook Foundations](/atlas/ai/training/smol-training-playbook-foundations)
 - [LLM Ablation Strategy](/atlas/ai/evaluation-experimentation/llm-ablation-strategy)
 - [High-Density GPU Infrastructure](/atlas/systems/infrastructure/high-density-gpu-infrastructure)
+- [Goodput, Determinism, and Fault Tolerance](/atlas/systems/infrastructure/goodput-determinism-and-fault-tolerance)
 - [Smol Training Playbook](https://huggingface.co/spaces/HuggingFaceTB/smol-training-playbook)

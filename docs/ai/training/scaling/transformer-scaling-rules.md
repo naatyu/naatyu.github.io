@@ -1,7 +1,7 @@
 ---
 title: "Transformer Scaling Rules"
 date: 2026-05-05
-lastmod: 2026-05-20
+lastmod: 2026-06-08
 tags:
   - ai/deep-learning
   - transformers
@@ -114,6 +114,25 @@ Rule of thumb:
 - low ratios like 2, 4, or 8 are usually the safe region for GQA
 - if the ratio gets too high, the model starts to behave more like MQA and quality can drop
 
+### 2.1 Use periodic global attention when long context matters
+
+A useful long-context architecture pattern is:
+
+- several local sliding-window attention layers
+- followed by one full global layer
+
+Example cadence:
+
+```text
+5 local layers : 1 global layer
+```
+
+Why it helps:
+
+- most layers stay cheap
+- KV and training costs stay lower
+- periodic global layers still let the model mix information across the full sequence
+
 ## 3. Translate formulas into design choices
 
 When you want to choose a config, read the formulas in this order:
@@ -141,6 +160,20 @@ When you want to choose a config, read the formulas in this order:
 - Dense FFN default: $d_{ff} \approx 4d$
 - Gated FFNs can use a smaller ratio for similar quality.
 - If quality is lagging, increase FFN capacity before making attention wider.
+
+### 6.1 Interleave dense and sparse feed-forward blocks
+
+A strong MoE design point is:
+
+- alternate dense FFN layers and high-sparsity MoE layers
+
+rather than using medium-sparsity MoE in every layer.
+
+This can work well because:
+
+- dense layers provide stable always-on transformation
+- sparse layers provide large conditional capacity
+- the wall-clock efficiency can be better than more uniformly sparse layouts
 
 ### 7. Long context is a cache problem
 
@@ -198,6 +231,12 @@ This is a good dense mid-size shape because it keeps the head dimension clean an
 - keep active experts small
 - use sparse routing with monitoring and load balancing
 
+Additional practical lessons:
+
+- very high-sparsity MoE can work well when paired with dense interleaving
+- shared experts are not always necessary in interleaved layouts
+- dropless routing changes both stability and what load-balancing conclusions remain valid
+
 Interpretation:
 
 - MoE changes the meaning of model size
@@ -240,4 +279,5 @@ Interpretation:
 - 30 - Atlas/AI/Transformers MOC
 - [Attention Variants](/atlas/ai/architectures/transformers/attention-variants)
 - [Scaling Laws](/atlas/ai/training/scaling/scaling-laws)
+- [Scaling Ladders and Efficiency Gain](/atlas/ai/training/scaling/scaling-ladders-and-efficiency-gain)
 - [FP8 Training](/atlas/ai/training/precision/fp8-training)

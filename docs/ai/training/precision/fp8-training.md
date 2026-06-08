@@ -1,7 +1,7 @@
 ---
 title: "FP8 Training"
 date: 2026-05-20
-lastmod: 2026-05-20
+lastmod: 2026-06-08
 tags:
   - ai/deep-learning
   - training
@@ -258,6 +258,56 @@ NVFP4 -> more aggressive 4-bit format, mostly inference / advanced quantized tra
 Even in FP8 training, not everything should be FP8.
 
 Usually keep these in BF16/FP32:
+- optimizer states
+- master weights
+- residual streams
+- normalization paths
+- softmax / pre-softmax logits
+- loss computation
+- global reductions
+
+### A concrete production-style recipe
+
+A practical frontier-style recipe is:
+
+- **BF16** as the default weight and activation type
+- **FP8 E4M3** for forward GEMMs
+- **FP8 E5M2** for data-gradient GEMMs
+- **BF16** compute for weight gradients
+- **FP32** gradient accumulation
+
+This gives:
+
+- E4M3 where forward precision matters more
+- E5M2 where backward range matters more
+- BF16/FP32 where instability compounds
+
+### Delayed scaling in practice
+
+One concrete implementation detail that matters is delayed scaling with a long amax history.
+
+Example:
+
+```text
+1024-step amax history
+```
+
+This is a good reminder that FP8 stability is not only about the format. It is also about the scale-update policy.
+
+### Operations commonly kept in FP32
+
+Recent large-scale recipes often keep the following in FP32:
+
+- the full residual stream
+- attention scores before softmax
+- MoE router logits
+- final output logits
+- router weights
+- embedding weights
+- optimizer state and AdamW math
+- data-parallel all-reduce / reduce-scatter paths
+
+So “FP8 training” should really be read as selective FP8 use inside a larger mixed-precision system.
 
 - optimizer states
 - master weights

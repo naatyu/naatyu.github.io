@@ -1,41 +1,178 @@
 ---
 title: "Group Relative Policy Optimization"
 date: 2026-04-08
-lastmod: 2026-04-08
+lastmod: 2026-06-08
 tags:
-  - unprocessed
+  - ai/training
+  - reinforcement-learning
+  - llm
 draft: false
 ---
 
 ## Summary
 
-[One sentence summary]
+Group Relative Policy Optimization (GRPO) is an RL objective for LLMs where several responses are sampled for the same prompt, scored, and compared relative to one another. It is attractive because it removes the need for a separate critic while still providing a structured policy-gradient signal.
+
 ## Concepts
-- **GRPO (Group Relative Policy Optimization):** a reinforcement learning algorithm that uses relative group rewards to optimize policies without a critic model.
-- **KL Divergence:** a mathematical measure of how much one probability distribution differs from another, used to penalize large policy updates.
-- **Advantage:** a score indicating how much better a specific outcome is compared to the average of its group.
 
-[2402.03300](https://arxiv.org/pdf/2402.03300)
+- **Group:** multiple sampled responses for the same prompt.
+- **Reward:** scalar score assigned to each response.
+- **Advantage:** normalized score telling how much better or worse one response is than its peers.
+- **Importance ratio:** ratio between new-policy and rollout-policy token probabilities.
+- **Top-p mask replay:** restricting training to the same nucleus-support used during rollout sampling.
 
-![Group Relative Policy Optimization 01](/attachments/ai/deep-learning/loss-functions/group-relative-policy-optimization/group-relative-policy-optimization-01.png)
+## 1. Core setup
 
-Here $q$ is a question and $o$ is the output. In GRPO instead of having evaluating one output like in PPO we evaluate $G$ outputs. $r$ is the reward for the output. $A$ is the advantage, which measure how much better or worse a particular response id compared to the average quality of other responses.
-**KL:** measure how one probability distribution differs from a second one. It "measure" the information lost from using one distribution to approximate another. It is from zero to positive and 0 means distributions are identical. In GRPO it is used as a regularization term during policy updates such that the new updated policy doesn't deviate too much (you try to minimize the KL between the old and new to make gradual steps).
-The reward model can be a neural network or a rule base case (it's rule based in Deepseek math and Deepseek R1) 
+For a prompt $q$, sample a group of responses:
 
-![Group Relative Policy Optimization 02](/attachments/ai/deep-learning/loss-functions/group-relative-policy-optimization/group-relative-policy-optimization-02.png)
-The division between the old policy and the new policy is to add momentum like in ADAM. The clip part is such that we have a "max" possible update. This ensure we can't do crazy updates. At the end we have the $KL$ divergence between new and old policy that is:
-$$\mathbb{D}_{KL}[\pi_\theta||\pi_{ref}]=
-rac{\pi_{ref}(o_{i,t}|q, o_{i,<t})}{\pi_{\theta}(o_{i,t}|q, o_{i,<t})} - log{
-rac{\pi_{ref}(o_{i,t}|q, o_{i,<t})}{\pi_\theta(o_{i,t}|q, o_{i,<t})}} - 1$$
-At the beginning, $
-rac\{1\}\{G\}\sum_\{i=1\}^\{G\}$ is the average between all groups. A group is a outputs for a single question. 
-Here $
-rac\{1\}\{|\{o_i\}|\}\sum_\{t=1\}^\{|o_i|\}$ this is for all the outputs, we take the minimum between the momentum of the policies with the advantage and the clipped one (to not go too far) and then we subtract with the KL divergence because we want to maximize the GRPO objective (it act as a penalty so that the new GRPO objective is penalized when KL divergence is high since we don't want the new policy to change too much, $\beta$ determines how much we want to penalize it).  
-The advantage is:
-$$A_i=
-rac{r_i-mean({r_1,r_2,...,r_G})}{std({r_1,r_2,...,r_G})}$$
-We have the reward of the current point and the mean, std of the current group. The advantage is how much the reward is good compared to the group.
+$$
+y_{1:G}
+$$
 
-This is a schema of GRPO
-![Group Relative Policy Optimization 03](/attachments/ai/deep-learning/loss-functions/group-relative-policy-optimization/group-relative-policy-optimization-03.png)
+Each response $y_i$ gets a reward:
+
+$$
+R_i = R(q, y_i)
+$$
+
+Instead of evaluating each response in isolation, GRPO builds a relative signal inside the group.
+
+## 2. Response-level advantage
+
+A common normalized advantage is:
+
+$$
+A_i=\frac{R_i-\mathrm{mean}(R_{1:G})}{\mathrm{std}(R_{1:G})}
+$$
+
+This same response-level advantage is then shared across all tokens in that response.
+
+## 3. Token-level importance ratio
+
+For token position $t$ in response $y_i$:
+
+$$
+r_{i,t}(\theta)=\frac{\pi_\theta(y_{i,t}\mid q,y_{i,<t})}{\pi_{\text{old}}(y_{i,t}\mid q,y_{i,<t})}
+$$
+
+This compares the current policy to the rollout policy used to generate the sample.
+
+## 4. Clipped GRPO objective
+
+A GRPO-style token-level clipped objective looks like:
+
+$$
+J(\theta)=
+\mathbb{E}\left[
+\frac{1}{\sum_i |y_i|}
+\sum_{i=1}^G \sum_{t=1}^{|y_i|}
+\min\left(
+r_{i,t}(\theta)A_i,\,
+\mathrm{clip}(r_{i,t}(\theta),1-\epsilon,1+\epsilon)A_i
+\right)
+\right]
+$$
+
+The clipping plays the same role as in PPO:
+
+- prevent very large policy jumps
+- keep updates within a trust region
+
+## 5. Why GRPO is useful for LLMs
+
+It fits the LLM setting well because:
+
+- sampling multiple completions per prompt is natural
+- many rewards are sparse or relative
+- a separate critic can be expensive or unstable
+
+So GRPO trades value-function complexity for group-based comparison.
+
+## 6. Practical MAI-style modifications
+
+The clean objective is usually not enough for long asynchronous RL climbs. The MAI report adds several practical modifications.
+
+### Adaptive entropy control
+
+They use asymmetric clipping with a dynamically adjusted upper bound:
+
+$$
+r^{\mathrm{tr}}_{i,t}(\theta)=\mathrm{clip}\left(r_{i,t}(\theta),\, 1-\epsilon,\,(1-\epsilon)^{-1}+k\right)
+$$
+
+where $k$ is updated online to keep policy entropy near a target.
+
+This helps avoid:
+
+- entropy collapse
+- entropy explosion
+
+### Outer ratio clip
+
+They also add a hard outer clip:
+
+$$
+r^{\mathrm{out}}_{i,t}(\theta)=\mathrm{clip}(r_{i,t}(\theta), r_{\min}, r_{\max})
+$$
+
+This is mainly an engineering safeguard against catastrophic gradient spikes from extreme off-policy mismatch.
+
+### Pass-rate filtering
+
+Groups that are too easy or too hard provide weak relative signal.
+
+So a useful trick is:
+
+- discard problems where almost every rollout succeeds
+- discard problems where almost every rollout fails
+
+This keeps training focused on informative groups.
+
+### Top-p mask replay
+
+If rollouts were sampled with top-p truncation, training can become unstable if gradients are allowed to flow through tokens that were excluded during sampling.
+
+A practical fix is:
+
+- reuse the rollout-time top-p mask during training
+- set excluded logits to $-\infty$ before softmax
+
+This reduces off-policy mismatch.
+
+## 7. Reward decomposition
+
+In practice, LLM RL often uses:
+
+$$
+R(q,y)=R_{\text{task}}(q,y)+w_{\text{lang}}R_{\text{lang}}(y)-w_{\text{len}}R_{\text{len}}(y)
+$$
+
+So the optimization may shape:
+
+- correctness
+- language consistency
+- reasoning length / inference cost
+
+## 8. Where GRPO fits
+
+GRPO is best thought of as:
+
+- a practical LLM RL objective
+- especially useful for reasoning and multi-sample training
+
+It does not replace:
+
+- reward design
+- inference-system engineering
+- staleness control
+- self-distillation between climbs
+
+Those are separate parts of the RL stack.
+
+## Related
+
+- [Reinforcement Learning for LLMs](/atlas/ai/training/optimization/reinforcement-learning-for-llms)
+- [Adaptive Entropy Control in RL](/atlas/ai/training/optimization/adaptive-entropy-control-in-rl)
+- [Self-Distillation in RL Climbs](/atlas/ai/training/optimization/self-distillation-in-rl-climbs)
+- [Asynchronous RL Infrastructure](/atlas/systems/infrastructure/asynchronous-rl-infrastructure)
+- [MAI-Thinking-1: Building a Hill-Climbing Machine](/atlas/ai/architectures/model-reports/mai-thinking-1-building-a-hill-climbing-machine)

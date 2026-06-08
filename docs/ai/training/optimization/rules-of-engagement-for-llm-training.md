@@ -1,7 +1,7 @@
 ---
 title: "Rules of Engagement for LLM Training"
 date: 2026-06-02
-lastmod: 2026-06-02
+lastmod: 2026-06-08
 tags:
   - ai/deep-learning
   - optimization
@@ -49,6 +49,12 @@ The playbook argues that architecture enthusiasts often overinvest in small-meth
 
 This is a useful corrective. In many real training programs, the biggest wins do not come from a clever optimizer or one extra architectural trick. They come from better data and better experimental filtering.
 
+Another useful extension is:
+
+- the objective itself should encode product priorities
+
+If coding matters more than multilingual breadth, the pretraining target and its internal weights should say so explicitly.
+
 ### 3. Prefer Flexibility and Stability When Performance Is Close
 
 If two methods perform similarly, prefer the one that is:
@@ -60,6 +66,12 @@ If two methods perform similarly, prefer the one that is:
 - and less likely to fail at scale.
 
 This is why the playbook likes choices such as WSD schedules and stable optimizers even when more aggressive alternatives may show slightly better best-case results.
+
+The same logic applies to:
+
+- data mixtures that scale more predictably
+- architectures that do not create fragile new bottlenecks
+- staged context-extension recipes that are easy to run late
 
 ### 4. Optimize for the Real Objective
 
@@ -95,6 +107,22 @@ A team needs an explicit point where the configuration is frozen and the goal ch
 
 Without that, tuning becomes a local optimization loop detached from the larger program objective.
 
+### 5.1 Scale-up validation is part of freezing
+
+A proxy win is not enough to freeze a major decision if there is a credible chance of scale inversion.
+
+This is especially true for:
+
+- data mixtures
+- sparsity layouts
+- long-horizon regularization tradeoffs
+
+So in practice:
+
+- shortlist at proxy scale
+- validate at a stronger scale
+- then freeze
+
 ### 6. “Perfect” Is Often the Wrong Target
 
 The playbook’s underlying principle is:
@@ -103,6 +131,36 @@ The playbook’s underlying principle is:
 - brittle micro-optimizations often do not.
 
 So “perfect is the enemy of good” is not motivational language here. It is an economic statement about finite compute and engineering bandwidth.
+
+### 7. Cap high-quality small datasets before they become traps
+
+High-quality data is not infinitely reusable.
+
+If a small source is upweighted too aggressively, it can become:
+
+- overfit,
+- memorized,
+- and less useful than its headline quality suggests.
+
+So repetition should be treated as a first-class training variable.
+
+### 8. Architecture and systems are co-designed
+
+A recipe is not just:
+
+- optimizer
+- schedule
+- model shape
+
+It is also:
+
+- communication pattern
+- checkpointing behavior
+- long-context memory plan
+- MoE routing implementation
+- recovery behavior
+
+At frontier scale, a design that wins only on paper but loses on goodput is not really winning.
 
 ## Practical Heuristics
 
@@ -117,4 +175,6 @@ So “perfect is the enemy of good” is not motivational language here. It is a
 - [Smol Training Playbook Foundations](/atlas/ai/training/smol-training-playbook-foundations)
 - [LLM Ablation Strategy](/atlas/ai/evaluation-experimentation/llm-ablation-strategy)
 - [Warmup-Stable-Decay Learning Rate Schedule](/atlas/ai/training/optimization/warmup-stable-decay-learning-rate-schedule)
+- [Data Mixture Optimization](/atlas/ai/training/data/data-mixture-optimization)
+- [Goodput, Determinism, and Fault Tolerance](/atlas/systems/infrastructure/goodput-determinism-and-fault-tolerance)
 - [Smol Training Playbook](https://huggingface.co/spaces/HuggingFaceTB/smol-training-playbook)
