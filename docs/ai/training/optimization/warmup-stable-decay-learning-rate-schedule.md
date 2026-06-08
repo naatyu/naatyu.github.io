@@ -100,6 +100,7 @@ This is one of the deeper lessons from the playbook: for long expensive runs, th
 
 ## Related
 
+- [AdamW](/atlas/ai/training/optimization/adamw)
 - [Learning Rate Warmup](/atlas/ai/training/optimization/learning-rate-warmup)
 - [Batch size & Learning rate](/atlas/ai/training/optimization/batch-size-and-learning-rate)
 - [Hyperparameter Scaling Laws for LLM Training](/atlas/ai/training/scaling/hyperparameter-scaling-laws-for-llm-training)

@@ -179,3 +179,4 @@ Most real-world projects fall in between, requiring a **balance** between regula
 - **Optimizers:** Studies show that when hyperparameters are well-tuned, there is **no single "best" optimizer**. Simple SGD (without momentum or fancy features) can be competitive.
 - **Momentum:** Momentum is essentially another mechanism that influences the **effective learning rate**, making it a subtle way to manage the step size.
 - **Gradient Clipping:** If gradients occasionally spike, clipping can cap the update size without changing the overall optimization direction. See [Gradient Clipping](/atlas/ai/training/optimization/gradient-clipping).
+- **AdamW:** For the actual AdamW update rule, EMA mechanism, and decoupled weight decay, see [AdamW](/atlas/ai/training/optimization/adamw).

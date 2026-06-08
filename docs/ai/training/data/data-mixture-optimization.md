@@ -221,6 +221,61 @@ $$
 
 This matters whenever long reasoning traces, long code samples, or document-length examples are present.
 
+## 8.3 Surrogate-based search scales better than brute-force sweeps
+
+If the mixture space is large, one useful pattern is:
+
+1. sample candidate mixtures around a manually designed prior
+2. train a swarm of proxy models
+3. fit a surrogate from mixture weights to capability metrics
+4. optimize the surrogate under practical constraints
+
+Formally, the mixture is a point on the simplex:
+
+$$
+x \in \Delta^d
+$$
+
+and the goal is to learn a map:
+
+$$
+\mathcal{M}: x \mapsto y
+$$
+
+from mixture weights to downstream capability scores.
+
+Once that surrogate is learned, the search problem becomes:
+
+$$
+\max_x \sum_j w_j f_j(x)
+$$
+
+subject to simplex and practicality constraints.
+
+This is attractive because it separates:
+
+- expensive proxy training
+- from cheaper post hoc optimization over the learned surrogate
+
+## 8.4 Stay near a reasonable prior unless the evidence is very strong
+
+A fully unconstrained surrogate optimizer may push toward unrealistic or brittle mixtures.
+
+So it is often useful to regularize toward a human-designed baseline:
+
+$$
+\mathcal{L}(x)
+=
+-\sum_j w_j f_j(x) + \lambda D_{KL}(x \| x_0)
+$$
+
+where $x_0$ is the prior mixture.
+
+This is a clean way to encode:
+
+- trust in the existing recipe
+- tolerance for deviation only when the measured gains justify it
+
 ## 9. What the MAI report adds
 
 The Microsoft MAI report contributes a few strong practical lessons:
@@ -241,6 +296,19 @@ The Smol Training Playbook reinforces a few additional lessons:
 - too much code early can hurt general-language performance
 - high-quality code/math datasets are often better staged later than exhausted early
 - annealing ablations are a practical way to test late-stage injections
+
+## 11. What the Laguna report adds
+
+The Laguna report contributes one especially useful extension:
+
+- fit surrogate regressors over mixture weights rather than relying only on direct ranking of proxy runs
+- sample candidate mixtures around a manually designed prior instead of over the whole simplex
+- optimize with an explicit regularization term that keeps the solution near the prior unless the data strongly suggests otherwise
+
+It also highlights a common tradeoff:
+
+- optimizing hard toward coding and math can improve those targets strongly
+- while causing modest regressions on some commonsense-oriented benchmarks
 
 ## Related
 

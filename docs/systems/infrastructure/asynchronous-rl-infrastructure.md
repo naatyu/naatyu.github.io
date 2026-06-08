@@ -118,6 +118,39 @@ So weight transfer often requires:
 
 At scale, this becomes a repeated distributed synchronization problem rather than a one-time load.
 
+## 6.1 Weight-sync cadence is a stability variable
+
+The learner-to-inference sync interval is not only a throughput parameter.
+
+If syncs are too sparse:
+
+- rollouts become too stale
+- importance ratios become less trustworthy
+- RL updates become noisier
+
+If syncs are too frequent:
+
+- transfer overhead can dominate
+- inference fleets spend too much time reloading or re-quantizing
+
+So sync cadence should be tuned as part of the RL recipe, not treated as fixed plumbing.
+
+## 6.2 Inference precision is part of the RL system contract
+
+Inference fleets may use different precision or quantization settings from the learner for speed reasons.
+
+This can be acceptable, but it should be treated as a controlled numerics mismatch:
+
+- learner runs in one dtype stack
+- inference rollouts run in another
+- weight transfer may include re-quantization or dtype conversion
+
+The important point is not “they must always match exactly.” It is:
+
+- measure the mismatch
+- keep it stable
+- and avoid changing it casually during a long RL run
+
 ## 7. Reliability patterns
 
 A robust async RL system needs:
@@ -149,6 +182,21 @@ $$
 $$
 
 That is why RL infra and RL objective design are tightly coupled.
+
+## 8.1 Exact rollout/runtime equivalence matters more for agentic RL
+
+In single-turn text RL, small rendering differences may be tolerable.
+
+In multi-turn, tool-using, agentic RL they are often not. If rollout rendering differs from production rendering, the model may be trained on a conversation protocol it never sees again after deployment.
+
+So RL infra should preserve:
+
+- tokenization behavior
+- assistant-message rendering
+- tool-call formatting
+- turn-boundary semantics
+
+as first-class invariants.
 
 ## Related
 

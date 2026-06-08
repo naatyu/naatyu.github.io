@@ -165,10 +165,24 @@ So RL is often best viewed as:
 - behavior optimization on top of pretrained competence
 - not a replacement for pretraining
 
+## 10. Production-harness RL is stronger than toy-harness RL
+
+One practical lesson from recent agentic RL systems is that rollouts are more useful when the model interacts with the same basic tool API and orchestration style that it will see in deployment.
+
+This matters because otherwise the policy may optimize for:
+
+- a synthetic action format
+- different tool semantics
+- different conversation rendering
+- or unrealistically clean environment behavior
+
+So for agentic coding and tool-use training, the closer the rollout harness is to the deployed harness, the more likely the learned behavior will transfer cleanly.
+
 ## Related
 
 - [Group Relative Policy Optimization](/atlas/ai/training/optimization/group-relative-policy-optimization)
 - [Adaptive Entropy Control in RL](/atlas/ai/training/optimization/adaptive-entropy-control-in-rl)
 - [Self-Distillation in RL Climbs](/atlas/ai/training/optimization/self-distillation-in-rl-climbs)
 - [Asynchronous RL Infrastructure](/atlas/systems/infrastructure/asynchronous-rl-infrastructure)
+- [Chat Templates for LLMs](/atlas/ai/inference-serving/chat-templates-for-llms)
 - [MAI-Thinking-1: Building a Hill-Climbing Machine](/atlas/ai/architectures/model-reports/mai-thinking-1-building-a-hill-climbing-machine)

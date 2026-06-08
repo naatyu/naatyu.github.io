@@ -147,6 +147,48 @@ This is why template design should be validated with:
 - direct inspection of rendered examples
 - manual conversation tests
 
+## 7. Rollout and deployment templates must agree exactly
+
+The Laguna report adds a useful RL-specific lesson:
+
+> rollout-time rendering and deployment-time rendering should be treated as an invariant, not merely as “similar enough.”
+
+In multi-turn and tool-use RL, tiny differences such as:
+
+- a missing newline
+- an extra trailing space
+- a slightly different assistant-message wrapper
+
+can create a real train/deploy mismatch.
+
+A robust approach is:
+
+- store the raw rollout tokens
+- re-render the same history through the production template
+- assert exact equality with the rollout prefix
+
+This is especially valuable when the inference stack and the RL harness evolve independently.
+
+## 8. Streaming parsers must handle multi-token deltas
+
+Reasoning and tool-call parsers are often written with an implicit assumption:
+
+> one streaming delta equals one token
+
+That assumption can fail under:
+
+- speculative decoding
+- merged deltas
+- fast producer / slow consumer pipelines
+
+Then block-boundary logic breaks, for example:
+
+- reasoning end tags are misdetected
+- trailing content after a boundary token is dropped
+- tool-call blocks become malformed
+
+So for reasoning/tool templates, parser robustness is part of the interface design.
+
 ## Practical Heuristics
 
 - Treat the chat template as part of the model recipe.
@@ -154,6 +196,7 @@ This is why template design should be validated with:
 - Use assistant-only masking by default for SFT unless you have a reason not to.
 - Validate reasoning retention rules separately for training and inference.
 - Test rendered examples before large runs.
+- Treat rollout-template and deployment-template equality as a hard requirement for RL systems.
 
 ## Related
 
