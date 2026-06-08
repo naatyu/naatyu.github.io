@@ -69,6 +69,7 @@ Entropy is the foundation for several related concepts:
 - **Jensen-Shannon Divergence** is built from entropy and [Kullback-Leibler Divergence](/atlas/math/probability/kullback-leibler-divergence).
 
 ## Related
+- [Prediction, Compression, and Entropy](/atlas/ai/foundations/prediction-compression-and-entropy)
 - [Cross-Entropy Loss](/atlas/ai/training/losses/cross-entropy-loss)
 - [Kullback-Leibler Divergence](/atlas/math/probability/kullback-leibler-divergence)
 - [Jensen-Shannon Divergence](/atlas/math/probability/jensen-shannon-divergence)

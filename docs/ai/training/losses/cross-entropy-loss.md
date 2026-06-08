@@ -75,6 +75,7 @@ In practice, cross-entropy is usually computed from logits directly rather than 
 - **Distillation**: Matching student predictions to a teacher distribution.
 
 ## Related
+- [Prediction, Compression, and Entropy](/atlas/ai/foundations/prediction-compression-and-entropy)
 - [Binary Cross-Entropy Loss](/atlas/ai/training/losses/binary-cross-entropy-loss)
 - [Jensen-Shannon Divergence](/atlas/math/probability/jensen-shannon-divergence)
 - [Kullback-Leibler Divergence](/atlas/math/probability/kullback-leibler-divergence)
