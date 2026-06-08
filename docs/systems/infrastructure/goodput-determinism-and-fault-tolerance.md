@@ -147,6 +147,7 @@ That is a healthier way to think about frontier training than raw utilization al
 
 ## Related
 
+- [Model FLOPs Utilization (MFU)](/atlas/systems/performance/model-flops-utilization-mfu)
 - [Choosing an LLM Training Framework](/atlas/systems/infrastructure/choosing-an-llm-training-framework)
 - [Asynchronous RL Infrastructure](/atlas/systems/infrastructure/asynchronous-rl-infrastructure)
 - [MAI-Thinking-1: Building a Hill-Climbing Machine](/atlas/ai/architectures/model-reports/mai-thinking-1-building-a-hill-climbing-machine)
