@@ -22,7 +22,7 @@ The key idea is:
 
 - **Compute-optimal training:** the parameter/token allocation that minimizes loss under a fixed training compute budget.
 - **Overtraining:** training on substantially more tokens than the compute-optimal rule would suggest for the chosen model size or active parameter count.
-- **TPP:** tokens per parameter, often used as a shorthand for training density.
+- **TPP (tokens per parameter):** the ratio of training tokens to model parameters, used as a shorthand for how long a model was trained relative to its size.
 - **Inference-aware scaling:** scaling that accounts for the fact that training is a one-time cost but inference is a recurring cost.
 - **Lifecycle objective:** an optimization target that includes both training and deployment economics.
 
@@ -53,11 +53,32 @@ $$
 \mathrm{TPP} = \frac{D}{N}
 $$
 
+where:
+
+- $D$ is the total number of pretraining tokens
+- $N$ is the dense-model parameter count
+
 or for MoEs more usefully:
 
 $$
 \mathrm{TPP}_{active} = \frac{D}{N_{active}}
 $$
+
+where $N_{active}$ is the number of parameters actually used on each forward pass.
+
+For a classic dense Chinchilla reference point, the rule of thumb is:
+
+$$
+D \approx 20N
+$$
+
+so the reference training density is:
+
+$$
+\mathrm{TPP}_{\text{Chinchilla}} \approx 20
+$$
+
+That `20 TPP` number is the baseline this note is comparing against when it says modern models are overtrained.
 
 The crucial point is:
 
@@ -142,7 +163,7 @@ $$
 \frac{15T}{8B} \approx 1875 \text{ TPP}
 $$
 
-which is an extreme example of overtraining relative to classic Chinchilla-style dense scaling.
+which is an extreme example of overtraining relative to the dense Chinchilla reference of roughly `20 TPP`.
 
 More importantly, Meta also states the reason directly:
 
@@ -164,7 +185,7 @@ $$
 \frac{14.8T}{37B} \approx 400 \text{ TPP}_{active}
 $$
 
-This is well above old Chinchilla-style dense regimes and fits the pattern:
+This is far above the classic dense Chinchilla reference of about `20 TPP`, even allowing for the fact that active-parameter accounting in MoEs is only an approximation, and fits the pattern:
 
 - small active footprint
 - heavier data training
@@ -183,7 +204,7 @@ $$
 \frac{23T}{32B} \approx 719 \text{ TPP}_{active}
 $$
 
-This is another strong modern example of intentional heavy-data training in an MoE with moderate active size.
+This is another strong modern example of intentional heavy-data training in an MoE with moderate active size, again far above the old dense `20 TPP` reference.
 
 ### MAI-Thinking-1
 
@@ -192,7 +213,7 @@ MAI is especially useful because it separates research and production regimes ex
 - many architecture ablations near `100-200 TPP`
 - production run around `500-1000 TPP`
 
-So MAI is direct evidence that modern teams may still use Chinchilla-like regimes for fair research comparison, while intentionally overtraining in production.
+Even the lower `100-200 TPP` ablation regime is already above the classic dense Chinchilla reference of about `20 TPP`, and the production regime is far beyond that. So MAI is direct evidence that modern teams may still use relatively lighter regimes for fair research comparison, while intentionally overtraining much harder in production.
 
 ### Qwen3
 
@@ -224,6 +245,14 @@ Epoch AI’s 2025 analysis provides the broad trend-level confirmation:
 - they estimate recent open models have been trained at ratios around `20x` the Chinchilla rule
 
 This is valuable because it shows overtraining is not one lab’s eccentricity. It is an ecosystem-wide direction.
+
+If the Chinchilla-style dense reference is roughly `20 TPP`, then `20x` that rule means a rough order of magnitude of:
+
+$$
+20 \times 20 \approx 400 \text{ TPP}
+$$
+
+which lines up with several of the modern examples above.
 
 ## 5. What overtraining buys you
 
