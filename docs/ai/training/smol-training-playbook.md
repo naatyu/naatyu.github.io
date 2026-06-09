@@ -321,6 +321,7 @@ The most reusable systems lesson is that cluster topology and storage behavior a
 - [Smol Training Playbook Foundations](/atlas/ai/training/smol-training-playbook-foundations)
 - [LLM Ablation Strategy](/atlas/ai/evaluation-experimentation/llm-ablation-strategy)
 - [Data Mixture Optimization](/atlas/ai/training/data/data-mixture-optimization)
+- [Overtraining and Inference-Aware Scaling](/atlas/ai/training/scaling/overtraining-and-inference-aware-scaling)
 - [Progressive Context Extension](/atlas/ai/training/scaling/progressive-context-extension)
 - [Supervised Fine-Tuning for LLMs](/atlas/ai/training/optimization/supervised-fine-tuning-for-llms)
 - [Preference Optimization for LLMs](/atlas/ai/training/optimization/preference-optimization-for-llms)

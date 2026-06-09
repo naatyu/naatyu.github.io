@@ -533,6 +533,7 @@ This is a better systems metric for frontier training because it prices both vis
 ## Related
 
 - [Scaling Ladders and Efficiency Gain](/atlas/ai/training/scaling/scaling-ladders-and-efficiency-gain)
+- [Overtraining and Inference-Aware Scaling](/atlas/ai/training/scaling/overtraining-and-inference-aware-scaling)
 - [Data Mixture Optimization](/atlas/ai/training/data/data-mixture-optimization)
 - [Deduplication and Memorization Control](/atlas/ai/training/data/deduplication-and-memorization-control)
 - [Progressive Context Extension](/atlas/ai/training/scaling/progressive-context-extension)

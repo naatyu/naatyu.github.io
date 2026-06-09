@@ -1,7 +1,7 @@
 ---
 title: "Scaling Laws"
 date: 2026-04-08
-lastmod: 2026-05-19
+lastmod: 2026-06-09
 tags:
   - ai/theory
   - scaling-laws
@@ -205,6 +205,8 @@ $$\text{training cost} \approx \text{expected inference cost}$$
 
 This is why models such as Llama 3 8B were trained on far more than $20$ tokens per parameter. The target is not only lowest pretraining loss per training FLOP; it is better quality per inference dollar.
 
+For a more detailed treatment of this shift, see [Overtraining and Inference-Aware Scaling](/atlas/ai/training/scaling/overtraining-and-inference-aware-scaling).
+
 ### Limits and caveats
 
 - $C \approx 6ND$ is a dense-transformer approximation, not an exact accounting formula.
@@ -217,6 +219,7 @@ This is why models such as Llama 3 8B were trained on far more than $20$ tokens 
 ## Related
 - AI Papers MOC
 - [Transformer Scaling Rules](/atlas/ai/training/scaling/transformer-scaling-rules)
+- [Overtraining and Inference-Aware Scaling](/atlas/ai/training/scaling/overtraining-and-inference-aware-scaling)
 - [Test-Time Compute](/atlas/ai/inference-serving/performance/test-time-compute)
 - [The Llama 3 Herd of Models](/atlas/ai/architectures/model-reports/the-llama-3-herd-of-models)
 - [Frontier Small Language Models](/atlas/ai/architectures/model-families/frontier-small-language-models)

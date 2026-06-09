@@ -169,4 +169,5 @@ The main lesson is that scaling discipline is not optional. Without it, you are 
 
 - [LLM Ablation Strategy](/atlas/ai/evaluation-experimentation/llm-ablation-strategy)
 - [Data Mixture Optimization](/atlas/ai/training/data/data-mixture-optimization)
+- [Overtraining and Inference-Aware Scaling](/atlas/ai/training/scaling/overtraining-and-inference-aware-scaling)
 - [MAI-Thinking-1: Building a Hill-Climbing Machine](/atlas/ai/architectures/model-reports/mai-thinking-1-building-a-hill-climbing-machine)
