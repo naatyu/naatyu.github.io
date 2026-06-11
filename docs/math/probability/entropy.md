@@ -1,7 +1,7 @@
 ---
 title: "Entropy"
 date: 2026-05-06
-lastmod: 2026-05-06
+lastmod: 2026-06-11
 tags:
   - math/probability
   - theory
@@ -17,6 +17,8 @@ Entropy measures the uncertainty or average information content of a probability
 - **Uncertainty:** How hard it is to predict the outcome of a random variable.
 - **Information Content:** The amount of information carried by an event.
 - **Logarithm Base:** Determines the unit of entropy: bits for base 2, nats for base $e$.
+- **Prefix-free code:** a variable-length code where no codeword is the prefix of another.
+- **Kraft inequality:** condition that valid prefix-free code lengths must satisfy.
 
 ## Content
 
@@ -58,6 +60,128 @@ The entropy is lower because the outcome is easier to predict.
 ### Useful Intuition
 Entropy is the theoretical lower bound on the average number of bits needed to encode samples from a distribution. More uncertainty means more information is needed to describe the outcome.
 
+### Coding-Theoretic Derivation
+
+The kexue.fm minimum-entropy series gives a useful derivation from prefix-free coding.
+
+Assume we encode $n$ symbols with binary code lengths:
+
+$$
+l_1,l_2,\ldots,l_n
+$$
+
+For a prefix-free code, the lengths must satisfy Kraft's inequality:
+
+$$
+\sum_{i=1}^{n}2^{-l_i}\leq 1
+$$
+
+The average code length is:
+
+$$
+\bar L
+=
+\sum_{i=1}^{n}p_i l_i
+$$
+
+Since:
+
+$$
+l_i = -\log_2 2^{-l_i}
+$$
+
+we can write:
+
+$$
+\bar L
+=
+-
+\sum_i p_i\log_2 2^{-l_i}
+$$
+
+Define:
+
+$$
+q_i = \frac{2^{-l_i}}{Z},
+\qquad
+Z = \sum_j 2^{-l_j}\leq 1
+$$
+
+Then:
+
+$$
+2^{-l_i}=Zq_i
+$$
+
+and:
+
+$$
+\bar L
+=
+-
+\sum_i p_i\log_2 q_i
+-
+\log_2 Z
+$$
+
+Because $Z\leq 1$:
+
+$$
+-\log_2 Z \geq 0
+$$
+
+and cross-entropy satisfies:
+
+$$
+-
+\sum_i p_i\log_2 q_i
+=
+H(P)+D_{\mathrm{KL}}(P\|Q)
+\geq
+H(P)
+$$
+
+Therefore:
+
+$$
+\bar L \geq H(P)
+$$
+
+This proves the coding interpretation:
+
+> no prefix-free binary code can have average length below the entropy.
+
+The ideal code length is:
+
+$$
+l_i^* = -\log_2 p_i
+$$
+
+which is exact when probabilities are powers of two and approximate otherwise.
+
+### Why Clustering Can Be an Entropy Principle
+
+The same coding idea extends beyond text compression. If grouping data makes descriptions shorter, then the grouping captured real structure.
+
+A generic objective is:
+
+$$
+\text{choose representation} \quad z
+\quad \text{to minimize expected code length}
+$$
+
+This is why entropy appears in:
+
+- compression
+- clustering
+- language modeling
+- representation learning
+- minimum description length
+
+The operational interpretation is:
+
+> good structure is structure that makes the data cheaper to describe.
+
 ### Special Cases
 - **Uniform distribution**: entropy is maximal for a fixed number of outcomes.
 - **Deterministic distribution**: entropy is 0.
@@ -75,3 +199,7 @@ Entropy is the foundation for several related concepts:
 - [Jensen-Shannon Divergence](/atlas/math/probability/jensen-shannon-divergence)
 - [Binary Cross-Entropy Loss](/atlas/ai/training/losses/binary-cross-entropy-loss)
 - [Law of Total Probability](/atlas/math/probability/law-of-total-probability)
+
+## Sources
+
+- Su Jianlin, [最小熵原理（五）：“层层递进”之社区发现与聚类](https://kexue.fm/archives/7006)

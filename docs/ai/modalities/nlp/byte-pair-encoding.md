@@ -1,7 +1,7 @@
 ---
 title: "Byte Pair Encoding"
 date: 2026-05-19
-lastmod: 2026-05-19
+lastmod: 2026-06-11
 tags:
   - ai/nlp
   - ai/llm
@@ -238,6 +238,8 @@ Use tokenizer evaluation metrics before training a model:
 - code fertility: important for code models
 - digit handling: are numbers split reasonably?
 - whitespace/newline behavior: important for code and markdown
+
+For byte-level unigram-style tokenization and randomized segmentations, see [BytePiece and Stochastic Tokenization](/atlas/ai/modalities/nlp/bytepiece-and-stochastic-tokenization).
 
 For comparing models with different tokenizers, perplexity is not directly comparable. Use tokenizer-independent metrics like [bits-per-byte (BPB)](/atlas/ai/architectures/transformers/byte-latent-transformer).
 

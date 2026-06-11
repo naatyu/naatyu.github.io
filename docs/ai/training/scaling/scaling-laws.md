@@ -1,7 +1,7 @@
 ---
 title: "Scaling Laws"
 date: 2026-04-08
-lastmod: 2026-06-09
+lastmod: 2026-06-11
 tags:
   - ai/theory
   - scaling-laws
@@ -216,10 +216,45 @@ For a more detailed treatment of this shift, see [Overtraining and Inference-Awa
 - Scaling laws predict average loss trends, not exact benchmark behavior or emergent capability thresholds.
 - Chinchilla is about compute-optimal pretraining, not necessarily optimal serving, fine-tuning, reasoning, or test-time compute.
 
+### Scaling laws are not only about $N$ and $D$
+
+The kexue.fm MuP and hyperparameter-scaling discussions highlight a useful separation:
+
+$$
+\text{loss scaling}
+\neq
+\text{hyperparameter transfer}
+$$
+
+Classic scaling laws estimate:
+
+$$
+L(N,D,C)
+$$
+
+But training a real frontier model also needs laws for:
+
+$$
+\eta(C),\quad B(C),\quad \lambda(C),\quad \text{warmup}(C)
+$$
+
+and sometimes width-transfer rules from MuP-style parametrization.
+
+So a practical scaling program has at least three layers:
+
+| Layer | Question |
+| --- | --- |
+| Model/data scaling | How large should $N$ and $D$ be? |
+| Hyperparameter scaling | How should LR, batch size, warmup, and decay change? |
+| Parametrization scaling | Does a small-model sweep transfer to a larger width? |
+
+This matters because a model can be correctly sized under Chinchilla but poorly trained because its LR, batch size, optimizer grouping, or parametrization did not scale correctly.
+
 ## Related
 - AI Papers MOC
 - [Transformer Scaling Rules](/atlas/ai/training/scaling/transformer-scaling-rules)
 - [Overtraining and Inference-Aware Scaling](/atlas/ai/training/scaling/overtraining-and-inference-aware-scaling)
+- [Hyperparameter Scaling Laws for LLM Training](/atlas/ai/training/scaling/hyperparameter-scaling-laws-for-llm-training)
 - [Test-Time Compute](/atlas/ai/inference-serving/performance/test-time-compute)
 - [The Llama 3 Herd of Models](/atlas/ai/architectures/model-reports/the-llama-3-herd-of-models)
 - [Frontier Small Language Models](/atlas/ai/architectures/model-families/frontier-small-language-models)

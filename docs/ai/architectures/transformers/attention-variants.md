@@ -1,7 +1,7 @@
 ---
 title: "Attention Variants"
 date: 2026-06-08
-lastmod: 2026-06-08
+lastmod: 2026-06-11
 tags:
   - ai/llm
   - transformers
@@ -25,6 +25,7 @@ The core tradeoff is:
 - **GQA:** grouped-query attention, where several query heads share one KV head.
 - **MLA:** multi-head latent attention, where keys and values are compressed into a low-dimensional latent cache.
 - **Sliding-window attention:** local attention where each token attends only to a fixed neighborhood.
+- **Linear attention:** attention family that avoids materializing the full $n \times n$ attention matrix by summarizing history into fixed-size states.
 - **Cross-attention:** queries come from one sequence, while keys and values come from another.
 - **Local attention:** attention restricted to a window or local region.
 - **Global attention:** unrestricted full-sequence attention, or in some architectures, attention involving globally visible tokens.
@@ -223,6 +224,187 @@ Important nuance:
 
 So MLA is closer to a **low-rank cache compression scheme** than a simple head-sharing scheme.
 
+### C. GQA is already partly low-rank
+
+A useful kexue.fm observation is that "MLA is low-rank" is not the full explanation.
+
+If we concatenate all GQA keys and values for token $i$:
+
+$$
+c_i
+=
+\left[
+k_i^{(1)},\ldots,k_i^{(g)},
+v_i^{(1)},\ldots,v_i^{(g)}
+\right]
+\in
+\mathbb{R}^{g(d_k+d_v)}
+$$
+
+then:
+
+$$
+c_i
+=
+x_i
+\left[
+W_k^{(1)},\ldots,W_k^{(g)},
+W_v^{(1)},\ldots,W_v^{(g)}
+\right]
+=
+x_i W_c
+$$
+
+In many LLM settings:
+
+$$
+g(d_k+d_v) < d
+$$
+
+so GQA itself can already be interpreted as projecting the hidden state into a lower-dimensional KV representation.
+
+The sharper distinction is:
+
+- GQA projects, then splits and repeats KV groups
+- MLA projects into a latent state, then uses learned projections from that latent state
+- MLA can use an identity transform at inference so the cache stores the latent state rather than expanded per-head keys and values
+
+### D. MLA identity transform
+
+Ignoring positional encoding, MLA can define:
+
+$$
+c_i = x_i W_c
+$$
+
+and then per head:
+
+$$
+q_t^{(s)} = x_t W_q^{(s)}
+$$
+
+$$
+k_i^{(s)} = c_i W_k^{(s)}
+$$
+
+$$
+v_i^{(s)} = c_i W_v^{(s)}
+$$
+
+The attention score is:
+
+$$
+q_t^{(s)} {k_i^{(s)}}^\top
+=
+\left(x_t W_q^{(s)}\right)
+\left(c_i W_k^{(s)}\right)^\top
+$$
+
+which can be rewritten as:
+
+$$
+q_t^{(s)} {k_i^{(s)}}^\top
+=
+x_t
+\left(W_q^{(s)} {W_k^{(s)}}^\top\right)
+c_i^\top
+$$
+
+This is the key trick. At inference time, the model can absorb:
+
+$$
+W_q^{(s)} {W_k^{(s)}}^\top
+$$
+
+into the query-side projection, and cache only:
+
+$$
+c_i
+$$
+
+instead of caching every expanded:
+
+$$
+k_i^{(s)}, v_i^{(s)}
+$$
+
+Similarly, the value projection can be moved into the output-side projection. So, in the no-position-encoding case, MLA can behave like a high-capacity training form that is algebraically transformed into a much cheaper latent-cache inference form.
+
+### E. Why RoPE complicates MLA
+
+The identity transform above assumes that:
+
+$$
+W_q^{(s)} {W_k^{(s)}}^\top
+$$
+
+is position-independent.
+
+With RoPE, queries and keys are multiplied by position-dependent rotation matrices:
+
+$$
+q_i^{(s)} = x_i W_q^{(s)} \mathcal{R}_i
+$$
+
+$$
+k_i^{(s)} = c_i W_k^{(s)} \mathcal{R}_i
+$$
+
+Then:
+
+$$
+q_t^{(s)} {k_i^{(s)}}^\top
+=
+x_t
+\left(
+W_q^{(s)}
+\mathcal{R}_{t-i}
+{W_k^{(s)}}^\top
+\right)
+c_i^\top
+$$
+
+The middle matrix now depends on the relative position $t-i$:
+
+$$
+W_q^{(s)}\mathcal{R}_{t-i}{W_k^{(s)}}^\top
+$$
+
+so it cannot be merged into one fixed query projection.
+
+This is the core MLA/RoPE conflict:
+
+> MLA can use RoPE, but full RoPE breaks the clean identity transform that makes latent KV caching cheap.
+
+The practical workaround is **Partial RoPE**:
+
+- keep part of the key/query dimensions unrotated so they can use latent-cache factorization
+- reserve a smaller part for RoPE so the model still gets relative position information
+
+This explains why modern MLA designs often split head dimensions into:
+
+$$
+d_{\text{head}}
+=
+d_{\text{nope}} + d_{\text{rope}}
+$$
+
+where $d_{\text{nope}}$ participates in the latent-cache trick and $d_{\text{rope}}$ carries rotary position information.
+
+### F. Why head dimension can matter more than number of KV groups
+
+The kexue.fm MLA analysis argues that some of MLA's strength comes not only from cache compression, but from allowing larger effective head dimensions under a fixed KV-cache budget.
+
+Under a cache budget, increasing the number of KV groups $g$ is not always the best use of memory. A larger per-head representation can be more valuable than more KV groups.
+
+Practical heuristic:
+
+- if the model is quality-limited, very small KV representations can bottleneck retrieval
+- if the model is bandwidth-limited, full MHA may be impossible
+- MLA and KV-shared variants try to spend cache budget on richer per-head dimensions rather than many independent KV groups
+
+This helps explain why MLA can be competitive with or better than GQA even when both are designed around KV-cache reduction.
+
 ## 6. Sliding-window attention
 
 In **sliding-window attention**, each token attends only to nearby tokens inside a fixed window of width $w$.
@@ -340,6 +522,7 @@ Disadvantages:
 | **MQA** | all heads share one KV head | minimal KV cache | can hurt quality |
 | **GQA** | groups of query heads share KV heads | good cache-quality tradeoff | still some quality loss vs MHA |
 | **MLA** | compress KV state into a latent bottleneck | very strong cache reduction | more architectural complexity |
+| **Linear attention** | summarize history into recurrent/kernel states | linear long-context scaling | weaker exact token retrieval |
 | **Sliding-window** | each token attends locally | long-context efficiency | weaker long-range access |
 | **Global attention** | unrestricted attention | full-context interaction | expensive |
 | **Cross-attention** | query one sequence with another | multimodal / encoder-decoder fusion | extra compute path |
@@ -371,6 +554,12 @@ Disadvantages:
 - use it when context length is large and most dependencies are local
 - pair it with occasional global mixing if long-range reasoning still matters
 
+### When to use linear attention
+
+- use it when the main constraint is long-context memory/compute
+- pair it with local mechanisms such as short convolution if precise nearby interactions matter
+- be careful on tasks that require exact retrieval or copying
+
 ### When to use cross-attention
 
 - use it when the model must fuse different streams of information
@@ -399,6 +588,8 @@ The real question is:
 - [KV Cache](/atlas/ai/inference-serving/caching/kv-cache)
 - [Transformer Scaling Rules](/atlas/ai/training/scaling/transformer-scaling-rules)
 - [RoPE scaling](/atlas/ai/architectures/transformers/rope-scaling)
+- [Attention Softmax and Scaling](/atlas/ai/architectures/transformers/attention-softmax-and-scaling)
+- [Linear Attention](/atlas/ai/architectures/transformers/linear-attention)
 - [Context Parallelism](/atlas/systems/parallel-computing/context-parallelism)
 - [Disaggregated Prefill-Decode Serving](/atlas/ai/inference-serving/serving-architectures/disaggregated-prefill-decode-serving)
 
@@ -408,3 +599,7 @@ The real question is:
 - Attention Is All You Need: https://papers.neurips.cc/paper/7181-attention-is-all-you-need.pdf
 - Longformer: The Long-Document Transformer: https://arxiv.org/abs/2004.05150
 - MAI-Thinking-1: Building a Hill-Climbing Machine: https://microsoft.ai/pdf/mai-thinking-1.pdf
+- Su Jianlin, [缓存与效果的极限拉扯：从MHA、MQA、GQA到MLA](https://kexue.fm/archives/10091)
+- Su Jianlin, [Transformer升级之路：20、MLA好在哪里?（上）](https://kexue.fm/archives/10907)
+- Su Jianlin, [Transformer升级之路：21、MLA好在哪里?（下）](https://kexue.fm/archives/11111)
+- Su Jianlin, [Transformer升级之路：19、第二类旋转位置编码](https://kexue.fm/archives/10862)

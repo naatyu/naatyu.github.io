@@ -1,7 +1,7 @@
 ---
 title: "Cross-Entropy Loss"
 date: 2026-05-06
-lastmod: 2026-05-06
+lastmod: 2026-06-11
 tags:
   - ai/deep-learning
   - theory/loss-functions
@@ -74,9 +74,29 @@ In practice, cross-entropy is usually computed from logits directly rather than 
 - **Language Modeling**: Next-token prediction in decoder-only transformers.
 - **Distillation**: Matching student predictions to a teacher distribution.
 
+### Distillation View
+
+When the target is one-hot, cross-entropy reduces to:
+
+$$
+L=-\log q_y
+$$
+
+When the target is a teacher distribution $p_T$, the loss becomes:
+
+$$
+L_{\text{distill}}
+=
+-
+\sum_i p_T(i)\log q_i
+$$
+
+This is still cross-entropy, but the target contains more information than a hard label. It can express that several alternatives are plausible, not only which one was annotated as correct.
+
 ## Related
 - [Prediction, Compression, and Entropy](/atlas/ai/foundations/prediction-compression-and-entropy)
 - [Binary Cross-Entropy Loss](/atlas/ai/training/losses/binary-cross-entropy-loss)
+- [Knowledge Distillation](/atlas/ai/training/losses/knowledge-distillation)
 - [Jensen-Shannon Divergence](/atlas/math/probability/jensen-shannon-divergence)
 - [Kullback-Leibler Divergence](/atlas/math/probability/kullback-leibler-divergence)
 - Loss Functions MOC

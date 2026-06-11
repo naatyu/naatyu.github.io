@@ -1,7 +1,7 @@
 ---
 title: "MoE Training Stability"
 date: 2026-06-08
-lastmod: 2026-06-08
+lastmod: 2026-06-11
 tags:
   - ai/training
   - moe
@@ -111,5 +111,7 @@ Loss alone is often too late or too coarse.
 ## Related
 
 - [Model FLOPs Utilization (MFU)](/atlas/systems/performance/model-flops-utilization-mfu)
+- [MoE Routing and Load Balancing](/atlas/ai/training/optimization/moe-routing-and-load-balancing)
+- [Muon Optimizer](/atlas/ai/training/optimization/muon-optimizer)
 - [Rules of Engagement for LLM Training](/atlas/ai/training/optimization/rules-of-engagement-for-llm-training)
 - [Laguna M.1 / XS.2 Technical Report](https://poolside.ai/assets/laguna/laguna-m1-xs2-technical-report.pdf)

@@ -1,7 +1,7 @@
 ---
 title: "Learning Rate Warmup"
 date: 2026-04-10
-lastmod: 2026-04-10
+lastmod: 2026-06-11
 tags:
   - ai/deep-learning
   - theory
@@ -68,4 +68,5 @@ A typical training run follows this pattern:
 - Optimization with PyTorch
 - [The Llama 3 Herd of Models](/atlas/ai/architectures/model-reports/the-llama-3-herd-of-models)
 - [Attention Mechanism](/atlas/ai/foundations/attention-mechanism)
+- [Residuals, Normalization, and Initialization](/atlas/ai/architectures/transformers/residual-normalization-and-initialization)
 - [Gradient Direction and Magnitude](/atlas/math/calculus/gradient-direction-and-magnitude)

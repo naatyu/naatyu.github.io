@@ -1,7 +1,7 @@
 ---
 title: "Batch size & Learning rate"
 date: 2026-05-11
-lastmod: 2026-06-02
+lastmod: 2026-06-11
 draft: false
 ---
 
@@ -157,6 +157,131 @@ In short:
 - **AdamW square-root scaling** tries to preserve update noise
 - for AdamW, the second heuristic is often the more stable default
 
+### D. Deeper view: Adam as SignSGD
+
+A useful approximation for Adam-like optimizers is to treat the adaptive update direction as a sign-like direction:
+
+$$
+\tilde{\varphi}_B \approx \operatorname{sign}(\tilde g_B)
+$$
+
+where:
+
+$$
+\tilde g_B = \frac{1}{B}\sum_{i=1}^B \tilde g^{(i)}
+$$
+
+and:
+
+$$
+\mathbb{E}[\tilde g_B] = g,\qquad
+\operatorname{Cov}(\tilde g_B)=\frac{\Sigma}{B}
+$$
+
+This view is imperfect, but it explains why AdamW often follows different batch-size rules than plain SGD.
+
+If the gradient noise is approximated as Gaussian:
+
+$$
+\tilde g_B - g \sim \mathcal{N}\left(0,\frac{\Sigma}{B}\right)
+$$
+
+then increasing $B$ makes the sign estimate more reliable. For a coordinate $i$, one can approximate:
+
+$$
+\mu_i
+=
+\mathbb{E}[\operatorname{sign}(\tilde g_{B,i})]
+\approx
+\frac{g_i/\sigma_i}{\sqrt{\pi/(2B)+(g_i/\sigma_i)^2}}
+$$
+
+or equivalently:
+
+$$
+\mu_i
+\approx
+\frac{\operatorname{sign}(g_i)}
+{\sqrt{1+\pi(\sigma_i/g_i)^2/(2B)}}
+$$
+
+If we simplify by assuming a shared noise-to-signal ratio:
+
+$$
+\left(\frac{\sigma_i}{g_i}\right)^2 \approx \kappa^2
+$$
+
+then for small enough batch size:
+
+$$
+\eta^* \propto \sqrt{B}
+$$
+
+This gives a more Adam-specific reason why square-root scaling is often a good starting point: with small or moderate batches, increasing $B$ mostly improves the reliability of the sign-like update direction.
+
+### E. Large batches can saturate or even reverse the LR trend
+
+The square-root rule is not a universal law. The kexue.fm analysis highlights a subtle point: once batch size is large enough, the Adam/SignSGD approximation can stop improving monotonically.
+
+Define:
+
+$$
+\beta
+=
+\left(1+\frac{\pi\kappa^2}{2B}\right)^{-1/2}
+$$
+
+As $B$ increases, $\beta$ increases. But an approximate optimal learning rate can take the form:
+
+$$
+\eta^*
+\approx
+\frac{\eta_{\max}}
+{\frac{1}{2}\left(\frac{\beta_{\text{noise}}}{\beta}
++
+\frac{\beta}{\beta_{\text{noise}}}\right)}
+$$
+
+where:
+
+$$
+\beta_{\text{noise}}
+=
+\sqrt{
+\frac{\sum_i H_{i,i}}
+{\sum_{i\neq j}\operatorname{sign}(g_i g_j)H_{i,j}}
+}
+$$
+
+and $H$ is the local Hessian.
+
+This expression is not monotonic in $\beta$. It is maximized around:
+
+$$
+\beta = \beta_{\text{noise}}
+$$
+
+Therefore, beyond a certain batch size:
+
+$$
+B > B_{\text{noise}}
+$$
+
+the optimal learning rate may stop increasing and can even decrease.
+
+Practical interpretation:
+
+- at small-to-medium batch, larger $B$ reduces harmful sign noise, so higher LR can help
+- at very large batch, Adam's adaptive sign-like direction may become too deterministic
+- some noise may have been correcting the suboptimality of the sign-like update
+- removing that noise can require a more conservative LR
+
+This is sometimes described as a **surge** phenomenon: performance improves as batch size increases up to a critical region, then the best LR behavior changes.
+
+For LLM pretraining, the takeaway is not "decrease LR for every huge batch." The takeaway is:
+
+> do not extrapolate the square-root or linear rule indefinitely without a batch-size sweep.
+
 ---
 
 ## Conclusion: The Contingency of Optimal Hyperparameters
@@ -180,3 +305,11 @@ Most real-world projects fall in between, requiring a **balance** between regula
 - **Momentum:** Momentum is essentially another mechanism that influences the **effective learning rate**, making it a subtle way to manage the step size.
 - **Gradient Clipping:** If gradients occasionally spike, clipping can cap the update size without changing the overall optimization direction. See [Gradient Clipping](/atlas/ai/training/optimization/gradient-clipping).
 - **AdamW:** For the actual AdamW update rule, EMA mechanism, and decoupled weight decay, see [AdamW](/atlas/ai/training/optimization/adamw).
+- **Muon:** For a matrix-aware alternative to AdamW, see [Muon Optimizer](/atlas/ai/training/optimization/muon-optimizer).
+
+## Sources
+
+- Su Jianlin, [当Batch Size增大时，学习率该如何随之变化？](https://kexue.fm/archives/10542)
+- Su Jianlin, [Adam的epsilon如何影响学习率的Scaling Law？](https://kexue.fm/archives/10563)
+- Su Jianlin, [重新思考学习率与Batch Size（一）：现状](https://kexue.fm/archives/11260)
+- Su Jianlin, [重新思考学习率与Batch Size（四）：EMA](https://kexue.fm/archives/11301)

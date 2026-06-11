@@ -1,7 +1,7 @@
 ---
 title: "AdamW"
 date: 2026-06-08
-lastmod: 2026-06-08
+lastmod: 2026-06-11
 tags:
   - ai/training
   - optimization
@@ -297,6 +297,57 @@ $$
 
 but some recipes use smaller values like `0.01`.
 
+### Learning rate and weight decay as memory length
+
+A useful kexue.fm perspective is to view AdamW's decoupled weight decay as a sliding-average memory mechanism.
+
+Ignoring the adaptive denominator for a moment, AdamW with decoupled weight decay has the form:
+
+$$
+\theta_{t+1}
+=
+(1-\eta\lambda)\theta_t
+-
+\eta u_t
+$$
+
+where $u_t$ is the optimizer update direction.
+
+Unrolling:
+
+$$
+\theta_T
+=
+(1-\eta\lambda)^T\theta_0
+-
+\eta
+\sum_{t=0}^{T-1}
+(1-\eta\lambda)^{T-1-t}u_t
+$$
+
+So older updates receive exponentially decaying weights:
+
+$$
+(1-\eta\lambda)^k
+\approx
+\exp(-\eta\lambda k)
+$$
+
+The effective memory timescale is therefore roughly:
+
+$$
+\tau_{\text{memory}}
+\approx
+\frac{1}{\eta\lambda}
+$$
+
+This gives an interpretation of the LR/WD product:
+
+- larger $\eta\lambda$ forgets old updates faster
+- smaller $\eta\lambda$ keeps a longer memory of previous data
+
+This matters because weight decay and learning rate are not independent in their effect on parameter history. Two runs with different $\eta$ and $\lambda$ but similar $\eta\lambda$ can have similar decay timescales, even if their instantaneous update sizes differ.
+
 ## 9. Why AdamW remains the default in LLM training
 
 AdamW is popular not because it is theoretically perfect, but because it is:
@@ -313,6 +364,8 @@ It works especially well in regimes where:
 - long stable training runs matter more than optimizer novelty
 
 Many newer optimizers can outperform it in some settings, but AdamW remains the standard baseline that strong training programs must beat fairly.
+
+One important example is [Muon](/atlas/ai/training/optimization/muon-optimizer), which replaces AdamW's elementwise adaptive normalization with a matrix-sign update for large matrix parameters. Muon is not a drop-in replacement for every parameter type, but it is a serious alternative for matrix-heavy LLM pretraining experiments.
 
 ## 10. Practical intuition
 
@@ -347,5 +400,10 @@ These are not universal laws, but they are strong defaults.
 
 - [Batch size & Learning rate](/atlas/ai/training/optimization/batch-size-and-learning-rate)
 - [Gradient Clipping](/atlas/ai/training/optimization/gradient-clipping)
+- [Muon Optimizer](/atlas/ai/training/optimization/muon-optimizer)
 - [Warmup-Stable-Decay Learning Rate Schedule](/atlas/ai/training/optimization/warmup-stable-decay-learning-rate-schedule)
 - [Hyperparameter Scaling Laws for LLM Training](/atlas/ai/training/scaling/hyperparameter-scaling-laws-for-llm-training)
+
+## Sources
+
+- Su Jianlin, [滑动平均视角下的权重衰减和学习率](https://kexue.fm/archives/11459)

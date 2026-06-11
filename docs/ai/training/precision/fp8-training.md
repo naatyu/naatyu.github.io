@@ -1,7 +1,7 @@
 ---
 title: "FP8 Training"
 date: 2026-05-20
-lastmod: 2026-06-08
+lastmod: 2026-06-11
 tags:
   - ai/deep-learning
   - training
@@ -54,6 +54,8 @@ keep numerically sensitive operations in BF16/FP32
 ```
 
 FP8 training is not usually "everything in FP8". Optimizer states, master weights, reductions, normalization, softmax, and loss computation usually stay in BF16/FP32.
+
+For attention specifically, low precision can introduce systematic rounding artifacts, not just random noise. See [Low-Precision Attention Rounding Bias](/atlas/ai/training/precision/low-precision-attention-rounding-bias).
 
 ### FP8 formats
 
