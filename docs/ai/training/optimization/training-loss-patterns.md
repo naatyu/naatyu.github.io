@@ -57,6 +57,10 @@ Useful comparisons:
 - per-domain validation losses
 - gradient norm and clipping frequency
 
+![Healthy BLOOM training loss curve](/img/training-loss-patterns/bloom-176B-success.png)
+
+_A healthy large-scale run is not perfectly smooth, but the global trend keeps improving and transient irregularities do not change the trajectory._
+
 ## 3. Fast recovering spikes
 
 A **fast recovering spike** is a sharp loss increase that quickly returns to the previous curve.
@@ -82,6 +86,10 @@ Action:
 - inspect related telemetry if the spike is unusually large
 
 Do not overreact to one fully recovered spike in an otherwise healthy run.
+
+![Fast recovering loss spikes](/img/training-loss-patterns/pre-bloom-tr1-13B-glitch-1-2.png)
+
+_Fast recovering spikes are useful to recognize because stopping every run on this pattern would waste compute. The important signal is the quick return to the previous loss trend._
 
 ## 4. Slow recovering spikes
 
@@ -109,6 +117,10 @@ The key question is:
 $$
 \text{did the model recover to the same trajectory, or only to a worse one?}
 $$
+
+![Slow recovering loss spike](/img/training-loss-patterns/idefics-80b-tr-190-01-spike-recover-2023-05-30.png)
+
+_A slow recovery can still be acceptable, but it has an opportunity cost: many steps are spent repairing the disturbed optimizer/model state instead of making normal progress._
 
 ## 5. Non-recovering spikes
 
@@ -138,6 +150,10 @@ Action:
 - check whether the issue reproduces from the same checkpoint
 
 A non-recovering spike should not be treated as “just noise.”
+
+![Non-recovering loss spike](/img/training-loss-patterns/pre-bloom-tr8-104B-glitch-1.png)
+
+_The dangerous case is not the spike itself, but the new post-spike regime. If the curve resumes from a worse plateau, the run may have taken irreversible damage without rollback._
 
 ## 6. Non-spike divergence
 
@@ -201,6 +217,10 @@ Action:
 
 Resume correctness is not just a convenience feature. It protects the validity of the run.
 
+![Resume-related data-source loss artifact](/img/training-loss-patterns/idefics-80b-tr-190-01-image2text.png)
+
+_Resume bugs often show up as localized artifacts around the restart boundary. This is why checkpoint validation should include dataloader and sampler state, not only model weights._
+
 ## 8. Repeated data can create false low loss
 
 One dangerous pattern is not a loss spike but an artificially low loss.
@@ -224,6 +244,10 @@ Action:
 
 This failure can invalidate ablations because the comparison no longer assumes the same data exposure.
 
+![Repeated data creates a false low-loss region](/img/training-loss-patterns/ptl-repeat-data-p3.png)
+
+_Repeated data can make a run look better than it is. When fresh data resumes, the apparent loss jump is the removal of the artificial advantage, not necessarily a new instability._
+
 ## 9. Track losses per data distribution
 
 When training on multiple data sources, aggregate loss can hide the source of a problem.
@@ -246,6 +270,10 @@ This helps distinguish:
 - a source-specific preprocessing bug
 
 If only one source spikes, the likely cause is different from a simultaneous spike across every source.
+
+![Per-source loss curves reveal localized instability](/img/training-loss-patterns/idefics-80b-tr-190-01-losses-2023-06-04.png)
+
+_Aggregate loss can hide the real failure mode. Per-source curves make it easier to separate global optimizer instability from source-specific data or preprocessing problems._
 
 ## 10. Diagnostic checklist
 
