@@ -1,7 +1,7 @@
 ---
 title: "Gradient Norm and Training Dynamics"
 date: 2026-05-11
-lastmod: 2026-05-11
+lastmod: 2026-06-11
 tags:
   - ai/deep-learning
   - theory
@@ -101,6 +101,7 @@ If loss is the "direction of improvement," the gradient norm is the "strength of
 That makes it one of the most useful scalar diagnostics for training dynamics.
 
 ## Related
+- [Training Loss Patterns](/atlas/ai/training/optimization/training-loss-patterns)
 - [Gradient Clipping](/atlas/ai/training/optimization/gradient-clipping)
 - [Gradient Direction and Magnitude](/atlas/math/calculus/gradient-direction-and-magnitude)
 - [Batch size & Learning rate](/atlas/ai/training/optimization/batch-size-and-learning-rate)

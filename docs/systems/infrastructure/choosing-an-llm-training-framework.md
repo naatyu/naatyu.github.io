@@ -1,7 +1,7 @@
 ---
 title: "Choosing an LLM Training Framework"
 date: 2026-06-02
-lastmod: 2026-06-08
+lastmod: 2026-06-11
 tags:
   - systems
   - llm-training
@@ -151,4 +151,5 @@ For long expensive runs, a framework should be judged on whether it supports:
 - [LLM Ablation Strategy](/atlas/ai/evaluation-experimentation/llm-ablation-strategy)
 - [High-Density GPU Infrastructure](/atlas/systems/infrastructure/high-density-gpu-infrastructure)
 - [Goodput, Determinism, and Fault Tolerance](/atlas/systems/infrastructure/goodput-determinism-and-fault-tolerance)
+- [Training Loss Patterns](/atlas/ai/training/optimization/training-loss-patterns)
 - [Smol Training Playbook](https://huggingface.co/spaces/HuggingFaceTB/smol-training-playbook)

@@ -328,4 +328,5 @@ The most reusable systems lesson is that cluster topology and storage behavior a
 - [Chat Templates for LLMs](/atlas/ai/inference-serving/chat-templates-for-llms)
 - [Hybrid Reasoning Models](/atlas/ai/architectures/hybrid-reasoning-models)
 - [Group Relative Policy Optimization](/atlas/ai/training/optimization/group-relative-policy-optimization)
+- [Training Loss Patterns](/atlas/ai/training/optimization/training-loss-patterns)
 - [The Smol Training Playbook](https://huggingface.co/spaces/HuggingFaceTB/smol-training-playbook)

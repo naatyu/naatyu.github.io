@@ -1,7 +1,7 @@
 ---
 title: "Goodput, Determinism, and Fault Tolerance"
 date: 2026-06-08
-lastmod: 2026-06-08
+lastmod: 2026-06-11
 tags:
   - systems
   - infrastructure
@@ -149,5 +149,6 @@ That is a healthier way to think about frontier training than raw utilization al
 
 - [Model FLOPs Utilization (MFU)](/atlas/systems/performance/model-flops-utilization-mfu)
 - [Choosing an LLM Training Framework](/atlas/systems/infrastructure/choosing-an-llm-training-framework)
+- [Training Loss Patterns](/atlas/ai/training/optimization/training-loss-patterns)
 - [Asynchronous RL Infrastructure](/atlas/systems/infrastructure/asynchronous-rl-infrastructure)
 - [MAI-Thinking-1: Building a Hill-Climbing Machine](/atlas/ai/architectures/model-reports/mai-thinking-1-building-a-hill-climbing-machine)
