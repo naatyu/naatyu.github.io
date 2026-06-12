@@ -1,7 +1,7 @@
 ---
 title: "Knowledge Distillation"
 date: 2026-06-11
-lastmod: 2026-06-11
+lastmod: 2026-06-12
 tags:
   - ai/training
   - losses
@@ -224,6 +224,12 @@ Practical approximations:
 - distill reasoning traces through SFT
 - use teacher-generated data without logit matching
 
+## 6.1 On-policy distillation
+
+Standard distillation trains on teacher trajectories. On-policy distillation instead samples trajectories from the student and asks the teacher to score them. This preserves dense token-level supervision while reducing exposure bias.
+
+See [On-Policy Distillation](/atlas/ai/training/optimization/on-policy-distillation).
+
 ## 7. Distillation and compression
 
 Distillation is not only model compression.
@@ -267,6 +273,7 @@ The student may outperform a same-size model trained only on hard labels because
 - [Cross-Entropy Loss](/atlas/ai/training/losses/cross-entropy-loss)
 - [Kullback-Leibler Divergence](/atlas/math/probability/kullback-leibler-divergence)
 - [Self-Distillation in RL Climbs](/atlas/ai/training/optimization/self-distillation-in-rl-climbs)
+- [On-Policy Distillation](/atlas/ai/training/optimization/on-policy-distillation)
 - [Supervised Fine-Tuning for LLMs](/atlas/ai/training/optimization/supervised-fine-tuning-for-llms)
 
 ## Sources

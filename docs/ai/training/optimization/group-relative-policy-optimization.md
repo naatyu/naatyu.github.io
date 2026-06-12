@@ -1,7 +1,7 @@
 ---
 title: "Group Relative Policy Optimization"
 date: 2026-04-08
-lastmod: 2026-06-08
+lastmod: 2026-06-12
 tags:
   - ai/training
   - reinforcement-learning
@@ -202,10 +202,14 @@ It does not replace:
 
 Those are separate parts of the RL stack.
 
+Because GRPO-style policy-gradient learning receives relatively low-bandwidth scalar reward or advantage feedback, LoRA can often match full fine-tuning at surprisingly low rank. See [LoRA vs Full Fine-Tuning](/atlas/ai/training/optimization/lora-vs-full-finetuning).
+
 ## Related
 
 - [Reinforcement Learning for LLMs](/atlas/ai/training/optimization/reinforcement-learning-for-llms)
 - [Adaptive Entropy Control in RL](/atlas/ai/training/optimization/adaptive-entropy-control-in-rl)
+- [On-Policy Distillation](/atlas/ai/training/optimization/on-policy-distillation)
+- [LoRA vs Full Fine-Tuning](/atlas/ai/training/optimization/lora-vs-full-finetuning)
 - [Self-Distillation in RL Climbs](/atlas/ai/training/optimization/self-distillation-in-rl-climbs)
 - [Asynchronous RL Infrastructure](/atlas/systems/infrastructure/asynchronous-rl-infrastructure)
 - [MAI-Thinking-1: Building a Hill-Climbing Machine](/atlas/ai/architectures/model-reports/mai-thinking-1-building-a-hill-climbing-machine)

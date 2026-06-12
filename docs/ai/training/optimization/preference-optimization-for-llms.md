@@ -1,7 +1,7 @@
 ---
 title: "Preference Optimization for LLMs"
 date: 2026-06-08
-lastmod: 2026-06-08
+lastmod: 2026-06-12
 tags:
   - ai/training
   - llm
@@ -168,6 +168,8 @@ A useful mental model is:
 ## Related
 
 - [Supervised Fine-Tuning for LLMs](/atlas/ai/training/optimization/supervised-fine-tuning-for-llms)
+- [LoRA vs Full Fine-Tuning](/atlas/ai/training/optimization/lora-vs-full-finetuning)
+- [On-Policy Distillation](/atlas/ai/training/optimization/on-policy-distillation)
 - [Group Relative Policy Optimization](/atlas/ai/training/optimization/group-relative-policy-optimization)
 - [Hybrid Reasoning Models](/atlas/ai/architectures/hybrid-reasoning-models)
 - [The Smol Training Playbook](/atlas/ai/training/smol-training-playbook)

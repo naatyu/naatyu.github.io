@@ -1,7 +1,7 @@
 ---
 title: "Supervised Fine-Tuning for LLMs"
 date: 2026-06-08
-lastmod: 2026-06-08
+lastmod: 2026-06-12
 tags:
   - ai/training
   - llm
@@ -119,6 +119,8 @@ The tradeoff is not only quality. It is also:
 - distributed-training requirements
 - checkpoint size
 
+For a deeper decision framework, see [LoRA vs Full Fine-Tuning](/atlas/ai/training/optimization/lora-vs-full-finetuning).
+
 ## 7. The few hyperparameters that matter first
 
 For many SFT setups, the first-order knobs are:
@@ -158,5 +160,6 @@ This is why SFT should be paired with:
 
 - [Chat Templates for LLMs](/atlas/ai/inference-serving/chat-templates-for-llms)
 - [Hybrid Reasoning Models](/atlas/ai/architectures/hybrid-reasoning-models)
+- [LoRA vs Full Fine-Tuning](/atlas/ai/training/optimization/lora-vs-full-finetuning)
 - [The Smol Training Playbook](/atlas/ai/training/smol-training-playbook)
 - [The Smol Training Playbook](https://huggingface.co/spaces/HuggingFaceTB/smol-training-playbook)

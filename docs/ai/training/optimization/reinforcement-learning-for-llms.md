@@ -180,6 +180,7 @@ So for agentic coding and tool-use training, the closer the rollout harness is t
 
 ## Related
 
+- [On-Policy Distillation](/atlas/ai/training/optimization/on-policy-distillation)
 - [Group Relative Policy Optimization](/atlas/ai/training/optimization/group-relative-policy-optimization)
 - [Adaptive Entropy Control in RL](/atlas/ai/training/optimization/adaptive-entropy-control-in-rl)
 - [Self-Distillation in RL Climbs](/atlas/ai/training/optimization/self-distillation-in-rl-climbs)
