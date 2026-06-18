@@ -216,6 +216,7 @@ This is especially relevant when comparing:
 - [FP8 Training](/atlas/ai/training/precision/fp8-training)
 - [Attention Softmax and Scaling](/atlas/ai/architectures/transformers/attention-softmax-and-scaling)
 - [Attention Variants](/atlas/ai/architectures/transformers/attention-variants)
+- [FlashAttention](/atlas/ai/architectures/transformers/flashattention)
 - [Training Loss Patterns](/atlas/ai/training/optimization/training-loss-patterns)
 
 ## Sources

@@ -284,7 +284,7 @@ If compute-bound:
 - improve instruction mix
 - reduce synchronization
 - improve tiling for compute utilization
-- use better kernels such as cuBLAS, FlashAttention, or fused kernels
+- use better kernels such as cuBLAS, [FlashAttention](/atlas/ai/architectures/transformers/flashattention), or fused kernels
 
 ### Common mistakes
 

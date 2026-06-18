@@ -1,7 +1,7 @@
 ---
 title: "Context Parallelism (CP)"
 date: 2026-04-08
-lastmod: 2026-04-08
+lastmod: 2026-06-18
 tags:
   - ai/distributed-training
   - parallelism
@@ -34,4 +34,4 @@ Unlike Tensor Parallelism, CP scales well to many nodes because it only involves
 ## Related
 - Distributed Training MOC
 - [Sequence Parallelism](/atlas/systems/parallel-computing/sequence-parallelism)
-- FlashAttention
+- [FlashAttention](/atlas/ai/architectures/transformers/flashattention)

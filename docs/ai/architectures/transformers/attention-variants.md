@@ -1,7 +1,7 @@
 ---
 title: "Attention Variants"
 date: 2026-06-08
-lastmod: 2026-06-11
+lastmod: 2026-06-18
 tags:
   - ai/llm
   - transformers
@@ -26,6 +26,7 @@ The core tradeoff is:
 - **MLA:** multi-head latent attention, where keys and values are compressed into a low-dimensional latent cache.
 - **Sliding-window attention:** local attention where each token attends only to a fixed neighborhood.
 - **Linear attention:** attention family that avoids materializing the full $n \times n$ attention matrix by summarizing history into fixed-size states.
+- **FlashAttention:** exact attention kernel that reduces memory traffic by tiling attention and avoiding materialized $n\times n$ attention matrices.
 - **Cross-attention:** queries come from one sequence, while keys and values come from another.
 - **Local attention:** attention restricted to a window or local region.
 - **Global attention:** unrestricted full-sequence attention, or in some architectures, attention involving globally visible tokens.
@@ -589,6 +590,7 @@ The real question is:
 - [Transformer Scaling Rules](/atlas/ai/training/scaling/transformer-scaling-rules)
 - [RoPE scaling](/atlas/ai/architectures/transformers/rope-scaling)
 - [Attention Softmax and Scaling](/atlas/ai/architectures/transformers/attention-softmax-and-scaling)
+- [FlashAttention](/atlas/ai/architectures/transformers/flashattention)
 - [Linear Attention](/atlas/ai/architectures/transformers/linear-attention)
 - [Context Parallelism](/atlas/systems/parallel-computing/context-parallelism)
 - [Disaggregated Prefill-Decode Serving](/atlas/ai/inference-serving/serving-architectures/disaggregated-prefill-decode-serving)
