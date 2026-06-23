@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Google+Sans+Code:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap');
 
 /**
  * Any CSS included here will be global. The classic template
@@ -8,80 +8,140 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #4caf50;
-  --ifm-color-primary-dark: #449d48;
-  --ifm-color-primary-darker: #3d8c40;
-  --ifm-color-primary-darkest: #337536;
-  --ifm-color-primary-light: #6bbf6e;
-  --ifm-color-primary-lighter: #8bcf8d;
-  --ifm-color-primary-lightest: #b4e2b5;
+  --site-paper: #f7f3ea;
+  --site-paper-soft: #fbf8f1;
+  --site-ink: #22251f;
+  --site-text: #3d4339;
+  --site-muted: #737b69;
+  --site-line: rgba(60, 68, 55, 0.16);
+  --site-accent: #5d6b56;
+  --site-accent-strong: #34402f;
+  --site-wash: #e8dfcf;
+  --site-font-display: 'Newsreader', Georgia, serif;
+  --ifm-color-primary: #5d6b56;
+  --ifm-color-primary-dark: #505d4a;
+  --ifm-color-primary-darker: #45503f;
+  --ifm-color-primary-darkest: #34402f;
+  --ifm-color-primary-light: #708062;
+  --ifm-color-primary-lighter: #82916f;
+  --ifm-color-primary-lightest: #a5b494;
   --ifm-code-font-size: 95%;
-  --ifm-font-family-monospace: 'Google Sans Code', ui-monospace, SFMono-Regular,
-    Menlo, Monaco, Consolas, 'Liberation Mono', monospace;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
-  --ifm-background-color: #0b1020;
-  --ifm-background-surface-color: #111827;
-  --ifm-navbar-background-color: rgba(11, 16, 32, 0.9);
-  --ifm-footer-background-color: #0b1020;
-  --ifm-font-color-base: #d6deeb;
-  --ifm-heading-color: #f8fafc;
-  --ifm-color-emphasis-100: #1f2937;
-  --ifm-color-emphasis-200: #263041;
-  --ifm-color-emphasis-300: #334155;
-  --ifm-color-emphasis-500: #94a3b8;
-  --ifm-color-emphasis-600: #cbd5e1;
-  --ifm-color-emphasis-700: #e2e8f0;
-  --ifm-toc-border-color: #243042;
+  --ifm-font-family-base: 'Zen Kaku Gothic New', 'Avenir Next', sans-serif;
+  --ifm-font-family-monospace: 'IBM Plex Mono', 'Courier New', monospace;
+  --ifm-heading-font-family: var(--site-font-display);
+  --ifm-background-color: var(--site-paper);
+  --ifm-background-surface-color: rgba(255, 255, 255, 0.5);
+  --ifm-navbar-background-color: rgba(247, 243, 234, 0.86);
+  --ifm-footer-background-color: #ebe4d6;
+  --ifm-font-color-base: var(--site-text);
+  --ifm-heading-color: var(--site-ink);
+  --ifm-color-emphasis-100: #f2eadc;
+  --ifm-color-emphasis-200: #e4dac8;
+  --ifm-color-emphasis-300: #c9bdab;
+  --ifm-color-emphasis-500: #7d8477;
+  --ifm-color-emphasis-600: #596153;
+  --ifm-color-emphasis-700: #383d34;
+  --ifm-toc-border-color: var(--site-line);
+  --ifm-navbar-height: 4rem;
+  --ifm-global-radius: 0.85rem;
+  --docusaurus-highlighted-code-line-bg: rgba(93, 107, 86, 0.11);
 }
 
-/* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #4caf50;
-  --ifm-color-primary-dark: #449d48;
-  --ifm-color-primary-darker: #3d8c40;
-  --ifm-color-primary-darkest: #337536;
-  --ifm-color-primary-light: #6bbf6e;
-  --ifm-color-primary-lighter: #8bcf8d;
-  --ifm-color-primary-lightest: #b4e2b5;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
-  --ifm-background-color: #0b1020;
-  --ifm-background-surface-color: #111827;
-  --ifm-navbar-background-color: rgba(11, 16, 32, 0.9);
-  --ifm-footer-background-color: #0b1020;
-  --ifm-font-color-base: #d6deeb;
-  --ifm-heading-color: #f8fafc;
-  --ifm-color-emphasis-100: #1f2937;
-  --ifm-color-emphasis-200: #263041;
-  --ifm-color-emphasis-300: #334155;
-  --ifm-color-emphasis-500: #94a3b8;
-  --ifm-color-emphasis-600: #cbd5e1;
-  --ifm-color-emphasis-700: #e2e8f0;
-  --ifm-toc-border-color: #243042;
+  --site-paper: #191b17;
+  --site-paper-soft: #20231e;
+  --site-ink: #f4efe5;
+  --site-text: #d9d1c2;
+  --site-muted: #a89f8f;
+  --site-line: rgba(232, 223, 207, 0.15);
+  --site-accent: #a8b89a;
+  --site-accent-strong: #c9d9ba;
+  --site-wash: #2b2d27;
+  --ifm-background-color: var(--site-paper);
+  --ifm-background-surface-color: rgba(255, 255, 255, 0.04);
+  --ifm-navbar-background-color: rgba(25, 27, 23, 0.9);
+  --ifm-footer-background-color: #151711;
+  --ifm-font-color-base: var(--site-text);
+  --ifm-heading-color: var(--site-ink);
+  --ifm-color-emphasis-100: #23261f;
+  --ifm-color-emphasis-200: #30342c;
+  --ifm-color-emphasis-300: #44493e;
+  --ifm-color-emphasis-500: #8b9484;
+  --ifm-color-emphasis-600: #c5cdbb;
+  --ifm-color-emphasis-700: #e8efdc;
+  --ifm-toc-border-color: var(--site-line);
+  --docusaurus-highlighted-code-line-bg: rgba(168, 184, 154, 0.12);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  overflow-x: hidden;
 }
 
 body {
+  color: var(--site-text);
   background-image:
-    linear-gradient(rgba(148, 163, 184, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(148, 163, 184, 0.035) 1px, transparent 1px);
-  background-size: 24px 24px;
+    radial-gradient(circle at top left, rgba(122, 136, 105, 0.12), transparent 34rem),
+    linear-gradient(rgba(93, 107, 86, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(93, 107, 86, 0.035) 1px, transparent 1px);
+  background-size: auto, 32px 32px, 32px 32px;
+}
+
+a {
+  text-underline-offset: 0.18em;
+}
+
+.main-wrapper {
+  background:
+    linear-gradient(180deg, rgba(251, 248, 241, 0.7), rgba(247, 243, 234, 0.92) 34rem),
+    transparent;
+}
+
+[data-theme='dark'] .main-wrapper {
+  background:
+    linear-gradient(180deg, rgba(32, 35, 30, 0.62), rgba(25, 27, 23, 0.88) 34rem),
+    transparent;
 }
 
 .navbar {
+  box-shadow: none;
   backdrop-filter: blur(14px);
-  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  border-bottom: 1px solid var(--site-line);
 }
 
 .navbar__brand {
   font-family: var(--ifm-font-family-monospace);
   font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.navbar__brand:empty {
+  display: none;
 }
 
 .navbar__item {
-  font-size: 0.95rem;
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.84rem;
+}
+
+.navbar__link {
+  border-radius: 999px;
+}
+
+.navbar__link:hover,
+.navbar__link--active {
+  background: rgba(93, 107, 86, 0.1);
+  color: var(--site-accent-strong);
 }
 
 .button {
-  border-radius: 0.45rem;
+  border-radius: 999px;
+  font-family: var(--ifm-font-family-monospace);
+  font-weight: 600;
 }
 
 code,
@@ -90,10 +150,150 @@ pre,
   font-family: var(--ifm-font-family-monospace);
 }
 
+code {
+  border: 1px solid var(--site-line);
+}
+
+.theme-doc-markdown {
+  font-size: 1.02rem;
+  line-height: 1.78;
+}
+
+.theme-doc-markdown h1,
+.theme-doc-markdown h2,
+.theme-doc-markdown h3 {
+  letter-spacing: -0.035em;
+}
+
+.theme-doc-markdown h1 {
+  font-size: clamp(2.2rem, 5vw, 4.1rem);
+}
+
+.theme-doc-markdown h2 {
+  margin-top: 2.5rem;
+  padding-top: 0.5rem;
+}
+
+.card,
+.theme-doc-sidebar-container,
+.table-of-contents {
+  border-color: var(--site-line);
+}
 
 .pagination-nav__link,
 .table-of-contents,
 .theme-doc-sidebar-container,
 .menu {
   background: transparent;
+}
+
+.menu__link {
+  border-radius: 0.65rem;
+  font-size: 0.92rem;
+}
+
+.menu__link--active,
+.menu__link:hover {
+  background: rgba(93, 107, 86, 0.1);
+  color: var(--site-accent-strong);
+}
+
+.navbar-sidebar {
+  --ifm-navbar-sidebar-width: min(86vw, 340px);
+  top: 0;
+  right: 0;
+  bottom: auto;
+  left: auto;
+  width: var(--ifm-navbar-sidebar-width);
+  height: 100vh;
+  height: 100dvh;
+  background:
+    linear-gradient(180deg, var(--site-paper-soft), var(--site-paper)),
+    var(--site-paper);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.navbar-sidebar__brand {
+  min-height: var(--ifm-navbar-height);
+  border-bottom: 1px solid var(--site-line);
+  box-shadow: none;
+}
+
+.navbar-sidebar__items {
+  display: flex;
+  height: calc(100vh - var(--ifm-navbar-height));
+  height: calc(100dvh - var(--ifm-navbar-height));
+  overflow: visible;
+}
+
+.navbar-sidebar__item {
+  width: var(--ifm-navbar-sidebar-width);
+  padding: 0.9rem;
+  overflow-y: auto;
+}
+
+.navbar-sidebar .menu__list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  width: 100%;
+}
+
+.navbar-sidebar .menu {
+  width: 100%;
+}
+
+.navbar-sidebar .menu__list-item {
+  display: flex;
+  width: 100%;
+}
+
+.navbar-sidebar .menu__link {
+  width: 100%;
+  min-height: 44px;
+  align-items: center;
+  padding: 0.72rem 0.85rem;
+  border: 1px solid var(--site-line);
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--site-ink);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.95rem;
+}
+
+[data-theme='dark'] .navbar-sidebar .menu__link {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.navbar-sidebar__backdrop {
+  top: 0;
+  right: 0;
+  bottom: auto;
+  left: 0;
+  height: 100vh;
+  height: 100dvh;
+}
+
+@media screen and (max-width: 996px) {
+  .navbar {
+    min-height: var(--ifm-navbar-height);
+  }
+
+  .navbar__toggle {
+    width: 42px;
+    height: 42px;
+    margin-right: 0.35rem;
+    border: 1px solid var(--site-line);
+    border-radius: 999px;
+    color: var(--site-ink);
+  }
+
+  .navbar__brand {
+    margin-right: 0;
+  }
+
+  .navbar__title {
+    font-size: 0.95rem;
+  }
 }

@@ -5,6 +5,33 @@ import Heading from '@theme/Heading';
 
 import styles from './index.module.css';
 
+const entryPoints = [
+  {
+    eyebrow: 'Atlas',
+    title: 'Personal notes',
+    href: '/atlas',
+    description:
+      'A structured notebook for AI, mathematics, systems, algorithms, and engineering concepts.',
+    meta: 'research memory',
+  },
+  {
+    eyebrow: 'Blog',
+    title: 'Writing',
+    href: '/blog',
+    description:
+      'Essays, project logs, and thoughts that need more room than an Atlas note.',
+    meta: 'essays',
+  },
+  {
+    eyebrow: 'Projects',
+    title: 'Things I build',
+    href: 'https://github.com/naatyu',
+    description:
+      'Selected experiments and repositories around machine learning, kernels, and technical exploration.',
+    meta: 'workbench',
+  },
+] as const;
+
 const pinnedRepos = [
   {
     name: 'MagNav',
@@ -29,34 +56,108 @@ const pinnedRepos = [
   },
 ] as const;
 
+const featuredNotes = [
+  {
+    title: 'SIGReg',
+    href: '/atlas/ai/training/losses/regularization/sketched-isotropic-gaussian-regularization',
+    meta: 'regularization',
+  },
+  {
+    title: 'FlashAttention',
+    href: '/atlas/ai/architectures/transformers/flashattention',
+    meta: 'kernels',
+  },
+  {
+    title: 'Model FLOPs utilization',
+    href: '/atlas/systems/performance/model-flops-utilization-mfu',
+    meta: 'systems',
+  },
+] as const;
+
 export default function Home(): ReactNode {
   return (
     <Layout
-      title="Projects"
-      description="Selected GitHub projects.">
+      title="Home"
+      description="Personal website for AI notes, blog posts, and projects.">
       <main>
-        <section className={styles.homeSection}>
+        <section className={styles.heroSection}>
           <div className="container">
-            <div className={styles.headerRow}>
-              <div>
-                <p className={styles.prompt}>naatyu@github:~$ ls pinned</p>
+            <div className={styles.heroGrid}>
+              <div className={styles.heroCopy}>
+                <p className={styles.kicker}>personal field notes</p>
                 <Heading as="h1" className={styles.pageTitle}>
+                  Nathan Laoué
+                </Heading>
+                <p className={styles.lead}>
+                  A personal space for my notes, projects, and occasional writings.
+                  I'am mainly interested in large models pretraining, regardless of modality (some finetunining too).
+                </p>
+                <div className={styles.heroActions}>
+                  <Link className={styles.primaryLink} to="/atlas">
+                    Open Atlas
+                  </Link>
+                  <Link className={styles.secondaryLink} to="/blog">
+                    Read blog
+                  </Link>
+                </div>
+              </div>
+
+              <aside className={styles.mathPanel} aria-label="Site focus">
+                <div className={styles.panelHeader}>
+                  <span>from the atlas</span>
+                  <span>selected</span>
+                </div>
+                <div className={styles.noteList}>
+                  {featuredNotes.map((note) => (
+                    <Link key={note.href} className={styles.noteRow} to={note.href}>
+                      <span>{note.title}</span>
+                      <span>{note.meta}</span>
+                    </Link>
+                  ))}
+                </div>
+                <p className={styles.panelNote}>
+                  A few useful entry points into the notebook: architecture, kernels,
+                  and performance.
+                </p>
+              </aside>
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.entrySection}>
+          <div className="container">
+            <div className={styles.entryGrid}>
+              {entryPoints.map((entry) => (
+                <Link key={entry.title} className={styles.entryCard} to={entry.href}>
+                  <p className={styles.cardEyebrow}>{entry.eyebrow}</p>
+                  <Heading as="h2" className={styles.entryTitle}>
+                    {entry.title}
+                  </Heading>
+                  <p>{entry.description}</p>
+                  <span>{entry.meta}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="projects" className={styles.projectSection}>
+          <div className="container">
+            <div className={styles.sectionHeader}>
+              <div>
+                <p className={styles.kicker}>selected repositories</p>
+                <Heading as="h2" className={styles.sectionTitle}>
                   Projects
                 </Heading>
               </div>
-              <Link className="button button--secondary" href="https://github.com/naatyu">
-                View profile
+              <Link className={styles.textLink} href="https://github.com/naatyu">
+                GitHub profile
               </Link>
             </div>
 
             <div className={styles.repoGrid}>
               {pinnedRepos.map((repo) => (
                 <Link key={repo.name} className={styles.repoCard} href={repo.href}>
-                  <div className={styles.repoChrome}>
-                    <span />
-                    <span />
-                    <span />
-                  </div>
                   <div className={styles.repoCardHeader}>
                     <div>
                       <p className={styles.repoPath}>{repo.path}</p>
