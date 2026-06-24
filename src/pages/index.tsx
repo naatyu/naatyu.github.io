@@ -74,6 +74,18 @@ const featuredNotes = [
   },
 ] as const;
 
+const publications = [
+  {
+    title: 'Neural Network Calibration of Airborne Magnetometers',
+    href: 'https://ieeexplore.ieee.org/document/10189964',
+    authors: 'Nathan Laoué, Arnaud Lepers, Laure Deletraz, Charly Faure',
+    venue: '2023 IEEE 10th International Workshop on Metrology for AeroSpace (MetroAeroSpace)',
+    details: 'Milan, Italy · pp. 37-42 · DOI: 10.1109/MetroAeroSpace57412.2023.10189964',
+    summary:
+      'Neural-network-based calibration for airborne magnetometers, improving compensation of aircraft magnetic disturbances.',
+  },
+] as const;
+
 export default function Home(): ReactNode {
   return (
     <Layout
@@ -135,6 +147,43 @@ export default function Home(): ReactNode {
                   </Heading>
                   <p>{entry.description}</p>
                   <span>{entry.meta}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.publicationSection}>
+          <div className="container">
+            <div className={styles.sectionHeader}>
+              <div>
+                <p className={styles.kicker}>published work</p>
+                <Heading as="h2" className={styles.sectionTitle}>
+                  Publications
+                </Heading>
+              </div>
+            </div>
+
+            <div className={styles.publicationGrid}>
+              {publications.map((publication) => (
+                <Link
+                  key={publication.href}
+                  className={styles.publicationCard}
+                  href={publication.href}>
+                  <div className={styles.publicationMeta}>
+                    <span>IEEE</span>
+                    <span>2023</span>
+                  </div>
+                  <Heading as="h2" className={styles.publicationTitle}>
+                    {publication.title}
+                  </Heading>
+                  <p className={styles.publicationAuthors}>{publication.authors}</p>
+                  <p className={styles.publicationVenue}>{publication.venue}</p>
+                  <p className={styles.publicationSummary}>{publication.summary}</p>
+                  <div className={styles.publicationFooter}>
+                    <span>{publication.details}</span>
+                    <span>Open paper ↗</span>
+                  </div>
                 </Link>
               ))}
             </div>
