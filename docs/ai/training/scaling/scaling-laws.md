@@ -1,7 +1,7 @@
 ---
 title: "Scaling Laws"
 date: 2026-04-08
-lastmod: 2026-06-11
+lastmod: 2026-06-26
 tags:
   - ai/theory
   - scaling-laws
@@ -10,7 +10,7 @@ draft: false
 
 ## Summary
 
-Scaling laws are empirical power laws that estimate how language-model loss changes with model parameters ($N$), training tokens ($D$), and training compute ($C$).
+Scaling laws are empirical power laws that estimate how language-model loss changes with model parameters ($N$), training tokens ($D$), and training compute ($C$). They are useful because they turn expensive pretraining decisions into extrapolation problems: fit smaller runs, estimate the frontier, then choose how to spend compute.
 ## Concepts
 - **Scaling law:** an empirical relationship, usually a power law, between model loss and scale.
 - **Parameters ($N$):** the number of trainable model parameters.
@@ -19,6 +19,9 @@ Scaling laws are empirical power laws that estimate how language-model loss chan
 - **IsoFLOP analysis:** compare different model sizes under the same compute budget to find the lowest-loss allocation of $N$ and $D$.
 - **Compute-optimal training:** choose $N$ and $D$ that minimize training loss for a fixed compute budget.
 - **Over-training:** train on far more tokens than the compute-optimal rule would suggest, usually to reduce inference cost.
+- **Irreducible loss ($E$):** the loss floor that remains even if model size and data are very large.
+- **Data-infinite regime:** the assumption that every training token is unique enough that repetition does not matter.
+- **Data-constrained regime:** the regime where high-quality unique data is finite and repeated tokens need separate modeling.
 
 ## Content
 
@@ -41,6 +44,34 @@ Where:
 - $D$ is training tokens
 
 The factor $6$ comes from a rough transformer training estimate: about $2ND$ FLOPs for the forward pass and about $4ND$ FLOPs for backward pass. It ignores details like attention quadratic cost, embeddings, activation recomputation, optimizer overhead, and hardware utilization, but it is good enough for first-order estimates.
+
+The standard shape is:
+
+$$
+L(x) \approx E + A x^{-\alpha}
+$$
+
+where $x$ can be data, parameters, or compute depending on the experiment.
+
+The important interpretation is:
+
+- $E$ is the irreducible floor
+- $A x^{-\alpha}$ is reducible error
+- $\alpha$ is the slope on a log-log plot
+
+So a scaling law is not saying loss decreases linearly. It is saying each multiplicative increase in scale buys a roughly predictable but diminishing reduction in loss.
+
+### Learning-curve regimes
+
+A practical learning curve often has three regions:
+
+| Region | Behavior |
+|---|---|
+| Too little data or compute | noisy, weakly predictable, not yet in the clean power-law region |
+| Power-law region | predictable loss improvement with scale |
+| Irreducible or saturated region | improvements slow because of noise, finite data, or limited objective quality |
+
+The power-law region is the useful one for pretraining planning. If the proxy runs are outside that region, extrapolation can be misleading.
 
 ### Kaplan scaling laws
 
@@ -102,6 +133,70 @@ Examples:
 - $7B$ parameters $\rightarrow$ about $140B$ tokens
 - $70B$ parameters $\rightarrow$ about $1.4T$ tokens
 
+### How Chinchilla was fit
+
+The useful methodological detail is that Chinchilla did not rely on a single fitting trick. It used several views of the same frontier.
+
+| Method | Procedure | What it estimates |
+|---|---|---|
+| Fixed model sizes | train the same $N$ for different token budgets | best loss reachable by each model size at different compute levels |
+| IsoFLOP profiles | fix $C$, sweep $N$, derive $D = C/(6N)$ | the best $N$ for each compute budget |
+| Parametric fit | fit $L(N,D)=E+A/N^\alpha+B/D^\beta$ | a smooth joint loss model |
+
+The IsoFLOP view is especially important. For a fixed compute budget:
+
+$$
+D = \frac{C}{6N}
+$$
+
+so making the model larger automatically shortens the training horizon. If $N$ is too small, the model is capacity-limited. If $N$ is too large, it is data-limited. The best point is the bottom of that fixed-compute curve.
+
+The parametric fit also gives a closed-form frontier. Starting from:
+
+$$
+\hat{L}(N, D) = E + A N^{-\alpha} + B D^{-\beta}
+$$
+
+and using:
+
+$$
+D = \frac{C}{6N}
+$$
+
+we get:
+
+$$
+\hat{L}(N) = E + A N^{-\alpha} + B \left(\frac{C}{6}\right)^{-\beta} N^\beta
+$$
+
+Setting the derivative with respect to $N$ to zero gives:
+
+$$
+N_{opt}
+=
+\left(\frac{\alpha A}{\beta B}\right)^{\frac{1}{\alpha+\beta}}
+\left(\frac{C}{6}\right)^{\frac{\beta}{\alpha+\beta}}
+$$
+
+and:
+
+$$
+D_{opt}
+=
+\left(\frac{\beta B}{\alpha A}\right)^{\frac{1}{\alpha+\beta}}
+\left(\frac{C}{6}\right)^{\frac{\alpha}{\alpha+\beta}}
+$$
+
+If $\alpha \approx \beta$, then:
+
+$$
+N_{opt} \propto C^{1/2},
+\qquad
+D_{opt} \propto C^{1/2}
+$$
+
+This is the mathematical reason the Chinchilla rule says parameters and tokens should grow at roughly the same rate.
+
 ### Kaplan vs Chinchilla
 
 | Paper | Main allocation rule | Practical consequence |
@@ -115,6 +210,72 @@ The difference matters because a fixed compute budget can be spent in two bad wa
 - Too small a model with too many tokens: data-rich but capacity-limited.
 
 Chinchilla says the optimum for training loss is near the balance point where the marginal value of extra parameters and extra data is similar.
+
+The disagreement is also a warning about extrapolation. Two details matter:
+
+- Kaplan fit mostly smaller models than Chinchilla, and small changes in log-log slope become large differences when extrapolated.
+- Kaplan counted non-embedding parameters, while Chinchilla counted total parameters. At small scale, embeddings are not negligible, so the apparent scaling exponent can shift.
+
+So the lesson is not simply "Kaplan was wrong." The lesson is:
+
+> scaling-law exponents are local empirical fits, not constants of nature.
+
+### Data-constrained scaling
+
+Classic Chinchilla assumes a data-infinite regime:
+
+$$
+D = \text{unique useful tokens}
+$$
+
+Modern pretraining is often not in that regime. High-quality unique tokens are finite, and repeating tokens does not have the same value as adding genuinely new data.
+
+A better decomposition is:
+
+$$
+D = U_D(1 + R_D)
+$$
+
+where:
+
+- $U_D$ is the number of unique tokens
+- $R_D$ is the number of repeats, or epochs minus one
+
+The key practical insight is:
+
+> raw token count is not effective token count.
+
+Repeated data can still help, but its marginal value decays and can eventually create memorization or overfitting. This means the real scaling question is not only:
+
+$$
+\text{how many tokens?}
+$$
+
+but:
+
+$$
+\text{how many unique high-quality tokens, repeated how many times, for what model size?}
+$$
+
+For more detail, see [Data-Constrained Scaling Laws](/atlas/ai/training/scaling/data-constrained-scaling-laws).
+
+### Why power laws may appear
+
+There is no single settled explanation for why neural scaling laws are so clean, but two intuitions are useful.
+
+One view is the **data manifold** view. If language data lies near a structured lower-dimensional manifold, then increasing model size lets the model partition that manifold more finely. If the effective resolution improves as a power of capacity, the loss can inherit a power-law shape.
+
+Another view is the **skill-frequency** view. Suppose language modeling requires many small skills or facts, and those skills have a heavy-tailed frequency distribution:
+
+- common skills are learned early
+- rare skills are learned late
+- each scale increase unlocks a thinner tail of rarer patterns
+
+That naturally produces smooth diminishing returns. This is also why scaling laws feel connected to language statistics such as Zipf-like distributions.
+
+The practical point is not that either theory is complete. The useful point is:
+
+> power laws are plausible when a system repeatedly harvests progressively rarer structure from a heavy-tailed distribution.
 
 ### Rough estimates
 
@@ -207,6 +368,30 @@ This is why models such as Llama 3 8B were trained on far more than $20$ tokens 
 
 For a more detailed treatment of this shift, see [Overtraining and Inference-Aware Scaling](/atlas/ai/training/scaling/overtraining-and-inference-aware-scaling).
 
+### Fitting scaling laws in practice
+
+A scaling law is only as good as the experiment design used to fit it.
+
+Common failure modes:
+
+- fitting on models that are too small or outside the stable power-law region
+- mixing runs with different tokenizers, data mixtures, schedulers, or optimizer settings
+- counting parameters inconsistently, especially embeddings
+- rounding loss values too aggressively
+- using too few compute budgets or too narrow a model-size sweep
+- fitting downstream benchmarks directly instead of smoother validation loss
+- ignoring failed runs whose loss curves rise or flatten because of repetition or instability
+
+This matters because scaling laws are usually extrapolated by orders of magnitude. A small error in the local log-log slope can become a large error at target scale.
+
+The safe workflow is:
+
+1. keep the recipe fixed
+2. fit only in the stable scaling region
+3. use multiple compute budgets
+4. compare several fitting views, such as IsoFLOP and parametric fits
+5. validate with at least one larger run before committing the full budget
+
 ### Limits and caveats
 
 - $C \approx 6ND$ is a dense-transformer approximation, not an exact accounting formula.
@@ -215,6 +400,9 @@ For a more detailed treatment of this shift, see [Overtraining and Inference-Awa
 - Data quality can dominate token count. One trillion bad tokens is not equivalent to one trillion high-quality tokens.
 - Scaling laws predict average loss trends, not exact benchmark behavior or emergent capability thresholds.
 - Chinchilla is about compute-optimal pretraining, not necessarily optimal serving, fine-tuning, reasoning, or test-time compute.
+- The fit is sensitive to parameter counting, loss precision, fitting region, optimizer settings, scheduler, tokenizer, and data mixture.
+- A scaling law assumes scale is the main thing changing. If the architecture, recipe, or data distribution changes, the old law is only a prior.
+- Downstream capabilities are usually noisier than validation loss, so loss is the cleaner target for extrapolation.
 
 ### Scaling laws are not only about $N$ and $D$
 
@@ -252,6 +440,7 @@ This matters because a model can be correctly sized under Chinchilla but poorly 
 
 ## Related
 - AI Papers MOC
+- [Data-Constrained Scaling Laws](/atlas/ai/training/scaling/data-constrained-scaling-laws)
 - [Transformer Scaling Rules](/atlas/ai/training/scaling/transformer-scaling-rules)
 - [Overtraining and Inference-Aware Scaling](/atlas/ai/training/scaling/overtraining-and-inference-aware-scaling)
 - [Hyperparameter Scaling Laws for LLM Training](/atlas/ai/training/scaling/hyperparameter-scaling-laws-for-llm-training)
@@ -259,3 +448,12 @@ This matters because a model can be correctly sized under Chinchilla but poorly 
 - [The Llama 3 Herd of Models](/atlas/ai/architectures/model-reports/the-llama-3-herd-of-models)
 - [Frontier Small Language Models](/atlas/ai/architectures/model-families/frontier-small-language-models)
 - [LLM Inference Economics](/atlas/ai/inference-serving/performance/llm-inference-economics)
+
+## Sources
+
+- Lilian Weng, [Scaling Laws, Carefully](https://lilianweng.github.io/posts/2026-06-24-scaling-laws/)
+- Kaplan et al., [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361)
+- Hoffmann et al., [Training Compute-Optimal Large Language Models](https://arxiv.org/abs/2203.15556)
+- Pearce and Song, [Reconciling Kaplan and Chinchilla Scaling Laws](https://arxiv.org/abs/2406.12907)
+- Besiroglu et al., [Chinchilla Scaling: A Replication Attempt](https://arxiv.org/abs/2404.10102)
+- Michaud et al., [The Quantization Model of Neural Scaling](https://arxiv.org/abs/2303.13506)

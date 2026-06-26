@@ -1,7 +1,7 @@
 ---
 title: "Deduplication and Memorization Control"
 date: 2026-06-08
-lastmod: 2026-06-08
+lastmod: 2026-06-26
 tags:
   - ai/training
   - data
@@ -148,6 +148,20 @@ This is the key shift in viewpoint:
 
 As capacity grows, the model saturates redundant data earlier. So rigorous dedup can improve not just cleanliness, but scaling efficiency and downstream robustness.
 
+In data-constrained scaling terms, dedup increases the gap between:
+
+$$
+D = \text{raw training tokens}
+$$
+
+and:
+
+$$
+U_D = \text{unique useful tokens}
+$$
+
+The more duplicated the corpus is, the more raw token count overstates effective data. This matters because repeated tokens can have diminishing value and can create a model-size-dependent overfitting penalty.
+
 ## 7. Practical pipeline
 
 A good large-scale dedup and memorization-control loop looks like:
@@ -176,4 +190,5 @@ That makes deduplication part of training design, not just corpus cleanup.
 ## Related
 
 - [Data Mixture Optimization](/atlas/ai/training/data/data-mixture-optimization)
+- [Data-Constrained Scaling Laws](/atlas/ai/training/scaling/data-constrained-scaling-laws)
 - [MAI-Thinking-1: Building a Hill-Climbing Machine](/atlas/ai/architectures/model-reports/mai-thinking-1-building-a-hill-climbing-machine)

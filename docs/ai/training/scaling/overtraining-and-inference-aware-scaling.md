@@ -1,7 +1,7 @@
 ---
 title: "Overtraining and Inference-Aware Scaling"
 date: 2026-06-09
-lastmod: 2026-06-09
+lastmod: 2026-06-26
 tags:
   - ai/training
   - scaling
@@ -308,6 +308,8 @@ Important caveats:
   - eventually additional tokens buy only small gains
 - **data quality still matters**
   - low-quality extra tokens do not rescue a bad recipe
+- **effective data matters**
+  - repeated tokens should be discounted relative to unique high-quality tokens
 - **MoE accounting matters**
   - total parameters and active parameters tell different stories
 - **stage accounting matters**
@@ -318,6 +320,18 @@ Important caveats:
 So the trend is not “always train longer.” It is:
 
 > train longer when the deployment objective justifies it.
+
+There is an additional data-side warning:
+
+$$
+\text{high TPP}
+\neq
+\text{high effective data}
+$$
+
+If a model is trained for many tokens because it sees genuinely diverse, high-quality data, overtraining can improve quality per inference dollar. If the same high TPP comes from aggressive repetition of low-novelty sources, the gains may mostly be memorization or narrow benchmark improvement.
+
+This is why overtraining should be interpreted together with [Data-Constrained Scaling Laws](/atlas/ai/training/scaling/data-constrained-scaling-laws).
 
 ## 8. Interaction with newer trends
 
@@ -373,6 +387,7 @@ not:
 ## Related
 
 - [Scaling Laws](/atlas/ai/training/scaling/scaling-laws)
+- [Data-Constrained Scaling Laws](/atlas/ai/training/scaling/data-constrained-scaling-laws)
 - [Scaling Ladders and Efficiency Gain](/atlas/ai/training/scaling/scaling-ladders-and-efficiency-gain)
 - [Hyperparameter Scaling Laws for LLM Training](/atlas/ai/training/scaling/hyperparameter-scaling-laws-for-llm-training)
 - [The Smol Training Playbook](/atlas/ai/training/smol-training-playbook)
@@ -392,3 +407,4 @@ not:
 - Hugging Face, *The Smol Training Playbook*
 - Microsoft, *MAI-Thinking-1: Building a Hill-Climbing Machine*
 - Epoch AI, *Training open-weight models is becoming more data intensive*
+- Lilian Weng, *Scaling Laws, Carefully*

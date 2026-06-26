@@ -1,7 +1,7 @@
 ---
 title: "Data Mixture Optimization"
 date: 2026-06-08
-lastmod: 2026-06-08
+lastmod: 2026-06-26
 tags:
   - ai/training
   - data
@@ -161,6 +161,14 @@ In practice, this often means:
 - high-quality niche sources are upweighted
 - but only up to a capped reuse budget
 
+A useful scaling-law view is to separate raw training tokens from unique tokens:
+
+$$
+D = U_D(1 + R_D)
+$$
+
+where $U_D$ is unique data and $R_D$ is repetition. Mixture weights therefore change not only domain balance, but also effective data supply. A small high-quality source can be worth upweighting, but once $R_D$ is large its marginal value should be discounted.
+
 This is also why staged training is often useful:
 
 - broad high-volume sources early
@@ -313,6 +321,7 @@ It also highlights a common tradeoff:
 ## Related
 
 - [Deduplication and Memorization Control](/atlas/ai/training/data/deduplication-and-memorization-control)
+- [Data-Constrained Scaling Laws](/atlas/ai/training/scaling/data-constrained-scaling-laws)
 - [Scaling Ladders and Efficiency Gain](/atlas/ai/training/scaling/scaling-ladders-and-efficiency-gain)
 - [LLM Ablation Strategy](/atlas/ai/evaluation-experimentation/llm-ablation-strategy)
 - [MAI-Thinking-1: Building a Hill-Climbing Machine](/atlas/ai/architectures/model-reports/mai-thinking-1-building-a-hill-climbing-machine)
