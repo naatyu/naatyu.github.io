@@ -2,6 +2,7 @@ import type {ReactNode} from 'react';
 import Link from '@docusaurus/Link';
 import Layout from '@theme/Layout';
 import Heading from '@theme/Heading';
+import {usePluginData} from '@docusaurus/useGlobalData';
 
 import styles from './index.module.css';
 
@@ -56,23 +57,14 @@ const pinnedRepos = [
   },
 ] as const;
 
-const featuredNotes = [
-  {
-    title: 'SIGReg',
-    href: '/atlas/ai/training/losses/regularization/sketched-isotropic-gaussian-regularization',
-    meta: 'regularization',
-  },
-  {
-    title: 'FlashAttention',
-    href: '/atlas/ai/architectures/transformers/flashattention',
-    meta: 'kernels',
-  },
-  {
-    title: 'Model FLOPs utilization',
-    href: '/atlas/systems/performance/model-flops-utilization-mfu',
-    meta: 'systems',
-  },
-] as const;
+type LatestNotesPluginData = {
+  notes: Array<{
+    title: string;
+    href: string;
+    date: string;
+    displayDate: string;
+  }>;
+};
 
 const publications = [
   {
@@ -87,6 +79,10 @@ const publications = [
 ] as const;
 
 export default function Home(): ReactNode {
+  const {notes: latestNotes} = usePluginData(
+    'latest-atlas-notes',
+  ) as LatestNotesPluginData;
+
   return (
     <Layout
       title="Home"
@@ -116,20 +112,20 @@ export default function Home(): ReactNode {
 
               <aside className={styles.mathPanel} aria-label="Site focus">
                 <div className={styles.panelHeader}>
-                  <span>from the atlas</span>
-                  <span>selected</span>
+                  <span>last published notes</span>
+                  <span>newest first</span>
                 </div>
                 <div className={styles.noteList}>
-                  {featuredNotes.map((note) => (
+                  {latestNotes.map((note) => (
                     <Link key={note.href} className={styles.noteRow} to={note.href}>
                       <span>{note.title}</span>
-                      <span>{note.meta}</span>
+                      <span>{note.displayDate}</span>
                     </Link>
                   ))}
                 </div>
                 <p className={styles.panelNote}>
-                  A few useful entry points into the notebook: architecture, kernels,
-                  and performance.
+                  The three newest notes in the Atlas, selected automatically by
+                  publication date.
                 </p>
               </aside>
             </div>
