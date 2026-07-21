@@ -1,7 +1,7 @@
 ---
 title: "Controlling Reasoning Effort in LLMs"
 date: 2026-07-20
-lastmod: 2026-07-20
+lastmod: 2026-07-21
 tags:
   - ai/llm
   - reasoning
@@ -195,6 +195,7 @@ Automatic selection is attractive but difficult. A router must estimate task dif
 - [Hybrid Reasoning Models](/atlas/ai/architectures/hybrid-reasoning-models)
 - [Chat Templates for LLMs](/atlas/ai/inference-serving/chat-templates-for-llms)
 - [Reinforcement Learning for LLMs](/atlas/ai/training/optimization/reinforcement-learning-for-llms)
+- [Reinforcement Learning with Verifiable Rewards](/atlas/ai/training/optimization/reinforcement-learning-with-verifiable-rewards)
 - [LLM Inference Economics](/atlas/ai/inference-serving/performance/llm-inference-economics)
 - [Group Relative Policy Optimization](/atlas/ai/training/optimization/group-relative-policy-optimization)
 

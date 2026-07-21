@@ -1,7 +1,7 @@
 ---
 title: "Reinforcement Learning for LLMs"
 date: 2026-06-08
-lastmod: 2026-06-08
+lastmod: 2026-07-21
 tags:
   - ai/training
   - reinforcement-learning
@@ -18,6 +18,7 @@ For LLMs, reinforcement learning is a later-stage training method used after pre
 - **Policy:** the model distribution over next tokens or responses.
 - **Rollout:** a generated response or trajectory sampled from the current or stale policy.
 - **Reward:** a scalar score measuring response quality.
+- **Verifier:** an executable or rule-based procedure that checks whether an outcome is correct.
 - **Advantage:** how much better a response is than a baseline or peer group.
 - **On-policy / off-policy:** whether training uses very fresh samples from the current policy or somewhat stale samples from earlier policies.
 
@@ -92,6 +93,22 @@ The strongest RL settings are often those where the reward is closest to ground 
 - verified math
 - code execution
 - environment success
+
+### RLHF versus RLVR
+
+Two common reward pipelines are:
+
+| Method | Reward source | Typical use |
+| --- | --- | --- |
+| **RLHF** | A learned model trained from human preferences | Helpfulness, style, safety |
+| **RLVR** | A rule, test, solver, or environment | Math, code, tool use |
+
+[Reinforcement Learning with Verifiable Rewards](/atlas/ai/training/optimization/reinforcement-learning-with-verifiable-rewards) often removes the need for a learned reward model, but it does not prescribe a policy optimizer. PPO, GRPO, or another optimizer can consume verifiable rewards.
+
+This distinction is useful:
+
+- **RLHF / RLVR** describes where reward comes from.
+- **PPO / GRPO** describes how reward updates the policy.
 
 ## 5. Group-based RL for LLMs
 
@@ -182,6 +199,7 @@ So for agentic coding and tool-use training, the closer the rollout harness is t
 
 - [On-Policy Distillation](/atlas/ai/training/optimization/on-policy-distillation)
 - [Group Relative Policy Optimization](/atlas/ai/training/optimization/group-relative-policy-optimization)
+- [Reinforcement Learning with Verifiable Rewards](/atlas/ai/training/optimization/reinforcement-learning-with-verifiable-rewards)
 - [Adaptive Entropy Control in RL](/atlas/ai/training/optimization/adaptive-entropy-control-in-rl)
 - [Self-Distillation in RL Climbs](/atlas/ai/training/optimization/self-distillation-in-rl-climbs)
 - [Asynchronous RL Infrastructure](/atlas/systems/infrastructure/asynchronous-rl-infrastructure)

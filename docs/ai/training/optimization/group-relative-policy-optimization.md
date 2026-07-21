@@ -1,7 +1,7 @@
 ---
 title: "Group Relative Policy Optimization"
 date: 2026-04-08
-lastmod: 2026-06-12
+lastmod: 2026-07-21
 tags:
   - ai/training
   - reinforcement-learning
@@ -88,9 +88,30 @@ It fits the LLM setting well because:
 
 So GRPO trades value-function complexity for group-based comparison.
 
-## 6. Practical MAI-style modifications
+## 6. GRPO and RLVR are separate choices
+
+GRPO is a policy-optimization method. It specifies how multiple sampled responses are compared and how their advantages update the policy.
+
+[Reinforcement Learning with Verifiable Rewards](/atlas/ai/training/optimization/reinforcement-learning-with-verifiable-rewards) specifies where the reward comes from: a rule, test, symbolic solver, or environment.
+
+Therefore:
+
+- RLVR can use PPO without GRPO.
+- GRPO can optimize rewards from learned judges without RLVR.
+- RLVR with GRPO is one common combination, not a single indivisible method.
+
+## 7. Practical MAI-style modifications
 
 The clean objective is usually not enough for long asynchronous RL climbs. The MAI report adds several practical modifications.
+
+### Length and difficulty normalization biases
+
+Two normalization choices in original GRPO-style objectives can distort the signal:
+
+- **Response-length bias:** averaging each response's token losses by its own length reduces the contribution of each token in long responses. Long incorrect answers may therefore be under-penalized.
+- **Difficulty bias:** dividing advantages by the reward standard deviation within each prompt group can overweight groups with very small variance.
+
+Dr. GRPO removes response-length normalization and question-level standard-deviation normalization. Token-level loss normalization, pass-rate filtering, and explicit length rewards are related practical fixes.
 
 ### Adaptive entropy control
 
@@ -139,7 +160,7 @@ A practical fix is:
 
 This reduces off-policy mismatch.
 
-## 7. Reward decomposition
+## 8. Reward decomposition
 
 In practice, LLM RL often uses:
 
@@ -153,7 +174,7 @@ So the optimization may shape:
 - language consistency
 - reasoning length / inference cost
 
-## 7.1 Overlong completion penalties
+## 8.1 Overlong completion penalties
 
 For reasoning models, reward hacking often takes the form:
 
@@ -186,7 +207,7 @@ This lets you trade off:
 
 The Smol Training Playbook's RLVR experiments are a good example: naive GRPO on the `/no_think` mode caused responses to become much longer, and explicit overlong penalties were needed to keep the concise mode from collapsing toward long chain-of-thought behavior.
 
-## 8. Where GRPO fits
+## 9. Where GRPO fits
 
 GRPO is best thought of as:
 
@@ -207,6 +228,7 @@ Because GRPO-style policy-gradient learning receives relatively low-bandwidth sc
 ## Related
 
 - [Reinforcement Learning for LLMs](/atlas/ai/training/optimization/reinforcement-learning-for-llms)
+- [Reinforcement Learning with Verifiable Rewards](/atlas/ai/training/optimization/reinforcement-learning-with-verifiable-rewards)
 - [Adaptive Entropy Control in RL](/atlas/ai/training/optimization/adaptive-entropy-control-in-rl)
 - [On-Policy Distillation](/atlas/ai/training/optimization/on-policy-distillation)
 - [LoRA vs Full Fine-Tuning](/atlas/ai/training/optimization/lora-vs-full-finetuning)
