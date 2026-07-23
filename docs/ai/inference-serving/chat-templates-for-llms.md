@@ -1,7 +1,7 @@
 ---
 title: "Chat Templates for LLMs"
 date: 2026-06-08
-lastmod: 2026-06-08
+lastmod: 2026-07-23
 tags:
   - ai/inference
   - llm
@@ -189,6 +189,25 @@ Then block-boundary logic breaks, for example:
 
 So for reasoning/tool templates, parser robustness is part of the interface design.
 
+## 9. Gemma 4: checkpoint type changes the terminal token
+
+Gemma 4 documents a small but critical distinction:
+
+- pretrained checkpoints terminate generation with `<eos>`
+- instruction-tuned checkpoints terminate a turn with `<turn|>`
+
+Fine-tuning data must use the terminal token expected by the selected checkpoint type. Treating them as interchangeable creates a direct train/inference mismatch.
+
+Gemma 4 also exposes separate control structures for:
+
+- thinking activation: `<|think|>` in the leading system turn
+- reasoning traces: `<|channel>thought ...<channel|>`
+- tool declarations
+- tool calls
+- system, user, and model turns
+
+The tokenizer requires a real BOS token to be added through tokenization rather than tokenizing the literal string `"[BOS]"`. This is exactly the kind of detail that should be tested on rendered token IDs before an SFT run.
+
 ## Practical Heuristics
 
 - Treat the chat template as part of the model recipe.
@@ -204,3 +223,4 @@ So for reasoning/tool templates, parser robustness is part of the interface desi
 - [Hybrid Reasoning Models](/atlas/ai/architectures/hybrid-reasoning-models)
 - [The Smol Training Playbook](/atlas/ai/training/smol-training-playbook)
 - [The Smol Training Playbook](https://huggingface.co/spaces/HuggingFaceTB/smol-training-playbook)
+- [Gemma 4 Technical Report](/atlas/ai/architectures/model-reports/gemma-4-technical-report)

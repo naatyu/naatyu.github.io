@@ -1,7 +1,7 @@
 ---
 title: "Goodput, Determinism, and Fault Tolerance"
 date: 2026-06-08
-lastmod: 2026-06-11
+lastmod: 2026-07-23
 tags:
   - systems
   - infrastructure
@@ -145,6 +145,30 @@ The MAI report is especially good on this operational framing:
 
 That is a healthier way to think about frontier training than raw utilization alone.
 
+## 9. Elastic degradation can beat full-topology recovery
+
+Gemma 4 adds a concrete fault-tolerance pattern from TPU training: **Slice-Granularity Elasticity**.
+
+When one localized slice fails, a large job can:
+
+1. reconfigure around the failed slice
+2. continue with fewer chips
+3. restore full capacity later
+
+The report states that this reduces interruption from many minutes to a few seconds for its larger runs.
+
+The important principle generalizes beyond TPUs:
+
+> maximize useful progress over wall-clock time, not instantaneous cluster size.
+
+Continuing at lower throughput can be better than leaving the entire allocation idle while waiting for a perfect topology. The tradeoff depends on:
+
+- reconfiguration time
+- throughput loss at the smaller world size
+- expected repair time
+- checkpoint/restart cost
+- whether changing topology preserves numerical and data-order correctness
+
 ## Related
 
 - [Model FLOPs Utilization (MFU)](/atlas/systems/performance/model-flops-utilization-mfu)
@@ -152,3 +176,4 @@ That is a healthier way to think about frontier training than raw utilization al
 - [Training Loss Patterns](/atlas/ai/training/optimization/training-loss-patterns)
 - [Asynchronous RL Infrastructure](/atlas/systems/infrastructure/asynchronous-rl-infrastructure)
 - [MAI-Thinking-1: Building a Hill-Climbing Machine](/atlas/ai/architectures/model-reports/mai-thinking-1-building-a-hill-climbing-machine)
+- [Gemma 4 Technical Report](/atlas/ai/architectures/model-reports/gemma-4-technical-report)

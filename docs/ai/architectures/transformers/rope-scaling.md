@@ -1,7 +1,7 @@
 ---
 title: "RoPE Scaling"
 date: 2026-04-08
-lastmod: 2026-06-11
+lastmod: 2026-07-23
 tags:
   - ai/llm
   - theory
@@ -22,6 +22,7 @@ RoPE scaling covers the family of techniques used to extend a model's context wi
 - **Position interpolation:** compressing long positions into the range seen during training.
 - **Position extrapolation:** using positions beyond the training range without compressing them.
 - **ReRoPE:** a hybrid approach that preserves local positions while compressing distant positions.
+- **p-RoPE:** partial RoPE, where only a fraction of each query/key head receives rotary position encoding.
 
 ## Content
 
@@ -241,12 +242,44 @@ workflow, but the extrapolation budget is finite. SmolLM3 could extrapolate from
 - Treat `train short, infer very long` as a limited extrapolation trick, not a free context extension.
 - Evaluate both retrieval-style long-context tasks and normal short-context tasks after changing RoPE.
 
+### 10.1 Partial RoPE as a cache and representation tradeoff
+
+Not every query/key dimension must be rotary. With p-RoPE, split a head into:
+
+$$
+q = [q_{\text{rope}}, q_{\text{nope}}],
+\qquad
+k = [k_{\text{rope}}, k_{\text{nope}}]
+$$
+
+and rotate only a fraction $p$:
+
+$$
+\dim(q_{\text{rope}}) = p d
+$$
+
+This gives the model:
+
+- position-sensitive dimensions for relative location
+- position-independent dimensions for content matching
+
+Gemma 4 uses:
+
+- `p = 0.25` in global attention layers
+- full RoPE in local layers
+- base `1M` globally and `10k` locally
+
+This division matches the jobs of the two layer types. Local layers need precise nearby geometry; global layers need broad content retrieval without spending every dimension on positional rotation.
+
+Partial RoPE alone does not automatically shrink a conventional full `K + V` cache. In Gemma 4, the reported `37.5%` global-cache reduction comes from combining `p = 0.25` with key-as-value attention. The mechanisms should not be credited interchangeably.
+
 ## Related
 - [Attention Mechanism](/atlas/ai/foundations/attention-mechanism)
 - [Progressive Context Extension](/atlas/ai/training/scaling/progressive-context-extension)
 - [The Smol Training Playbook](/atlas/ai/training/smol-training-playbook)
 - [The Llama 3 Herd of Models](/atlas/ai/architectures/model-reports/the-llama-3-herd-of-models)
 - [Context Parallelism](/atlas/systems/parallel-computing/context-parallelism)
+- [Gemma 4 Technical Report](/atlas/ai/architectures/model-reports/gemma-4-technical-report)
 
 ## Sources
 
@@ -255,3 +288,4 @@ workflow, but the extrapolation budget is finite. SmolLM3 could extrapolate from
 - Su Jianlin, [Transformer升级之路：12、无限外推的ReRoPE？](https://kexue.fm/archives/9708)
 - Su Jianlin, [Transformer升级之路：16、“复盘”长度外推技术](https://kexue.fm/archives/9948)
 - Su Jianlin, [Transformer升级之路：18、RoPE的底数选择原则](https://kexue.fm/archives/10122)
+- Gemma Team, [Gemma 4 Technical Report](https://arxiv.org/abs/2607.02770)

@@ -1,7 +1,7 @@
 ---
 title: "Attention Variants"
 date: 2026-06-08
-lastmod: 2026-06-18
+lastmod: 2026-07-23
 tags:
   - ai/llm
   - transformers
@@ -479,6 +479,49 @@ Good mental model:
 - local layers do the cheap dense work nearby
 - global layers periodically resynchronize the full context
 
+### D. Gemma 4: local/global layers plus key-as-value attention
+
+Gemma 4 uses another periodic layer pattern:
+
+- E2B: `4` local layers for every `1` global layer
+- other sizes: `5` local layers for every `1` global layer
+
+It then makes the global layers cheaper in two additional ways.
+
+First, only a fraction of each global query/key head receives RoPE:
+
+$$
+p = 0.25
+$$
+
+Second, the `12B`, `26B-A4B`, and `31B` global layers reuse keys as values:
+
+$$
+V = K
+$$
+
+Standard attention computes:
+
+$$
+\operatorname{softmax}
+\left(
+\frac{QK^\top}{\sqrt{d}}
+\right)V
+$$
+
+With key-as-value attention this becomes:
+
+$$
+\operatorname{softmax}
+\left(
+\frac{QK^\top}{\sqrt{d}}
+\right)K
+$$
+
+This removes the separate value projection/cache for those layers. Combined with partial RoPE, Gemma 4 reports a `37.5%` global KV-cache reduction.
+
+The tradeoff is expressivity: keys normally define **where to retrieve**, while values define **what content to return**. Setting `V = K` ties those roles together. It is therefore a targeted cache-quality tradeoff, not a drop-in rule for every attention layer.
+
 ## 8. Cross-attention
 
 In **self-attention**, queries, keys, and values all come from the same sequence.
@@ -526,6 +569,7 @@ Disadvantages:
 | **Linear attention** | summarize history into recurrent/kernel states | linear long-context scaling | weaker exact token retrieval |
 | **Sliding-window** | each token attends locally | long-context efficiency | weaker long-range access |
 | **Global attention** | unrestricted attention | full-context interaction | expensive |
+| **Key-as-value** | reuse $K$ as $V$ | removes separate value cache | ties retrieval and content representations |
 | **Cross-attention** | query one sequence with another | multimodal / encoder-decoder fusion | extra compute path |
 
 ## 10. Practical design heuristics
@@ -588,6 +632,7 @@ The real question is:
 - [Attention Mechanism](/atlas/ai/foundations/attention-mechanism)
 - [KV Cache](/atlas/ai/inference-serving/caching/kv-cache)
 - [Transformer Scaling Rules](/atlas/ai/training/scaling/transformer-scaling-rules)
+- [Gemma 4 Technical Report](/atlas/ai/architectures/model-reports/gemma-4-technical-report)
 - [RoPE scaling](/atlas/ai/architectures/transformers/rope-scaling)
 - [Attention Softmax and Scaling](/atlas/ai/architectures/transformers/attention-softmax-and-scaling)
 - [FlashAttention](/atlas/ai/architectures/transformers/flashattention)
