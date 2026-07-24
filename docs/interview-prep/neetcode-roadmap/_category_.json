@@ -1,0 +1,9 @@
+{
+  "label": "NeetCode Roadmap",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "title": "NeetCode Roadmap",
+    "description": "Reusable patterns, invariants, and Python templates for every section of the NeetCode 150 roadmap."
+  }
+}
