@@ -1,7 +1,7 @@
 ---
 title: "Looped Language Models (Ouro)"
 date: 2026-05-19
-lastmod: 2026-05-19
+lastmod: 2026-07-25
 tags:
   - ai/deep-learning
   - ai/llm
@@ -184,6 +184,40 @@ Practical rule:
 - overlooping can be safer than underlooping on some tasks
 - but loop count is task-dependent and should not be blindly increased
 
+### Nanbeige4.2: a fixed-loop production case
+
+[Nanbeige4.2-3B](/atlas/ai/architectures/model-reports/nanbeige4-2-3b-unlocking-agentic-capabilities) provides a useful contrast to Ouro. Both reuse transformer layers in latent space, but they make different choices:
+
+| Dimension | Ouro | Nanbeige4.2 |
+| :--- | :--- | :--- |
+| Loop depth | adaptive, with a learned exit gate | fixed at two complete passes |
+| Training | supports several possible exits | every token uses both passes |
+| Objective | allocate more latent compute when useful | increase effective depth under a fixed weight budget |
+| Scale reported | up to `2.6B`, trained on `7.7T` tokens | `3B` non-embedding parameters, trained on `28T` tokens |
+
+Nanbeige reports that training the looped architecture from scratch works better than first training an ordinary transformer and then introducing recurrence through upcycling. This suggests that hidden representations benefit from adapting to repeated layer roles throughout pretraining.
+
+It also reports that two passes give the best practical trade-off:
+
+- approximately `75%` of the token-processing efficiency of a standard transformer
+- meaningful capacity gains
+- only marginal further gains from more loops
+- slower and less stable optimization beyond two passes
+
+Unlike Ouro's adaptive exits, Nanbeige does not save compute on easy tokens. Every token receives the same recurrent depth.
+
+Nanbeige also tests sharing KV-cache state across loop passes. Sharing halves the loop-related cache requirement but produces smaller quality gains, so the released model retains distinct state for each pass. This is an important qualification to the parameter-efficiency story:
+
+$$
+\text{shared weights}
+\neq
+\text{shared compute}
+\neq
+\text{shared cache}
+$$
+
+The report does not publish detailed numerical loop-depth or upcycling ablations, and it changes the pretraining data recipe at the same time. It therefore supports the practicality of large-scale dense looping without cleanly isolating its contribution.
+
 ### Relation to other approaches
 
 Ouro is related to:
@@ -211,6 +245,7 @@ The key difference is that Ouro performs the extra reasoning in latent space dur
 - [Test-Time Compute](/atlas/ai/inference-serving/performance/test-time-compute)
 - [Transformer Scaling Rules](/atlas/ai/training/scaling/transformer-scaling-rules)
 - [Moe Looped Language Models](/atlas/ai/architectures/transformers/moe-looped-language-models)
+- [Nanbeige4.2-3B](/atlas/ai/architectures/model-reports/nanbeige4-2-3b-unlocking-agentic-capabilities)
 - [Frontier Small Language Models](/atlas/ai/architectures/model-families/frontier-small-language-models)
 - [Large Concept Models](/atlas/ai/architectures/model-families/large-concept-models)
 - AI Papers MOC

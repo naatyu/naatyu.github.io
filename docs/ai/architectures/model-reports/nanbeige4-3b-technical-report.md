@@ -24,7 +24,7 @@ Nanbeige4-3B is a family consisting of a `3B` base model and the reasoning-orien
 
 The broader lesson is that parameter count alone says little about the capability of a small model. Data quantity, data ordering, distillation, and the construction of learnable RL problems can compensate for a large part of the capacity gap.
 
-This report describes the original Nanbeige4-3B family. It should not be confused with **Nanbeige4.2-3B**, a later model that introduces a Looped Transformer architecture.
+This report describes the original Nanbeige4-3B family. It should not be confused with [Nanbeige4.2-3B](/atlas/ai/architectures/model-reports/nanbeige4-2-3b-unlocking-agentic-capabilities), a later model that introduces a Looped Transformer architecture.
 
 ## Concepts
 
@@ -399,5 +399,6 @@ The benchmark selection also emphasizes the model's target strengths. Strong mat
 - [Supervised Fine-Tuning for LLMs](/atlas/ai/training/optimization/supervised-fine-tuning-for-llms)
 - [Reinforcement Learning with Verifiable Rewards](/atlas/ai/training/optimization/reinforcement-learning-with-verifiable-rewards)
 - [Group Relative Policy Optimization](/atlas/ai/training/optimization/group-relative-policy-optimization)
+- [Nanbeige4.2-3B](/atlas/ai/architectures/model-reports/nanbeige4-2-3b-unlocking-agentic-capabilities)
 - [Nanbeige4-3B Technical Report](https://arxiv.org/abs/2512.06266)
 - [Nanbeige4-3B checkpoints](https://huggingface.co/Nanbeige)

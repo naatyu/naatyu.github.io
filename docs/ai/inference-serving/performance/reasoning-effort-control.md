@@ -1,7 +1,7 @@
 ---
 title: "Controlling Reasoning Effort in LLMs"
 date: 2026-07-20
-lastmod: 2026-07-21
+lastmod: 2026-07-25
 tags:
   - ai/llm
   - reasoning
@@ -133,6 +133,46 @@ $$
 \text{hard limit} = \text{how much budget is available}
 $$
 
+### Difficulty-aware length control
+
+[Nanbeige4.2-3B](/atlas/ai/architectures/model-reports/nanbeige4-2-3b-unlocking-agentic-capabilities) provides a concrete alternative to applying one global token penalty.
+
+For every problem $q$, collect correct responses from earlier checkpoints and set a fixed historical budget:
+
+$$
+b_q
+=
+\operatorname{median}
+\left\{
+\text{length of correct rollouts for }q
+\right\}
+$$
+
+For a new response of length $L_i$, the constrained RL phase uses:
+
+$$
+r_i
+=
+r_i^{base}
+-
+\alpha p_q
+\left[
+\frac{L_i-b_q}
+{L_{max}-b_q}
+\right]_0^1
+$$
+
+where $p_q$ is the fraction of correct responses in the current rollout group.
+
+This makes the pressure to be concise depend on two quantities:
+
+1. how far the response exceeds the historical correct budget
+2. how reliably the current policy solves the problem
+
+Easy problems with high pass rates receive stronger length pressure. Hard problems retain more room for exploration. Responses within budget are never penalized.
+
+Nanbeige alternates these constrained phases with free-expansion phases where the length penalty is disabled. This avoids teaching the model that shorter is universally better and preserves its ability to exploit additional test-time compute.
+
 ## 5. Representative implementation patterns
 
 Different model families expose similar user-facing controls while using different post-training recipes.
@@ -144,6 +184,7 @@ Different model families expose similar user-facing controls while using differe
 | **DeepSeek V4** | Non-think, Think High, and Think Max use mode-specific post-training settings; the resulting specialists are distilled into one checkpoint. | A unified model can inherit modes first developed as separate specialists. |
 | **Nemotron 3 Ultra** | Medium effort is introduced in SFT and reinforced on a subset of RLVR prompts with length-aware rewards; learned modes can be combined with hard budgets. | A learned policy and an external budget can coexist. |
 | **Kimi K2.5** | Toggle alternates budgeted and unconstrained RL phases rather than permanently optimizing against one short budget. | Alternating constraints can improve token efficiency without destroying test-time scalability. |
+| **Nanbeige4.2** | Each problem receives a budget from historical correct rollouts; excess-length penalties scale with current pass rate, and constrained phases alternate with free expansion. | Length pressure can increase automatically as a problem becomes easier for the policy. |
 
 These approaches share three recurring ingredients:
 
@@ -198,6 +239,7 @@ Automatic selection is attractive but difficult. A router must estimate task dif
 - [Reinforcement Learning with Verifiable Rewards](/atlas/ai/training/optimization/reinforcement-learning-with-verifiable-rewards)
 - [LLM Inference Economics](/atlas/ai/inference-serving/performance/llm-inference-economics)
 - [Group Relative Policy Optimization](/atlas/ai/training/optimization/group-relative-policy-optimization)
+- [Nanbeige4.2-3B](/atlas/ai/architectures/model-reports/nanbeige4-2-3b-unlocking-agentic-capabilities)
 
 ## Sources
 
@@ -207,3 +249,4 @@ Automatic selection is attractive but difficult. A router must estimate task dif
 - [DeepSeek V4 Technical Report](https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/main/DeepSeek_V4.pdf)
 - [NVIDIA Nemotron 3 Ultra Technical Report](https://research.nvidia.com/labs/nemotron/files/NVIDIA-Nemotron-3-Ultra-Technical-Report.pdf)
 - [Kimi K2.5 Technical Report](https://arxiv.org/abs/2602.02276)
+- [Nanbeige4.2-3B Technical Report](https://huggingface.co/Nanbeige/Nanbeige4.2-3B/blob/main/Nanbeige42_report.pdf)
