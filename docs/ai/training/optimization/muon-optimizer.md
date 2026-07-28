@@ -1,7 +1,7 @@
 ---
 title: "Muon Optimizer"
 date: 2026-06-11
-lastmod: 2026-06-11
+lastmod: 2026-07-27
 tags:
   - ai/training
   - optimization
@@ -343,7 +343,50 @@ Practical implication:
 
 Muon is non-elementwise, and matrix shape changes the effective update scale unless the implementation compensates for it.
 
-## 8. Which parameters should use Muon?
+## 8. Per-head Muon for attention projections
+
+Applying Muon to a complete query, key, or value projection treats all attention heads as one matrix:
+
+$$
+W_Q
+\in
+\mathbb{R}^{d_{\text{model}}\times(hd_h)}
+$$
+
+If some heads produce much larger momentum directions, full-matrix orthogonalization lets them influence the shared singular geometry. Smaller-scale heads may receive updates shaped by the dominant heads.
+
+Kimi K3 partitions the momentum by head:
+
+$$
+M
+=
+\left[
+M^{(1)},M^{(2)},\ldots,M^{(h)}
+\right]
+$$
+
+and applies Newton-Schulz orthogonalization independently:
+
+$$
+\Delta W
+=
+\left[
+\operatorname{msign}(M^{(1)}),
+\ldots,
+\operatorname{msign}(M^{(h)})
+\right]
+$$
+
+This has two intended effects:
+
+- equalize update geometry across attention heads
+- prevent a few large heads from dominating the full projection update
+
+The smaller matrices also make the orthogonalization slightly cheaper. This is a useful general rule: optimizer structure should match the functional partition of a parameter, not only its storage layout.
+
+Per-head Muon is not equivalent to using a different learning rate per head. It changes which singular directions are normalized together.
+
+## 9. Which parameters should use Muon?
 
 Muon is intended for dense matrix parameters such as:
 
@@ -369,7 +412,7 @@ Neither is obviously equivalent to the intended matrix optimizer behavior. A pra
 - use Muon for large matrix weights
 - use AdamW or SGD-like rules for embeddings, norms, and small/vector parameters
 
-## 9. What Muon seems to change in trained weights
+## 10. What Muon seems to change in trained weights
 
 One reported observation from Moonlight-style experiments is that Muon-trained weights can have more uniform singular value spectra.
 
@@ -394,7 +437,7 @@ Higher entropy means the matrix energy is spread across more singular directions
 
 This is not yet a complete theory, but it is a useful diagnostic direction.
 
-## 10. Muon and pretraining vs fine-tuning
+## 11. Muon and pretraining vs fine-tuning
 
 One important caveat is that an optimizer may shape the geometry of the weights during pretraining.
 
@@ -414,7 +457,7 @@ $$
 
 This matters because LLM training is staged. Optimizer choice in pretraining can affect the best optimizer choice later.
 
-## 11. Practical checklist
+## 12. Practical checklist
 
 When testing Muon in a serious LLM run:
 
@@ -432,7 +475,7 @@ The strongest case for Muon is not "it always beats AdamW." The stronger claim i
 
 > Matrix parameters may deserve matrix-aware optimization, and Muon is a practical implementation of that idea.
 
-## 12. Practical testing recipe
+## 13. Practical testing recipe
 
 A clean Muon experiment should separate three questions:
 
@@ -478,9 +521,11 @@ The main failure mode to avoid is a superficially good early loss curve followed
 - [Gradient Norm and Training Dynamics](/atlas/ai/training/optimization/gradient-norm-and-training-dynamics)
 - [MoE Training Stability](/atlas/ai/training/optimization/moe-training-stability)
 - [MoE Routing and Load Balancing](/atlas/ai/training/optimization/moe-routing-and-load-balancing)
+- [Kimi K3](/atlas/ai/architectures/model-reports/kimi-k3-open-frontier-intelligence)
 
 ## Sources
 
 - Su Jianlin, [Muon优化器赏析：从向量到矩阵的本质跨越](https://kexue.fm/archives/10592)
 - Su Jianlin, [Muon续集：为什么我们选择尝试Muon？](https://kexue.fm/archives/10739)
 - Su Jianlin, [Muon优化器指南：快速上手与关键细节](https://kexue.fm/archives/11416)
+- Kimi Team, [Kimi K3: Open Frontier Intelligence — Technical Report](https://github.com/MoonshotAI/Kimi-K3/blob/main/k3_tech_report.pdf)

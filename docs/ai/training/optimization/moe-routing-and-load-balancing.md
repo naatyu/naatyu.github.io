@@ -1,7 +1,7 @@
 ---
 title: "MoE Routing and Load Balancing"
 date: 2026-06-11
-lastmod: 2026-06-11
+lastmod: 2026-07-27
 tags:
   - ai/training
   - moe
@@ -199,7 +199,47 @@ This is attractive because it separates two objectives:
 
 The risk is that score correction becomes another control loop. It must be stable, slow enough not to oscillate, and consistent across distributed workers.
 
-## 6. Uniform routing is not always optimal
+## 6. Quantile Balancing
+
+Kimi K3 replaces the fixed-step bias controller with a direct quantile calculation.
+
+For each token, consider expert $i$'s router score relative to the Top-$(k+1)$ selection cutoff. This produces a margin:
+
+$$
+m_{ti}
+=
+s_{ti}
+-
+\operatorname{Top}_{k+1}(s_t)
+$$
+
+Expert $i$ is selected when its bias-adjusted margin is above the cutoff. If the target expert load is:
+
+$$
+q=\frac{mk}{E}
+$$
+
+for $m$ tokens, K3 chooses the next bias from the margin quantile that makes exactly $q$ margins positive.
+
+Compared with a sign-based controller:
+
+- there is no learning-rate-like bias step to tune
+- balance is reached in a few steps rather than through gradual correction
+- the update uses router geometry, not only whether load was high or low
+
+The biases affect expert selection but not mixture weights, are mean-centered after the update, and are frozen for inference.
+
+At large scale, communicating every margin is too expensive. K3 builds one histogram per expert, all-reduces the histogram counts, and estimates the desired quantile from `1,000` bins. The quantile error is bounded by the bin width, while communication is reported below `1%` of transmitting raw margins.
+
+This is an example of turning a feedback-control problem into a distributed statistics problem:
+
+$$
+\text{load error + tuned step}
+\rightarrow
+\text{target-load quantile}
+$$
+
+## 7. Uniform routing is not always optimal
 
 The phrase "load balancing" can be misleading. Equal expert load is useful, but not always the true objective.
 
@@ -220,7 +260,7 @@ Uniform load is a practical proxy for avoiding collapse, not a proof of optimal 
 
 This matters for interpreting expert histograms. A perfectly flat histogram is not automatically a better model. It may indicate that the router is being over-regularized.
 
-## 7. Sequence-level balancing
+## 8. Sequence-level balancing
 
 Batch-level balancing can still allow bad local patterns. For example, one sequence might route almost entirely to one expert while another sequence compensates globally.
 
@@ -243,7 +283,7 @@ The tradeoff:
 - stronger balancing gives more predictable utilization
 - but it can interfere more with natural specialization
 
-## 8. Capacity factor and token dropping
+## 9. Capacity factor and token dropping
 
 Let each expert receive capacity:
 
@@ -268,7 +308,7 @@ If $\gamma$ is too large, experts get enough slack but memory and communication 
 
 Dropless MoE avoids token dropping, but then the system must handle variable expert loads efficiently. This is often harder at scale.
 
-## 9. Practical signals to log
+## 10. Practical signals to log
 
 For MoE training, aggregate loss is insufficient.
 
@@ -287,7 +327,7 @@ Track:
 
 Good MoE monitoring should connect optimization and systems telemetry.
 
-## 10. Practical heuristics
+## 11. Practical heuristics
 
 - Start with simple auxiliary balancing unless the run is large enough to justify loss-free control loops.
 - Do not over-tune the auxiliary coefficient to force perfect uniformity.
@@ -302,6 +342,7 @@ Good MoE monitoring should connect optimization and systems telemetry.
 - [MoE Training Stability](/atlas/ai/training/optimization/moe-training-stability)
 - [Transformer Scaling Rules](/atlas/ai/training/scaling/transformer-scaling-rules)
 - [Muon Optimizer](/atlas/ai/training/optimization/muon-optimizer)
+- [Kimi K3](/atlas/ai/architectures/model-reports/kimi-k3-open-frontier-intelligence)
 - [Hardware Topology and Parallelism](/atlas/systems/parallel-computing/hardware-topology-and-parallelism)
 
 ## Sources
@@ -312,3 +353,4 @@ Good MoE monitoring should connect optimization and systems telemetry.
 - Su Jianlin, [MoE环游记：4、难处应当多投入](https://kexue.fm/archives/10815)
 - Su Jianlin, [MoE环游记：6、最优分配促均衡](https://kexue.fm/archives/11619)
 - Su Jianlin, [MoE环游记：8、强制序列级均衡](https://kexue.fm/archives/11760)
+- Kimi Team, [Kimi K3: Open Frontier Intelligence — Technical Report](https://github.com/MoonshotAI/Kimi-K3/blob/main/k3_tech_report.pdf)

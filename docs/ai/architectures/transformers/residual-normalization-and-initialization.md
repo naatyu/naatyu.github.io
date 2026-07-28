@@ -1,7 +1,7 @@
 ---
 title: "Residuals, Normalization, and Initialization"
 date: 2026-06-11
-lastmod: 2026-06-11
+lastmod: 2026-07-27
 tags:
   - ai/llm
   - transformers
@@ -367,6 +367,8 @@ Practical view:
 
 ## Related
 
+- [Attention Residuals](/atlas/ai/architectures/transformers/attention-residuals)
+- [Kimi K3](/atlas/ai/architectures/model-reports/kimi-k3-open-frontier-intelligence)
 - [Layer Normalization](/atlas/ai/foundations/layer-normalization)
 - [RMSNorm](/atlas/ai/foundations/root-mean-square-layer-normalization)
 - [Attention Variants](/atlas/ai/architectures/transformers/attention-variants)

@@ -1,7 +1,7 @@
 ---
 title: "Linear Attention"
 date: 2026-06-11
-lastmod: 2026-06-11
+lastmod: 2026-07-27
 tags:
   - ai/llm
   - transformers
@@ -307,7 +307,49 @@ $$
 
 L2 normalization makes the operation depend more on direction than magnitude, which stabilizes the recurrent memory dynamics.
 
-## 8. When linear attention is attractive
+## 8. Bounded decay in Kimi Delta Attention
+
+Recurrent linear attention often includes a learned forget factor:
+
+$$
+S_t
+=
+\alpha_t\odot S_{t-1}
++
+\Delta_t
+$$
+
+If $\alpha_t$ can become arbitrarily close to zero, blockwise implementations must rescale partial states by very large reciprocal decay factors. These values can leave the useful BF16 range and force a separate, less efficient path for some position pairs.
+
+Kimi K3 bounds the log decay:
+
+$$
+g_t
+=
+g_{\min}
+\operatorname{Sigmoid}
+\left(
+e^A z_t
+\right),
+\qquad
+g_{\min}=-5
+$$
+
+$$
+\alpha_t=e^{g_t}>e^{-5}
+$$
+
+The state can still forget strongly, but reciprocal rescaling remains bounded. This lets both diagonal and off-diagonal tiles use dense Tensor Core matrix multiplications.
+
+This is an important model-systems lesson:
+
+> Constraining a learned recurrence can improve numerical safety and unlock a much simpler kernel without removing the behavior the model needs.
+
+The bound is a hyperparameter with a real trade-off. A value too close to zero weakens rapid forgetting; a value too negative recreates the numerical and kernel problem.
+
+K3 combines KDA layers with periodic global Gated MLA layers. The recurrent state handles economical long-range accumulation, while exact attention restores sharp token retrieval.
+
+## 9. When linear attention is attractive
 
 Linear attention is most attractive when:
 
@@ -324,7 +366,7 @@ It is risky when:
 - the model must compete with strong softmax-attention baselines at the same scale
 - kernel support and implementation maturity are weak
 
-## 9. Practical mental model
+## 10. Practical mental model
 
 Softmax attention stores a flexible interaction graph:
 
@@ -354,6 +396,7 @@ The better question is:
 - [KV Cache](/atlas/ai/inference-serving/caching/kv-cache)
 - [Progressive Context Extension](/atlas/ai/training/scaling/progressive-context-extension)
 - [Transformer Scaling Rules](/atlas/ai/training/scaling/transformer-scaling-rules)
+- [Kimi K3](/atlas/ai/architectures/model-reports/kimi-k3-open-frontier-intelligence)
 
 ## Sources
 
@@ -364,3 +407,4 @@ The better question is:
 - Su Jianlin, [线性注意力简史：从模仿、创新到反哺](https://kexue.fm/archives/11033)
 - Su Jianlin, [为什么线性注意力要加Short Conv？](https://kexue.fm/archives/11320)
 - Su Jianlin, [为什么DeltaNet要加L2 Normalize？](https://kexue.fm/archives/11486)
+- Kimi Team, [Kimi K3: Open Frontier Intelligence — Technical Report](https://github.com/MoonshotAI/Kimi-K3/blob/main/k3_tech_report.pdf)

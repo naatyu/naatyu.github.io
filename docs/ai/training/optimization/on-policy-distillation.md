@@ -1,7 +1,7 @@
 ---
 title: "On-Policy Distillation"
 date: 2026-06-12
-lastmod: 2026-06-12
+lastmod: 2026-07-27
 tags:
   - ai/training
   - post-training
@@ -455,7 +455,49 @@ This suggests a useful production pattern:
 2. once a strong policy exists, distill it on-policy into cheaper or cleaner students
 3. do not pay the RL search cost again for every student or personalization variant
 
-## 12. When to use on-policy distillation
+## 12. Multi-teacher on-policy distillation
+
+Kimi K3 extends the method from one teacher to a set of specialized policies.
+
+Its post-training pipeline first trains specialists across:
+
+- task domains such as reasoning, vision, search, coding, and general agents
+- reasoning-effort levels such as low, high, and max
+
+This produces nine teachers. During consolidation:
+
+1. sample a domain $d$ and reasoning effort $e$
+2. generate a trajectory from the student
+3. select the matching teacher $\pi_{T_{d,e}}$
+4. score the student's tokens with that teacher
+5. combine dense token feedback with the task reward
+
+The token reward is a clipped log-probability ratio with stopped gradients:
+
+$$
+r_t
+=
+\operatorname{clip}
+\left(
+\operatorname{stopgrad}
+\left[
+\log\pi_{T_{d,e}}(a_t\mid s_t)
+-
+\log\pi_\theta(a_t\mid s_t)
+\right]
+\right)
+$$
+
+This separates two problems:
+
+- specialists explore and optimize their own domains
+- one deployed student consolidates their behavior
+
+It also avoids forcing every specialized objective into one simultaneous RL mixture. The main risk is teacher inconsistency: shared prompts or behaviors may receive different preferences across specialists. Domain routing and a common SFT initialization help, but the report does not isolate interference among teachers.
+
+K3 reports that distilling only teacher Top-$k$ logits did not improve over scoring sampled tokens. This reinforces the compute advantage of sampled reverse-KL-style feedback: the teacher need not expose or communicate the entire vocabulary distribution.
+
+## 13. When to use on-policy distillation
 
 Use it when:
 
@@ -499,6 +541,7 @@ Forward-KL SFT can add support for new tokens and behaviors. Reverse-KL on-polic
 - [Reinforcement Learning for LLMs](/atlas/ai/training/optimization/reinforcement-learning-for-llms)
 - [Preference Optimization for LLMs](/atlas/ai/training/optimization/preference-optimization-for-llms)
 - [Supervised Fine-Tuning for LLMs](/atlas/ai/training/optimization/supervised-fine-tuning-for-llms)
+- [Kimi K3](/atlas/ai/architectures/model-reports/kimi-k3-open-frontier-intelligence)
 
 ## Sources
 
@@ -506,3 +549,4 @@ Forward-KL SFT can add support for new tokens and behaviors. Reverse-KL on-polic
 - Ross et al., [A Reduction of Imitation Learning and Structured Prediction to No-Regret Online Learning](https://arxiv.org/abs/1011.0686)
 - Agarwal et al., [On-Policy Distillation of Language Models: Learning from Self-Generated Mistakes](https://arxiv.org/abs/2306.13649)
 - Gu et al., [MiniLLM: Knowledge Distillation of Large Language Models](https://arxiv.org/abs/2306.08543)
+- Kimi Team, [Kimi K3: Open Frontier Intelligence — Technical Report](https://github.com/MoonshotAI/Kimi-K3/blob/main/k3_tech_report.pdf)

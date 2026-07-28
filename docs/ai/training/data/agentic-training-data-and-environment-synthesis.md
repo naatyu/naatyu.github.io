@@ -1,7 +1,7 @@
 ---
 title: "Agentic Training Data and Environment Synthesis"
 date: 2026-07-25
-lastmod: 2026-07-25
+lastmod: 2026-07-27
 tags:
   - ai/training
   - agents
@@ -299,7 +299,93 @@ Running the same task through several scaffolds exposes different valid strategi
 
 The desired target is scaffold-invariant competence, not imitation of one agent product.
 
-## 8. Filter trajectories and turns separately
+## 8. White-box configurable harnesses
+
+Scaffold diversity is more useful when the harness itself is represented as configurable modules rather than several opaque applications.
+
+Kimi K3 decomposes a harness into:
+
+- tools
+- system prompts
+- context-management policy
+- skills and memory
+- subagent configuration
+
+A task can then sample or select these components dynamically. The same environment layer can reproduce several agent products while keeping task state and verification consistent.
+
+This makes scaffold variation a controlled data dimension:
+
+$$
+\text{task}
+\times
+\text{tool set}
+\times
+\text{context policy}
+\times
+\text{subagent policy}
+$$
+
+It also supports cleaner ablations. If performance changes, one can attribute it to a specific harness component rather than to an entirely different runner.
+
+## 9. Knowledge-graph-guided task synthesis
+
+K3 uses a self-expanding hierarchical directed acyclic graph to organize task concepts.
+
+The process is:
+
+1. start from broad seed concepts
+2. retrieve public source material
+3. expand each concept into finer prerequisites or subtopics
+4. reuse an existing related node instead of duplicating it
+5. stop when a concept is sufficiently atomic
+6. sample related nodes across levels to synthesize tasks
+
+This produces structured combinations rather than independent prompt topics. A task can require dependencies that span:
+
+- general and specialized knowledge
+- several tools
+- text and vision
+- multiple levels of abstraction
+
+The graph is valuable because it makes coverage and difficulty inspectable. However, model-generated graph structure can encode false dependencies or synthetic biases, so nodes still need source grounding and deduplication.
+
+## 10. Autonomous Execution Tasks
+
+K3 formalizes open-ended agent tasks as:
+
+$$
+\mathcal{E}
+=
+\left(
+s_0,
+g,
+\mathcal{A},
+B,
+V
+\right)
+$$
+
+where:
+
+- $s_0$ is the initial state
+- $g$ is a constrained goal
+- $\mathcal{A}$ is the available tool set
+- $B$ is the execution or submission budget
+- $V$ is an independent verifier
+
+There is no reference trajectory. The agent must decide how to decompose the goal, recover from failures, and terminate.
+
+Public verifier output may provide limited diagnostics, but hidden checks are held out and isolated from agent tools. Submission limits and penalties discourage solving the task by repeatedly probing the grader.
+
+This is closer to real agent deployment than trajectory imitation:
+
+$$
+\text{learn a successful policy}
+\neq
+\text{copy one successful path}
+$$
+
+## 11. Filter trajectories and turns separately
 
 Trajectory success is necessary but not sufficient.
 
@@ -360,7 +446,7 @@ $$
 \text{how to make the error}
 $$
 
-## 9. Evolve tasks with the model
+## 12. Evolve tasks with the model
 
 A fixed dataset eventually becomes:
 
@@ -395,7 +481,7 @@ Difficulty should be factored rather than represented by one scalar:
 
 This makes task evolution controllable. If a task becomes too easy, the generator can increase a specific dimension instead of adding arbitrary complexity.
 
-## 10. Match task difficulty to the learning stage
+## 13. Match task difficulty to the learning stage
 
 The hardest tasks are not always the most useful.
 
@@ -426,7 +512,7 @@ $$
 \text{task difficulty}
 $$
 
-## 11. Outcome and process rewards
+## 14. Outcome and process rewards
 
 Outcome rewards answer:
 
@@ -459,7 +545,7 @@ $$
 
 Process rubrics must not overpower the outcome verifier. An agent that performs locally plausible actions but never completes the task should not outrank a successful unconventional strategy.
 
-## 12. Failure modes
+## 15. Failure modes
 
 ### Simulator overfitting
 
@@ -506,4 +592,7 @@ Keeping only clean, direct successes removes examples of debugging, recovery, an
 - [Supervised Fine-Tuning for LLMs](/atlas/ai/training/optimization/supervised-fine-tuning-for-llms)
 - [Data Mixture Optimization](/atlas/ai/training/data/data-mixture-optimization)
 - [Reasoning Effort Control](/atlas/ai/inference-serving/performance/reasoning-effort-control)
+- [Long-Horizon Agentic RL Infrastructure](/atlas/ai/training/optimization/long-horizon-agentic-rl-infrastructure)
+- [Kimi K3](/atlas/ai/architectures/model-reports/kimi-k3-open-frontier-intelligence)
 - [Nanbeige4.2-3B Technical Report](https://huggingface.co/Nanbeige/Nanbeige4.2-3B/blob/main/Nanbeige42_report.pdf)
+- Kimi Team, [Kimi K3: Open Frontier Intelligence — Technical Report](https://github.com/MoonshotAI/Kimi-K3/blob/main/k3_tech_report.pdf)
