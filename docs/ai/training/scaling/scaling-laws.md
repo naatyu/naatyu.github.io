@@ -1,7 +1,7 @@
 ---
 title: "Scaling Laws"
 date: 2026-04-08
-lastmod: 2026-06-26
+lastmod: 2026-07-29
 tags:
   - ai/theory
   - scaling-laws
@@ -438,12 +438,39 @@ So a practical scaling program has at least three layers:
 
 This matters because a model can be correctly sized under Chinchilla but poorly trained because its LR, batch size, optimizer grouping, or parametrization did not scale correctly.
 
+### Decompose before fitting
+
+A useful synthesis is to separate final loss into:
+
+$$
+L
+=
+F_{\text{data}}
++
+F_{\text{opt}}
++
+F_{\text{arch}}
++
+L_{\text{floor}}
+$$
+
+This prevents several distinct limitations from being hidden inside one fitted curve:
+
+- insufficient unique data or excessive repetition
+- incomplete or noisy optimization
+- insufficient architectural capacity
+
+Each gap can be modeled with competing power-law terms and optimized under a resource constraint. The resulting optima recover familiar patterns for learning rate, batch size, model/data allocation, and repeated epochs.
+
+The decomposition is exact as an accounting identity, but the chosen power-law forms are hypotheses. See [Decomposing Scaling Laws](/atlas/ai/training/scaling/decomposing-scaling-laws) for the full derivation and its limitations.
+
 ## Related
 - AI Papers MOC
 - [Data-Constrained Scaling Laws](/atlas/ai/training/scaling/data-constrained-scaling-laws)
 - [Transformer Scaling Rules](/atlas/ai/training/scaling/transformer-scaling-rules)
 - [Overtraining and Inference-Aware Scaling](/atlas/ai/training/scaling/overtraining-and-inference-aware-scaling)
 - [Hyperparameter Scaling Laws for LLM Training](/atlas/ai/training/scaling/hyperparameter-scaling-laws-for-llm-training)
+- [Decomposing Scaling Laws](/atlas/ai/training/scaling/decomposing-scaling-laws)
 - [Test-Time Compute](/atlas/ai/inference-serving/performance/test-time-compute)
 - [The Llama 3 Herd of Models](/atlas/ai/architectures/model-reports/the-llama-3-herd-of-models)
 - [Frontier Small Language Models](/atlas/ai/architectures/model-families/frontier-small-language-models)

@@ -1,7 +1,7 @@
 ---
 title: "Hyperparameter Scaling Laws for LLM Training"
 date: 2026-06-02
-lastmod: 2026-06-11
+lastmod: 2026-07-29
 tags:
   - ai/deep-learning
   - scaling-laws
@@ -286,6 +286,7 @@ $$
 ## Related
 
 - [Scaling Laws](/atlas/ai/training/scaling/scaling-laws)
+- [Decomposing Scaling Laws](/atlas/ai/training/scaling/decomposing-scaling-laws)
 - [Batch size & Learning rate](/atlas/ai/training/optimization/batch-size-and-learning-rate)
 - [Warmup-Stable-Decay Learning Rate Schedule](/atlas/ai/training/optimization/warmup-stable-decay-learning-rate-schedule)
 - [Smol Training Playbook Foundations](/atlas/ai/training/smol-training-playbook-foundations)

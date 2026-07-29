@@ -1,7 +1,7 @@
 ---
 title: "Data-Constrained Scaling Laws"
 date: 2026-06-26
-lastmod: 2026-06-26
+lastmod: 2026-07-29
 tags:
   - ai/training
   - scaling
@@ -281,6 +281,7 @@ The core rule:
 ## Related
 
 - [Scaling Laws](/atlas/ai/training/scaling/scaling-laws)
+- [Decomposing Scaling Laws](/atlas/ai/training/scaling/decomposing-scaling-laws)
 - [Overtraining and Inference-Aware Scaling](/atlas/ai/training/scaling/overtraining-and-inference-aware-scaling)
 - [Data Mixture Optimization](/atlas/ai/training/data/data-mixture-optimization)
 - [Deduplication and Memorization Control](/atlas/ai/training/data/deduplication-and-memorization-control)
