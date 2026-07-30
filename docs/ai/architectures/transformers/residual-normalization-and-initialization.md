@@ -1,7 +1,7 @@
 ---
 title: "Residuals, Normalization, and Initialization"
 date: 2026-06-11
-lastmod: 2026-07-27
+lastmod: 2026-07-30
 tags:
   - ai/llm
   - transformers
@@ -324,7 +324,43 @@ The engineering lesson:
 - deep models need residual scaling, careful initialization, or both
 - normalization alone does not solve every depth-scaling issue
 
-## 7. Normalization replacements
+## 7. Attention Residuals: learn the aggregation over depth
+
+Standard residuals do more than provide a gradient shortcut. After unrolling:
+
+$$
+x_l
+=
+x_0
++
+\sum_{i=0}^{l-1}F_i(x_i)
+$$
+
+they also define a fixed depth-wise aggregation rule in which every preceding layer output has weight `1`.
+
+The Kimi Team's **Attention Residuals (AttnRes)** replace this uniform sum with:
+
+$$
+x_l
+=
+\sum_{i=0}^{l-1}
+\alpha_{i\rightarrow l}v_i
+$$
+
+where the coefficients are a softmax over earlier layer outputs and depend on the current token. This lets each layer selectively retrieve earlier representations rather than reading only one accumulated state.
+
+Full AttnRes attends over every preceding layer output. Block AttnRes sums layers within blocks, then attends over completed block summaries and the current block's partial sum. The block form reduces stored depth sources from $O(Ld)$ to $O(Nd)$ and is the scalable version used in the paper's `48B` total / `3B` active Kimi Linear experiment.
+
+This directly targets the Pre-Norm depth-dilution issue discussed above:
+
+- fixed residual accumulation grows with depth
+- each new update becomes small relative to the accumulated state
+- selective softmax aggregation keeps the mixture bounded
+- gradients become more uniformly distributed across layers
+
+AttnRes is complementary to initialization and normalization choices, but it is a larger architectural change than residual scaling. See [Attention Residuals](/atlas/ai/architectures/transformers/attention-residuals) for the mechanism, systems implementation, scaling results, and caveats.
+
+## 8. Normalization replacements
 
 Recent normalization-free or normalization-light work tries to replace full LayerNorm/RMSNorm with cheaper elementwise transforms.
 
@@ -355,23 +391,24 @@ Practical view:
 - normalization affects depth stability
 - replacing it should be evaluated as an optimization change, not just a speed trick
 
-## 8. Practical heuristics
+## 9. Practical heuristics
 
 - Treat residual scaling, normalization placement, initialization, and warmup as one coupled design.
 - Pre-Norm is safer for large LLM pretraining, but may reduce effective depth.
 - Post-Norm can be stronger but needs more careful scaling.
 - If attention removes or changes $1/\sqrt d$, revisit initialization.
 - For very deep transformers, use explicit residual scaling or DeepNet-style rules.
+- Treat the residual stream as an information-routing mechanism; selective depth mixing such as AttnRes is a separate design axis from residual scale.
 - Monitor activation RMS and gradient RMS by layer, not only loss.
 - Do not copy BERT's `0.02` initialization outside its architectural context.
 
 ## Related
 
-- [Attention Residuals](/atlas/ai/architectures/transformers/attention-residuals)
-- [Kimi K3](/atlas/ai/architectures/model-reports/kimi-k3-open-frontier-intelligence)
 - [Layer Normalization](/atlas/ai/foundations/layer-normalization)
 - [RMSNorm](/atlas/ai/foundations/root-mean-square-layer-normalization)
 - [Attention Variants](/atlas/ai/architectures/transformers/attention-variants)
+- [Attention Residuals](/atlas/ai/architectures/transformers/attention-residuals)
+- [Kimi K3](/atlas/ai/architectures/model-reports/kimi-k3-open-frontier-intelligence)
 - [Learning Rate Warmup](/atlas/ai/training/optimization/learning-rate-warmup)
 - [Gradient Norm and Training Dynamics](/atlas/ai/training/optimization/gradient-norm-and-training-dynamics)
 
@@ -382,3 +419,4 @@ Practical view:
 - Su Jianlin, [为什么需要残差？一个来自DeepNet的视角](https://kexue.fm/archives/8994)
 - Su Jianlin, [为什么Pre Norm的效果不如Post Norm？](https://kexue.fm/archives/9009)
 - Su Jianlin, [通过梯度近似寻找Normalization的替代品](https://kexue.fm/archives/10831)
+- Kimi Team, [Attention Residuals](https://arxiv.org/abs/2603.15031)

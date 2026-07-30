@@ -1,230 +1,489 @@
 ---
-title: "Attention Residuals"
-date: 2026-07-27
-lastmod: 2026-07-27
+title: "Attention Residuals (AttnRes)"
+date: 2026-07-30
+lastmod: 2026-07-30
 tags:
   - ai/llm
   - transformers
-  - residual-connections
+  - residuals
   - attention
 draft: false
 ---
 
 ## Summary
 
-Standard residual connections compress the entire history of a deep network into one running sum. Attention Residuals preserve several earlier representations and let each layer learn which depths to retrieve.
+Attention Residuals, or **AttnRes**, replace the fixed additive residual stream with learned softmax attention over depth.
 
-The method turns residual aggregation from:
+A standard Pre-Norm transformer gives every preceding layer output an implicit weight of `1`. AttnRes instead lets each layer select earlier representations using token-dependent attention weights. Full AttnRes attends to every preceding layer output. Block AttnRes compresses groups of layers into block summaries, preserving most of the gain with practical memory and communication costs.
 
-$$
-\text{uniform accumulation}
-$$
+The Kimi Team reports:
 
-into:
+- consistent scaling-law gains over standard residuals
+- approximately `1.25x` compute advantage at the largest proxy scale
+- less than `4%` measured training overhead with pipeline parallelism
+- less than `2%` inference-latency overhead on their typical workloads
+- improvements on every reported downstream benchmark in a `48B` total / `3B` active Kimi Linear model trained on `1.4T` tokens
 
-$$
-\text{content-dependent depth selection}
-$$
+The central idea is:
 
-Kimi K3 makes the idea practical by attending over blocks of layers rather than every individual layer. This reduces memory and communication while retaining selective access to intermediate representations.
+> token attention selects information across sequence position; AttnRes selects information across network depth.
 
 ## Concepts
 
-- **Residual stream:** the running hidden state carried through transformer layers.
-- **Depth attention:** attention whose sources are representations from different layers rather than different token positions.
-- **Pseudo-query:** a learned query associated with the destination layer, independent of the current token content.
-- **Block Attention Residual:** memory-efficient variant that aggregates layer outputs within blocks before attention.
-- **Online softmax merge:** incremental combination of attention statistics without materializing every score at once.
+- **Depth-wise attention:** attention where the sources are earlier-layer outputs rather than earlier tokens.
+- **Pseudo-query:** one learned vector per layer that queries earlier representations.
+- **Full AttnRes:** softmax attention over every preceding layer output.
+- **Block AttnRes:** softmax attention over completed block summaries and the current block's partial residual.
+- **Pre-Norm dilution:** the shrinking relative influence of each new layer as an unnormalized residual stream grows with depth.
+- **Depth mixing matrix:** the matrix describing how strongly every layer reads every preceding layer.
+- **Two-phase computation:** batched inter-block attention followed by sequential intra-block attention and an online-softmax merge.
 
-## 1. Limitation of ordinary residual accumulation
+## 1. The residual stream is already a depth mixer
 
-For residual blocks:
+For layer transformation $f_l$, a standard residual recurrence is:
 
 $$
-x_{\ell+1}
+h_l
 =
-x_\ell + F_\ell(x_\ell)
+h_{l-1}
++
+f_{l-1}(h_{l-1})
 $$
 
-unrolling gives:
+Let:
 
 $$
-x_\ell
+v_0 = h_1
+$$
+
+be the token embedding and:
+
+$$
+v_i = f_i(h_i), \qquad i \ge 1
+$$
+
+be the output produced by layer $i$. Unrolling the recurrence gives:
+
+$$
+h_l
 =
-x_0+\sum_{i<\ell}F_i(x_i)
+\sum_{i=0}^{l-1} v_i
 $$
 
-Every previous layer contributes through the same addition. A later layer receives the total but loses direct control over the mixture.
-
-This creates an information bottleneck across depth:
+So the ordinary residual stream implicitly aggregates every preceding source with the same coefficient:
 
 $$
-\{x_0,F_0,\ldots,F_{\ell-1}\}
-\rightarrow
-\text{one accumulated vector}
+M_{i\rightarrow l}=1
 $$
 
-Even if the useful feature was clearest at an intermediate layer, later computation must recover it from the merged residual stream.
+where $M$ is a lower-triangular depth mixing matrix.
 
-## 2. Attend over depth
+This is useful for gradient flow, but restrictive as an information-routing rule:
 
-Attention Residuals keep previous layer outputs as sources. Destination layer $\ell$ has a learned pseudo-query $q_\ell$ and each source has a learned key:
+- every earlier output is treated equally
+- a layer cannot recover an earlier representation individually
+- information is compressed irreversibly into one running sum
+- the residual magnitude can grow with depth
+
+Residual connections are therefore doing two jobs:
+
+1. providing an identity path for gradients
+2. defining how information is mixed across depth
+
+AttnRes changes the second job.
+
+## 2. Why Pre-Norm dilution is the target
+
+A Pre-Norm block has the form:
 
 $$
-a_{\ell i}
+x_{l+1}
 =
-\operatorname{softmax}_i
-\left(
-\frac{q_\ell^\top k_i}{\sqrt{d_k}}
-\right)
+x_l
++
+F_l(\operatorname{Norm}(x_l))
 $$
 
-The input to the layer is:
+The normalized branch receives controlled-scale inputs, but the residual stream itself is not renormalized after each addition.
+
+The paper describes its magnitude as growing approximately:
 
 $$
-r_\ell
+\lVert x_l \rVert = O(L)
+$$
+
+with depth under the observed correlated accumulation regime. As the accumulated state becomes larger, a fixed-size new layer output contributes a smaller relative change:
+
+$$
+\frac{\lVert F_l(\operatorname{Norm}(x_l))\rVert}
+{\lVert x_l\rVert}
+\rightarrow 0
+$$
+
+Deeper layers must then produce increasingly large outputs to remain influential. This is the paper's **Pre-Norm dilution** problem.
+
+Post-Norm bounds the forward scale but repeatedly places normalization on the main gradient path. AttnRes attempts another solution: do not accumulate all earlier outputs with unit weight in the first place.
+
+## 3. Full Attention Residuals
+
+Full AttnRes replaces uniform summation with:
+
+$$
+h_l
 =
-\sum_{i<\ell} a_{\ell i}v_i
+\sum_{i=0}^{l-1}
+\alpha_{i\rightarrow l}v_i
 $$
 
-This resembles token attention, but the attended axis is depth:
-
-| Token attention | Attention Residual |
-| --- | --- |
-| sources are token positions | sources are earlier layers or blocks |
-| query varies by token content | pseudo-query is learned per destination layer |
-| retrieves from sequence history | retrieves from representation history |
-
-Because the weights sum to one, the method produces a normalized mixture instead of an ever-growing residual sum.
-
-## 3. Why a learned pseudo-query is enough
-
-The query does not need to depend on the current token for the basic method to be useful. Different destination layers have different computational roles and can learn stable preferences:
-
-- early layers may favor embeddings and local features
-- middle layers may combine several depths
-- late layers may retrieve both high-level and lower-level representations
-
-This resembles learned skip-connection topology. The network discovers which earlier depths should feed each later depth rather than fixing every skip weight to one.
-
-## 4. Full Attention Residual
-
-With $L$ layers and hidden width $d$, keeping every layer output requires:
+where:
 
 $$
-O(Ld)
+\sum_{i=0}^{l-1}\alpha_{i\rightarrow l}=1
 $$
 
-activation storage per token. Each new layer also has more sources, yielding:
+Each layer has one learned pseudo-query:
+
+$$
+q_l = w_l \in \mathbb{R}^d
+$$
+
+Keys and values are the earlier layer outputs:
+
+$$
+k_i = v_i
+$$
+
+The depth-wise attention score is:
+
+$$
+s_{i\rightarrow l}
+=
+w_l^\top \operatorname{RMSNorm}(k_i)
+$$
+
+and:
+
+$$
+\alpha_{i\rightarrow l}
+=
+\frac{\exp(s_{i\rightarrow l})}
+{\sum_{j=0}^{l-1}\exp(s_{j\rightarrow l})}
+$$
+
+The query is fixed for a layer after training, but the keys depend on the current token. The resulting mixture is therefore token-dependent.
+
+RMSNorm on keys is important: without it, sources with larger magnitude can dominate the softmax for scale rather than content.
+
+### Complexity
+
+For $L$ layers and hidden dimension $d$, Full AttnRes requires:
 
 $$
 O(L^2d)
 $$
 
-total mixing work across depth.
-
-For fewer than roughly one hundred layers, the arithmetic may be affordable. The harder problem is moving and storing all source representations under tensor, pipeline, and context parallelism.
-
-## 5. Block Attention Residual
-
-Block Attention Residual groups consecutive layer outputs:
-
-$$
-B_j
-=
-\sum_{i\in\mathcal{B}_j}
-F_i(x_i)
-$$
-
-Later layers attend over the block summaries:
-
-$$
-r_\ell
-=
-\sum_{j< b(\ell)}
-a_{\ell j}B_j
-$$
-
-If there are $N$ blocks, source storage becomes:
-
-$$
-O(Nd)
-$$
-
-instead of:
+arithmetic and:
 
 $$
 O(Ld)
 $$
 
-Kimi K3 uses blocks of twelve layers, eight blocks in total, and treats the embedding as an additional source. Layers inside a block still share a locally accumulated path; attention is used to select among the coarser depth stages.
+stored depth-wise sources per token.
 
-This is a deliberate approximation:
+The arithmetic is modest because model depth is far smaller than sequence length. The practical difficulty is preserving and communicating all earlier layer outputs when activation recomputation and pipeline parallelism are used.
 
-- smaller blocks give finer depth selection
-- larger blocks save more memory and communication
+## 4. Block Attention Residuals
 
-## 6. Efficient inference
+Block AttnRes partitions the $L$ layers into $N$ blocks, each with approximately:
 
-Autoregressive inference processes layers sequentially. Attention over residual sources can use the same online-softmax identity used in tiled attention kernels.
+$$
+S = \frac{L}{N}
+$$
 
-For groups of scores, keep:
+layers.
 
-- the running maximum
-- the running exponential sum
-- the running weighted value sum
+Inside completed block $n$, its layer outputs are summed:
 
-When a new source block arrives, rescale the old statistics and merge the new contribution. This avoids storing the full attention vector and supports block-wise distributed execution.
+$$
+b_n
+=
+\sum_{j\in B_n}f_j(h_j)
+$$
 
-## 7. Relationship to ordinary residual design
+Across blocks, each layer attends to:
 
-Attention Residuals do not remove the need for normalization or stable layer transformations. They change how information crosses depth.
+- the token embedding $b_0$
+- every completed block representation
+- the evolving partial sum of its current block
 
-Ordinary residuals provide:
+This changes storage and communication from:
 
-- a simple identity gradient path
-- cheap accumulation
-- no extra source storage
+$$
+O(Ld)
+$$
 
-Attention Residuals provide:
+to:
 
-- selective retrieval from earlier depths
-- normalized mixing
-- interpretable depth-routing weights
+$$
+O(Nd)
+$$
 
-The cost is:
+The extremes are:
 
-- more activations
-- additional projection and softmax work
-- more complicated distributed communication
+- $N=L$: Full AttnRes
+- $N=1$: close to a standard residual stream, with the embedding isolated as a separate source
 
-Blockwise aggregation is what makes the trade-off plausible at large scale.
+The experiments find that approximately `8` blocks recover most of the Full AttnRes gain across model scales.
 
-## 8. What to measure
+This is more effective than retaining only a sliding window of recent layer outputs. In the ablation, access to a few distant summaries mattered more than access to many nearby individual layers.
 
-Useful ablations should compare:
+## 5. Why the pseudo-query is deliberately simple
 
-- standard residuals
-- full Attention Residuals
-- block variants at several block sizes
-- parameter- and compute-matched deeper or wider baselines
+A natural alternative is to derive the query from the current hidden state:
 
-Diagnostics should include:
+$$
+q_l = W_l h_l
+$$
 
-- attention mass by source depth
-- whether patterns vary across layer type
-- gradient norm across depth
-- activation memory and communication
-- effect on exact retrieval and long-context tasks
+This improved proxy validation loss from `1.737` to `1.731`, but requires a $d\times d$ projection at every layer and makes depth-wise reads sequential during decoding.
 
-One should not assume that learned depth weights prove a human-interpretable hierarchy. They show which sources the optimization uses, not why a semantic computation occurs there.
+The default learned pseudo-query:
+
+$$
+q_l=w_l
+$$
+
+is slightly less expressive but enables all queries within a block to be computed in parallel.
+
+Other ablations support the chosen design:
+
+| Variant | Validation loss |
+| --- | ---: |
+| Pre-Norm baseline | `1.766` |
+| DenseFormer, static cross-layer weights | `1.767` |
+| mHC | `1.747` |
+| Full AttnRes | `1.737` |
+| Input-dependent query | `1.731` |
+| Input-independent mixing | `1.749` |
+| Sigmoid instead of softmax | `1.741` |
+| Full AttnRes without key RMSNorm | `1.743` |
+| Block AttnRes, block size `4` | `1.746` |
+| Block AttnRes with `16` heads | `1.752` |
+| Block AttnRes without key RMSNorm | `1.750` |
+
+The multi-head result suggests that the useful depth mixture is mostly shared across channels: when an earlier layer output matters, it tends to matter as a whole representation.
+
+Softmax also outperforms sigmoid gating. Competition for a fixed probability mass appears to encourage more selective depth routing.
+
+## 6. Systems design
+
+### Training
+
+Under ordinary training without recomputation, the layer outputs are already retained for backpropagation, so Full AttnRes adds little memory.
+
+At scale, pipeline parallelism is the harder problem. A naïve implementation repeatedly transmits the entire block history across stages. The paper caches block representations on each physical pipeline rank and sends only newly completed blocks at later virtual-stage transitions.
+
+For $P$ physical and $V$ virtual stages, this reduces peak per-transition communication from scaling with:
+
+$$
+O(PV)
+$$
+
+chunks to:
+
+$$
+O(P)
+$$
+
+The reported end-to-end training overhead for Block AttnRes is:
+
+- negligible without pipeline parallelism
+- less than `4%` with pipeline parallelism
+
+### Inference
+
+The layer pseudo-queries are known before the block executes. The implementation uses two phases:
+
+1. **Inter-block phase:** batch all $S$ queries in a block against previous block summaries.
+2. **Intra-block phase:** process the current block sequentially and merge its evolving partial sum with the precomputed inter-block result using online softmax.
+
+For a representative configuration with:
+
+$$
+L=128,\qquad N=8,\qquad S=16
+$$
+
+the paper estimates residual-mechanism memory I/O per token per layer as:
+
+| Mechanism | Typical memory I/O |
+| --- | ---: |
+| Standard residual | $3d$ |
+| Block AttnRes | $5.5d$ |
+| Full AttnRes with optimized schedule | $24d$ |
+| mHC with four streams | $34d$ |
+
+The reported inference-latency overhead is less than `2%` on typical workloads.
+
+### Long-context prefill
+
+Block summaries add a cache of:
+
+$$
+N T d
+$$
+
+elements for sequence length $T$. The report gives `15 GB` for `128K` context with `8` blocks before sharding. Sequence sharding across $P$ tensor-parallel devices reduces the per-device footprint to:
+
+$$
+N\frac{T}{P}d
+$$
+
+The merge is integrated with the normal tensor-parallel reduce-scatter and all-gather path.
+
+## 7. Scaling results
+
+The proxy scaling study covers MoE models with approximately:
+
+- `194M–528M` active parameters
+- `38.7B–119B` training tokens
+- `12–17` attention layers and the same number of MLP layers
+- `8K` context
+
+The fitted curves are:
+
+$$
+L_{\text{baseline}}
+=
+1.891 C^{-0.057}
+$$
+
+$$
+L_{\text{block}}
+=
+1.870 C^{-0.058}
+$$
+
+$$
+L_{\text{full}}
+=
+1.865 C^{-0.057}
+$$
+
+The slopes remain similar, while AttnRes shifts the loss curve downward. At `5.6 PFLOP/s-days`, Block AttnRes reaches validation loss `1.692` versus the baseline's fitted `1.714`, which the paper interprets as a `1.25x` compute advantage.
+
+At the largest proxy scale:
+
+| Model | Baseline | Block AttnRes | Full AttnRes |
+| --- | ---: | ---: | ---: |
+| `528M` active, `119B` tokens | `1.719` | `1.693` | `1.692` |
+
+Block AttnRes is only `0.001` behind Full AttnRes at that point.
+
+## 8. The 48B Kimi Linear experiment
+
+The large experiment uses:
+
+- `48B` total parameters
+- `3B` activated parameters
+- `27` transformer blocks, treated as `54` attention/MLP layers
+- `8` routed experts out of `256`, plus one shared expert
+- `6` layers per AttnRes block
+- `9` model blocks plus the token embedding, giving `10` depth-wise sources
+- Muon optimizer
+- WSD learning-rate schedule
+- global batch size of `8M` tokens
+
+Training consists of:
+
+1. `1T` tokens of pretraining at `4K` context
+2. approximately `400B` high-quality mid-training tokens
+3. progressive context extension to `32K`
+
+The controlled downstream comparison reports:
+
+| Benchmark | Baseline | Block AttnRes | Delta |
+| --- | ---: | ---: | ---: |
+| MMLU | `73.5` | `74.6` | `+1.1` |
+| MMLU-Pro | `52.2` | `52.2` | `0.0` |
+| GPQA-Diamond | `36.9` | `44.4` | `+7.5` |
+| BBH | `76.3` | `78.0` | `+1.7` |
+| MATH | `53.5` | `57.1` | `+3.6` |
+| HumanEval | `59.1` | `62.2` | `+3.1` |
+| MBPP | `72.0` | `73.9` | `+1.9` |
+| CMMLU | `82.0` | `82.9` | `+0.9` |
+| C-Eval | `79.6` | `82.5` | `+2.9` |
+
+AttnRes matches or improves the baseline on every reported task. The largest gains occur on multi-step reasoning and code/math tasks, consistent with—but not proving—the idea that compositional problems benefit more from selective cross-layer retrieval.
+
+## 9. What the learned weights reveal
+
+The learned depth attention is mostly local, but not exclusively local:
+
+- layers usually give the most weight to their immediate predecessor
+- some layers learn strong long skips to early representations
+- the token embedding keeps non-trivial weight even at considerable depth
+- attention sublayers use a broader depth receptive field
+- MLP sublayers rely more sharply on recent representations
+- Block AttnRes produces sharper mixtures while preserving the main Full AttnRes pattern
+
+Block summaries may therefore act as both compression and implicit regularization.
+
+The paper also observes depth-wise attention sinks: some sources receive consistently high weight across inputs, analogous to attention sinks over sequence positions.
+
+## 10. Relation to other residual mechanisms
+
+| Method | Accessible history | Mixing weights |
+| --- | --- | --- |
+| Standard residual | immediate accumulated state | fixed |
+| ReZero / LayerScale | immediate accumulated state | learned static scale |
+| Highway | immediate accumulated state | input-dependent gate |
+| Hyper-Connections / mHC | multiple recurrent streams | input-dependent mixing |
+| DenseFormer | individual earlier outputs | learned static weights |
+| Full AttnRes | all individual earlier outputs | input-dependent softmax |
+| Block AttnRes | block summaries and current partial block | input-dependent softmax |
+
+From the paper's structured-matrix perspective:
+
+- standard residuals have an all-ones lower-triangular depth mixing matrix
+- recurrent multi-stream methods behave like depth-wise linear attention
+- Full AttnRes creates a dense token-dependent depth mixing matrix
+- Block AttnRes interpolates between recurrent accumulation and full cross-layer access
+
+This makes AttnRes conceptually different from residual scaling. It does not merely control how much the current layer writes; it changes what historical representation the next layer reads.
+
+## 11. Caveats
+
+- The report is authored by the proposing team and provides no independent replication.
+- The largest controlled model has only `3B` active parameters despite `48B` total parameters.
+- Downstream evaluation is base-model evaluation, not a controlled post-training or agentic comparison.
+- The `1.25x` compute figure is derived from fitted proxy scaling curves, not measured as a universal end-to-end cost reduction.
+- The overhead numbers depend on custom pipeline caching, online-softmax merging, kernel fusion, and the reported hardware/software stack.
+- Full AttnRes remains expensive under activation recomputation and pipeline parallelism.
+- Block size is an architecture and systems hyperparameter; approximately `8` blocks is an empirical heuristic, not a law.
+- The paper's architecture sweep favors deeper, narrower models under fixed training compute, but deeper models increase serial inference latency.
+- The method changes the architecture and therefore cannot be added to a pretrained model as an ordinary fine-tune.
+
+## Practical takeaways
+
+- Treat the residual stream as a depth-routing mechanism, not only a gradient highway.
+- Measure hidden-state RMS, layer-output RMS, and gradient RMS across depth.
+- If experimenting with AttnRes, start with approximately `8` blocks and keep RMSNorm on depth-attention keys.
+- Prefer the learned per-layer pseudo-query when serving efficiency matters.
+- Compare against strong residual baselines such as mHC, not only plain Pre-Norm.
+- Evaluate real wall-clock efficiency: a lower loss at matched FLOPs may not survive an unoptimized implementation.
+- Re-run depth/width allocation studies because AttnRes can change the preferred architecture shape.
 
 ## Related
 
 - [Residuals, Normalization, and Initialization](/atlas/ai/architectures/transformers/residual-normalization-and-initialization)
-- [Attention Mechanism](/atlas/ai/foundations/attention-mechanism)
+- [Attention Variants](/atlas/ai/architectures/transformers/attention-variants)
+- [Linear Attention](/atlas/ai/architectures/transformers/linear-attention)
 - [Kimi K3](/atlas/ai/architectures/model-reports/kimi-k3-open-frontier-intelligence)
+- [Kimi Linear](https://arxiv.org/abs/2510.26692)
+- [Model FLOPs Utilization](/atlas/systems/performance/model-flops-utilization-mfu)
+- [Pipeline Parallelism](/atlas/systems/parallel-computing/pipeline-parallelism)
 
 ## Sources
 
-- Kimi Team, [Kimi K3: Open Frontier Intelligence — Technical Report](https://github.com/MoonshotAI/Kimi-K3/blob/main/k3_tech_report.pdf)
+- Kimi Team, [Attention Residuals](https://arxiv.org/abs/2603.15031)
+- Moonshot AI, [Attention Residuals code](https://github.com/MoonshotAI/Attention-Residuals)
