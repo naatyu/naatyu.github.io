@@ -275,6 +275,7 @@ Partial RoPE alone does not automatically shrink a conventional full `K + V` cac
 
 ## Related
 - [Attention Mechanism](/atlas/ai/foundations/attention-mechanism)
+- [No Positional Embeddings (NoPE)](/atlas/ai/architectures/transformers/no-positional-embeddings-nope)
 - [Progressive Context Extension](/atlas/ai/training/scaling/progressive-context-extension)
 - [The Smol Training Playbook](/atlas/ai/training/smol-training-playbook)
 - [The Llama 3 Herd of Models](/atlas/ai/architectures/model-reports/the-llama-3-herd-of-models)

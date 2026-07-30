@@ -634,6 +634,7 @@ The real question is:
 - [Transformer Scaling Rules](/atlas/ai/training/scaling/transformer-scaling-rules)
 - [Gemma 4 Technical Report](/atlas/ai/architectures/model-reports/gemma-4-technical-report)
 - [RoPE scaling](/atlas/ai/architectures/transformers/rope-scaling)
+- [No Positional Embeddings (NoPE)](/atlas/ai/architectures/transformers/no-positional-embeddings-nope)
 - [Attention Softmax and Scaling](/atlas/ai/architectures/transformers/attention-softmax-and-scaling)
 - [FlashAttention](/atlas/ai/architectures/transformers/flashattention)
 - [Linear Attention](/atlas/ai/architectures/transformers/linear-attention)

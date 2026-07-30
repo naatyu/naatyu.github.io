@@ -437,6 +437,7 @@ The benchmark suite supports the claim that the complete system is competitive. 
 - [Quantization-Aware Training](/atlas/ai/training/precision/quantization-aware-training)
 - [Speculative Decoding](/atlas/ai/inference-serving/decoding/speculative-decoding)
 - [Chat Templates for LLMs](/atlas/ai/inference-serving/chat-templates-for-llms)
+- [No Positional Embeddings (NoPE)](/atlas/ai/architectures/transformers/no-positional-embeddings-nope)
 
 ## Sources
 
