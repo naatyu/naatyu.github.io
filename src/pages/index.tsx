@@ -12,7 +12,7 @@ const entryPoints = [
     title: 'Personal notes',
     href: '/atlas',
     description:
-      'A structured notebook for AI, mathematics, systems, algorithms, and engineering concepts.',
+      'A structured notebook covering AI, mathematics, systems, algorithms, and engineering concepts.',
     meta: 'research memory',
   },
   {
@@ -28,7 +28,7 @@ const entryPoints = [
     title: 'Things I build',
     href: 'https://github.com/naatyu',
     description:
-      'Selected experiments and repositories around machine learning, kernels, and technical exploration.',
+      'Selected experiments and repositories focused on machine learning, kernels, and technical exploration.',
     meta: 'workbench',
   },
 ] as const;
@@ -38,21 +38,21 @@ const pinnedRepos = [
     name: 'MagNav',
     href: 'https://github.com/naatyu/MagNav',
     path: 'naatyu/MagNav',
-    description: 'Aircraft magnetic disturbance field compensation with deep learning',
+    description: 'Deep-learning-based compensation of aircraft magnetic disturbance fields',
     topics: ['deep learning', 'signal processing', 'navigation'],
   },
   {
     name: 'Looped-Transformer',
     href: 'https://github.com/naatyu/Looped-Transformer',
     path: 'naatyu/Looped-Transformer',
-    description: 'Repository to explore recurrent depth transformers (also named looped transformer)',
+    description: 'A repository for exploring transformers with recurrent depth, also known as looped transformers',
     topics: ['transformers', 'research', 'architecture'],
   },
   {
     name: 'SigReg-Kernel',
     href: 'https://github.com/naatyu/SigReg-Kernel',
     path: 'naatyu/SigReg-Kernel',
-    description: 'Writing GPU kernel to optimize SigReg - Sketeched Isotropic Gaussian Regularizer',
+    description: 'GPU kernels for accelerating SigReg—Sketched Isotropic Gaussian Regularization',
     topics: ['gpu', 'kernels', 'optimization'],
   },
 ] as const;
@@ -97,22 +97,23 @@ export default function Home(): ReactNode {
                   Nathan Laoué
                 </Heading>
                 <p className={styles.lead}>
-                  A personal space for my notes, projects, and occasional writings.
-                  I'am mainly interested in large models pretraining, regardless of modality (some finetunining too).
+                  A personal space for my notes, projects, and occasional writing.
+                  I&apos;m mainly interested in pretraining large models across
+                  modalities, with some work on fine-tuning as well.
                 </p>
                 <div className={styles.heroActions}>
                   <Link className={styles.primaryLink} to="/atlas">
-                    Open Atlas
+                    Open the Atlas
                   </Link>
                   <Link className={styles.secondaryLink} to="/blog">
-                    Read blog
+                    Read the blog
                   </Link>
                 </div>
               </div>
 
               <aside className={styles.mathPanel} aria-label="Site focus">
                 <div className={styles.panelHeader}>
-                  <span>last published notes</span>
+                  <span>latest published notes</span>
                   <span>newest first</span>
                 </div>
                 <div className={styles.noteList}>
