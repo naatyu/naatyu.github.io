@@ -329,3 +329,9 @@ Short version:
 
 - `nsys`: whole training loop
 - `ncu`: one kernel in depth
+
+## Related
+
+- [PyTorch Profiler and GPU Trace Reading](/atlas/tooling/profiling/pytorch-profiler-and-gpu-trace-reading)
+- [Roofline Model](/atlas/systems/performance/roofline-model)
+- [Model FLOPs Utilization](/atlas/systems/performance/model-flops-utilization-mfu)

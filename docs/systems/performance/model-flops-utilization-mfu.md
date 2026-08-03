@@ -287,6 +287,7 @@ For those, pair it with [Goodput, Determinism, and Fault Tolerance](/atlas/syste
 
 ## Related
 
+- [PyTorch Profiler and GPU Trace Reading](/atlas/tooling/profiling/pytorch-profiler-and-gpu-trace-reading)
 - [Goodput, Determinism, and Fault Tolerance](/atlas/systems/infrastructure/goodput-determinism-and-fault-tolerance)
 - [Roofline Model](/atlas/systems/performance/roofline-model)
 - [Latency vs. Throughput](/atlas/systems/performance/latency-vs-throughput)

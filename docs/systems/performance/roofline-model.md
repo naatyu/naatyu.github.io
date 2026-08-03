@@ -367,6 +367,7 @@ For LLMs:
 - Roofline tells you which optimization direction matters before writing code.
 
 ## Related
+- [PyTorch Profiler and GPU Trace Reading](/atlas/tooling/profiling/pytorch-profiler-and-gpu-trace-reading)
 - [LLM Inference Economics](/atlas/ai/inference-serving/performance/llm-inference-economics)
 - [Disaggregated Prefill-Decode Serving](/atlas/ai/inference-serving/serving-architectures/disaggregated-prefill-decode-serving)
 - [FP8 Training](/atlas/ai/training/precision/fp8-training)

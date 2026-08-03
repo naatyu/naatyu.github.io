@@ -454,6 +454,7 @@ It is a major reason long-context transformers became practical, but it is not a
 
 ## Related
 
+- [PyTorch Profiler and GPU Trace Reading](/atlas/tooling/profiling/pytorch-profiler-and-gpu-trace-reading)
 - [Attention Variants](/atlas/ai/architectures/transformers/attention-variants)
 - [Attention Softmax and Scaling](/atlas/ai/architectures/transformers/attention-softmax-and-scaling)
 - [Linear Attention](/atlas/ai/architectures/transformers/linear-attention)
