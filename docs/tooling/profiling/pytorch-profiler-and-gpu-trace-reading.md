@@ -1,7 +1,7 @@
 ---
 title: "PyTorch Profiler and GPU Trace Reading"
 date: 2026-08-03
-lastmod: 2026-08-03
+lastmod: 2026-08-04
 tags:
   - tooling
   - profiling
@@ -195,6 +195,35 @@ Signs:
 - the GPU repeatedly waits for the host
 
 Possible actions include batching work, fusing operations, reducing hot-path Python control flow, compiling a sufficiently large graph, or using CUDA Graphs for stable repeated workloads.
+
+#### Case study: turning a launch-bound decode trace into GPT-Fast
+
+PyTorch's GPT-Fast case study is a useful continuation of the Hugging Face Part 1 trace: it shows what to try after profiling identifies CPU launch overhead in batch-1 autoregressive decoding. Its initial trace contained many short kernels separated by CPU-side gaps, so warming the workload could hide initialization costs but could not remove the recurring launch cost.
+
+The first intervention was to compile the single-token decode step as one full graph:
+
+```python
+decode_one_token = torch.compile(
+    decode_one_token,
+    mode="reduce-overhead",
+    fullgraph=True,
+)
+```
+
+`mode="reduce-overhead"` is intended for small workloads where Python and CUDA-launch overhead are material. When the workload is capturable, it can use CUDA Graphs to record a sequence of launches once and replay it with much less CPU involvement. `fullgraph=True` asks Dynamo to capture the whole function and raises on graph breaks rather than silently splitting the hot path into separately launched regions.
+
+This required a **static KV cache**. A cache that grows by concatenating the new key and value at every token changes tensor shapes, reallocates storage, and copies old contents. Those operations are expensive themselves and make stable CUDA Graph replay difficult. Instead:
+
+1. preallocate K and V storage for the maximum supported sequence length
+2. update the slots selected by the current token position
+3. keep tensor addresses and compiled decode shapes stable
+4. use the logical sequence position or a mask to restrict attention to valid cache entries
+
+Prefill and decode should not be conflated. Prompt prefill has a variable sequence dimension and processes many tokens; single-token decode has a fixed token dimension and repeats the same graph. The case study compiled them separately so dynamic prompt length did not destroy the static decode path.
+
+On its specific benchmark, compilation plus the static KV cache increased generation from **25.5 to 107 tokens/s**, about **4.2x**. The later progression used int8 weight-only quantization, speculative decoding, int4/GPTQ, and tensor parallelism, ultimately reporting **244.7 tokens/s**. Those later techniques attack weight-memory traffic, the number of serial decoding steps, or available aggregate bandwidth; they are not fixes for launch overhead itself.
+
+Treat these figures as a worked diagnosis, not a portable expectation. The post measured batch size 1 on an A100 80 GB with a 330 W power limit, and compiler, kernel, quantization, and attention implementations have changed since the original 2023 experiment. Re-profile the actual model, hardware, prompt/decode lengths, and software stack, then confirm latency outside the profiler.
 
 ### Compute-bound
 
@@ -431,6 +460,8 @@ The durable habit is:
 - [Model FLOPs Utilization](/atlas/systems/performance/model-flops-utilization-mfu)
 - [FlashAttention](/atlas/ai/architectures/transformers/flashattention)
 - [Attention Softmax and Scaling](/atlas/ai/architectures/transformers/attention-softmax-and-scaling)
+- [KV Cache](/atlas/ai/inference-serving/caching/kv-cache)
+- [Speculative Decoding](/atlas/ai/inference-serving/decoding/speculative-decoding)
 - [FP8 Training](/atlas/ai/training/precision/fp8-training)
 
 ## Sources
@@ -438,6 +469,7 @@ The durable habit is:
 - Hugging Face, [Profiling in PyTorch, Part 1: A Beginner's Guide to `torch.profiler`](https://huggingface.co/blog/torch-profiler)
 - Hugging Face, [Profiling in PyTorch, Part 2: From `nn.Linear` to a Fused MLP](https://huggingface.co/blog/torch-mlp-fusion)
 - Hugging Face, [Profiling in PyTorch, Part 3: Attention Is All You Profile](https://huggingface.co/blog/torch-attention-profile)
+- PyTorch, [Accelerating Generative AI with PyTorch II: GPT, Fast](https://pytorch.org/blog/accelerating-generative-ai-2/)
 - PyTorch, [`torch.profiler` API documentation](https://docs.pytorch.org/docs/stable/profiler.html)
 - PyTorch, [Profiler recipe](https://docs.pytorch.org/tutorials/recipes/recipes/profiler_recipe.html)
 - PyTorch, [Scaled dot-product attention tutorial](https://docs.pytorch.org/tutorials/intermediate/scaled_dot_product_attention_tutorial.html)
