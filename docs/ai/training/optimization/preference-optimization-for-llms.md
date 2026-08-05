@@ -1,7 +1,7 @@
 ---
 title: "Preference Optimization for LLMs"
 date: 2026-06-08
-lastmod: 2026-06-12
+lastmod: 2026-08-05
 tags:
   - ai/training
   - llm
@@ -99,10 +99,19 @@ This makes sense because the model is no longer learning from broad supervised s
 
 The parameter $\beta$ controls how tightly the policy stays near the reference model.
 
-At a high level:
+Under the conventional KL-regularized RL derivation:
 
-- lower $\beta$ means stronger anchoring
-- higher $\beta$ means more willingness to fit the preference data
+$$
+\max_\pi
+\mathbb{E}[R]
+-
+\beta D_{\mathrm{KL}}(\pi\|\pi_{ref}),
+$$
+
+- higher $\beta$ means stronger anchoring to the reference
+- lower $\beta$ permits more policy movement
+
+Libraries and papers sometimes expose an inverse temperature or use a different convention, so always verify the exact objective before interpreting a configured value.
 
 The useful practical rule is to treat values like:
 
@@ -172,5 +181,6 @@ A useful mental model is:
 - [On-Policy Distillation](/atlas/ai/training/optimization/on-policy-distillation)
 - [Group Relative Policy Optimization](/atlas/ai/training/optimization/group-relative-policy-optimization)
 - [Hybrid Reasoning Models](/atlas/ai/architectures/hybrid-reasoning-models)
+- [RL Fine-Tuning for LLMs: Interview Guide](/atlas/ai/training/optimization/rl-fine-tuning-for-llms-interview-guide)
 - [The Smol Training Playbook](/atlas/ai/training/smol-training-playbook)
 - [The Smol Training Playbook](https://huggingface.co/spaces/HuggingFaceTB/smol-training-playbook)
