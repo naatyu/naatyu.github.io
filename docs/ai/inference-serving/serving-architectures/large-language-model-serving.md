@@ -1,7 +1,7 @@
 ---
 title: "Large Language Model Serving"
 date: 2026-04-08
-lastmod: 2026-04-08
+lastmod: 2026-08-05
 tags:
   - cs/system-design
   - interview
@@ -50,7 +50,7 @@ For adaptive processing, the simple task would likely not need any since it is s
 Once this is done, the request can go to the *inference layer*. This layer has a coordinator, in this case an inference coordinator (kubernetes) with model inference clusters with GPUs.  We would have a model registry to track the different model versions and a model tuning and tracking service. 
 Our request first goes to the coordinator, which read the requirements given by our orchestration layer. Then the coordinator will select the right model (flash for easy or pro for complex) and it will be finally processed by the LLM providing a response. The response will be analyzed by a service like W&B for observations and performances. 
 
-We can now move to the *safety and monitoring* layer which conduct safety and content moderation. We could have a RestAPI acting as a filter for content policy and violations. We could leverage another lightweight model to check this. This layer can also be used for monitoring leveraging gafana for exemple for live logs. 
+We can now move to the *safety and monitoring* layer which conduct safety and content moderation. We could have a RestAPI acting as a filter for content policy and violations. We could leverage another lightweight model to check this. A [policy-adaptive guard model such as Shieldstral](/atlas/ai/architectures/model-reports/shieldstral) can condition the decision on a deployment-specific natural-language policy rather than exposing only a fixed taxonomy. This layer can also be used for monitoring leveraging gafana for exemple for live logs.
 
 The output was approved, it can now be sent back to the user. The request will go back to the orchestration layer and go to the api gateway layer bypassing the request processing layer and be delivered back to the user.
 
