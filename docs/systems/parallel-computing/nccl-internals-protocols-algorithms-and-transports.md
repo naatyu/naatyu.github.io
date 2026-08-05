@@ -86,8 +86,11 @@ In the analyzed version, the network FIFO slot is 512 KiB for the Simple protoco
 
 The lesson is not "maximize channels," but:
 
-$$n_{channels}^{*}=f(\text{message},\text{topology},\text{algorithm},
-\text{protocol},\text{threads},\text{NIC paths}).$$
+$$
+n_{\mathrm{channels}}^{*}
+= f(\mathrm{message}, \mathrm{topology}, \mathrm{algorithm},
+\mathrm{protocol}, \mathrm{threads}, \mathrm{NIC\ paths})
+$$
 
 ## 4. The Three Communication Protocols
 
