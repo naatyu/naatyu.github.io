@@ -1,7 +1,7 @@
 ---
 title: "Transformer Scaling Rules"
 date: 2026-05-05
-lastmod: 2026-06-08
+lastmod: 2026-08-05
 tags:
   - ai/deep-learning
   - transformers
@@ -279,5 +279,6 @@ Interpretation:
 - 30 - Atlas/AI/Transformers MOC
 - [Attention Variants](/atlas/ai/architectures/transformers/attention-variants)
 - [Scaling Laws](/atlas/ai/training/scaling/scaling-laws)
+- [Transformer Performance Accounting](/atlas/ai/training/scaling/transformer-performance-accounting)
 - [Scaling Ladders and Efficiency Gain](/atlas/ai/training/scaling/scaling-ladders-and-efficiency-gain)
 - [FP8 Training](/atlas/ai/training/precision/fp8-training)
