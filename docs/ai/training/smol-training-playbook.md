@@ -1,7 +1,7 @@
 ---
 title: "The Smol Training Playbook"
 date: 2026-06-08
-lastmod: 2026-06-08
+lastmod: 2026-08-05
 tags:
   - ai/training
   - llm-training
@@ -318,6 +318,7 @@ The most reusable systems lesson is that cluster topology and storage behavior a
 
 ## Related
 
+- [LLM Pretraining System Design: Interview Guide](/atlas/ai/training/pretraining-system-design-interview-guide)
 - [Smol Training Playbook Foundations](/atlas/ai/training/smol-training-playbook-foundations)
 - [LLM Ablation Strategy](/atlas/ai/evaluation-experimentation/llm-ablation-strategy)
 - [Data Mixture Optimization](/atlas/ai/training/data/data-mixture-optimization)

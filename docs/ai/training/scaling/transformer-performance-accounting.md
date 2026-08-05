@@ -148,6 +148,8 @@ Sanity-check reported MFU by using the same FLOP convention as the report. A sys
 
 ## Related
 
+- [LLM Training Capacity Planning](/atlas/ai/training/scaling/llm-training-capacity-planning)
+- [LLM Pretraining System Design: Interview Guide](/atlas/ai/training/pretraining-system-design-interview-guide)
 - [Transformer Scaling Rules](/atlas/ai/training/scaling/transformer-scaling-rules)
 - [Model FLOPs Utilization](/atlas/systems/performance/model-flops-utilization-mfu)
 - [KV Cache](/atlas/ai/inference-serving/caching/kv-cache)

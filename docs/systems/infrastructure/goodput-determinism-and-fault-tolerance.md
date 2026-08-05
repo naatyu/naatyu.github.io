@@ -1,7 +1,7 @@
 ---
 title: "Goodput, Determinism, and Fault Tolerance"
 date: 2026-06-08
-lastmod: 2026-07-23
+lastmod: 2026-08-05
 tags:
   - systems
   - infrastructure
@@ -171,6 +171,8 @@ Continuing at lower throughput can be better than leaving the entire allocation 
 
 ## Related
 
+- [LLM Pretraining System Design: Interview Guide](/atlas/ai/training/pretraining-system-design-interview-guide)
+- [LLM Training Capacity Planning](/atlas/ai/training/scaling/llm-training-capacity-planning)
 - [Model FLOPs Utilization (MFU)](/atlas/systems/performance/model-flops-utilization-mfu)
 - [Choosing an LLM Training Framework](/atlas/systems/infrastructure/choosing-an-llm-training-framework)
 - [Training Loss Patterns](/atlas/ai/training/optimization/training-loss-patterns)
