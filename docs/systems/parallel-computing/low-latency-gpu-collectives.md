@@ -1,7 +1,7 @@
 ---
 title: "Low-Latency GPU Collectives"
 date: 2026-07-21
-lastmod: 2026-07-21
+lastmod: 2026-08-05
 tags:
   - parallel-computing
   - gpu
@@ -240,6 +240,7 @@ The paper also reports improvements in cuSOLVERMp, showing that latency-sensitiv
 
 ## Related
 
+- [NCCL Internals: Protocols, Algorithms, and Transports](/atlas/systems/parallel-computing/nccl-internals-protocols-algorithms-and-transports)
 - [Tensor Parallelism](/atlas/systems/parallel-computing/tensor-parallelism)
 - [Hardware Topology & Parallelism](/atlas/systems/parallel-computing/hardware-topology-and-parallelism)
 - [Sequence Parallelism](/atlas/systems/parallel-computing/sequence-parallelism)

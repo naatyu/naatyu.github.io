@@ -134,4 +134,5 @@ The roofline question is not merely "how many bytes move?" but "how much of that
 - [Tensor Parallelism](/atlas/systems/parallel-computing/tensor-parallelism)
 - [Data Parallelism](/atlas/systems/parallel-computing/data-parallelism)
 - [Low-Latency GPU Collectives](/atlas/systems/parallel-computing/low-latency-gpu-collectives)
+- [NCCL Internals: Protocols, Algorithms, and Transports](/atlas/systems/parallel-computing/nccl-internals-protocols-algorithms-and-transports)
 - [Roofline Model](/atlas/systems/performance/roofline-model)
