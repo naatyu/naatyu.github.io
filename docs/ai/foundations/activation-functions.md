@@ -1,7 +1,7 @@
 ---
 title: "Activation Functions"
 date: 2024-10-01
-lastmod: 2026-05-04
+lastmod: 2026-08-10
 tags:
   - ai/deep-learning
   - theory/activation-functions
@@ -52,6 +52,8 @@ Proche de la sigmoid mais varie de -1 à 1, aujourd'hui peu utilisé pour les m�
 Définit par:
 $$f(x_i)=\frac{e^{x_i}}{\sum_{j=1}^ne^{x_j}}$$
 Utilisé comme couche d'output pour de la classification multi-classes. Permet d'obtenir une distribution de probabilité pour toutes les classes.
+
+Softmax is also the output mapping paired with Shannon entropy and log loss by the Fenchel–Young construction. Alternative generalized entropies lead to mappings such as sparsemax and entmax, which can produce exact zeros. See [Proper Scoring Rules and Fenchel-Young Losses](/atlas/ai/training/losses/proper-scoring-rules-and-fenchel-young-losses).
 
 ## GELU
 

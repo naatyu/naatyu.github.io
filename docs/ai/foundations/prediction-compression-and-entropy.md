@@ -1,7 +1,7 @@
 ---
 title: "Prediction, Compression, and Entropy"
 date: 2026-06-08
-lastmod: 2026-06-11
+lastmod: 2026-08-10
 tags:
   - ai/foundations
   - information-theory
@@ -250,6 +250,7 @@ So:
 
 ## Related
 
+- [Proper Scoring Rules and Fenchel-Young Losses](/atlas/ai/training/losses/proper-scoring-rules-and-fenchel-young-losses)
 - [Entropy](/atlas/math/probability/entropy)
 - [Cross-Entropy Loss](/atlas/ai/training/losses/cross-entropy-loss)
 - [Kullback-Leibler Divergence](/atlas/math/probability/kullback-leibler-divergence)

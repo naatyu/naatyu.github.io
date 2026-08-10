@@ -1,7 +1,7 @@
 ---
 title: "Cross-Entropy Loss"
 date: 2026-05-06
-lastmod: 2026-06-11
+lastmod: 2026-08-10
 tags:
   - ai/deep-learning
   - theory/loss-functions
@@ -94,6 +94,7 @@ $$
 This is still cross-entropy, but the target contains more information than a hard label. It can express that several alternatives are plausible, not only which one was annotated as correct.
 
 ## Related
+- [Proper Scoring Rules and Fenchel-Young Losses](/atlas/ai/training/losses/proper-scoring-rules-and-fenchel-young-losses)
 - [Prediction, Compression, and Entropy](/atlas/ai/foundations/prediction-compression-and-entropy)
 - [Binary Cross-Entropy Loss](/atlas/ai/training/losses/binary-cross-entropy-loss)
 - [Knowledge Distillation](/atlas/ai/training/losses/knowledge-distillation)
