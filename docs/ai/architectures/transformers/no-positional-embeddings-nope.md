@@ -1,7 +1,7 @@
 ---
 title: "No Positional Embeddings (NoPE)"
 date: 2026-07-30
-lastmod: 2026-07-30
+lastmod: 2026-08-11
 tags:
   - ai/llm
   - theory
@@ -221,6 +221,7 @@ The central ablation is not only “RoPE versus NoPE.” It is:
 
 ## Related
 
+- [Positional Encoding: From Sinusoidal Features to RoPE](/atlas/ai/architectures/transformers/positional-encoding-sinusoidal-to-rope)
 - [RoPE Scaling](/atlas/ai/architectures/transformers/rope-scaling)
 - [Attention Variants](/atlas/ai/architectures/transformers/attention-variants)
 - [Kimi K3: Open Frontier Intelligence](/atlas/ai/architectures/model-reports/kimi-k3-open-frontier-intelligence)

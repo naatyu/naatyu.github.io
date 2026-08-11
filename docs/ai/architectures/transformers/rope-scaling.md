@@ -1,7 +1,7 @@
 ---
 title: "RoPE Scaling"
 date: 2026-04-08
-lastmod: 2026-07-23
+lastmod: 2026-08-11
 tags:
   - ai/llm
   - theory
@@ -274,6 +274,7 @@ This division matches the jobs of the two layer types. Local layers need precise
 Partial RoPE alone does not automatically shrink a conventional full `K + V` cache. In Gemma 4, the reported `37.5%` global-cache reduction comes from combining `p = 0.25` with key-as-value attention. The mechanisms should not be credited interchangeably.
 
 ## Related
+- [Positional Encoding: From Sinusoidal Features to RoPE](/atlas/ai/architectures/transformers/positional-encoding-sinusoidal-to-rope)
 - [Attention Mechanism](/atlas/ai/foundations/attention-mechanism)
 - [No Positional Embeddings (NoPE)](/atlas/ai/architectures/transformers/no-positional-embeddings-nope)
 - [Progressive Context Extension](/atlas/ai/training/scaling/progressive-context-extension)
