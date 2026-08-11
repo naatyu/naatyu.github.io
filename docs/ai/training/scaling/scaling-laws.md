@@ -1,7 +1,7 @@
 ---
 title: "Scaling Laws"
 date: 2026-04-08
-lastmod: 2026-07-29
+lastmod: 2026-08-11
 tags:
   - ai/theory
   - scaling-laws
@@ -466,6 +466,7 @@ The decomposition is exact as an accounting identity, but the chosen power-law f
 
 ## Related
 - AI Papers MOC
+- [Skaling: Coupled Model-Data Scaling Laws](/atlas/ai/training/scaling/skaling-coupled-model-data-scaling-laws)
 - [Data-Constrained Scaling Laws](/atlas/ai/training/scaling/data-constrained-scaling-laws)
 - [Transformer Scaling Rules](/atlas/ai/training/scaling/transformer-scaling-rules)
 - [Overtraining and Inference-Aware Scaling](/atlas/ai/training/scaling/overtraining-and-inference-aware-scaling)

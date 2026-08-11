@@ -1,7 +1,7 @@
 ---
 title: "Decomposing Scaling Laws: Optimization, Architecture, and Data"
 date: 2026-07-29
-lastmod: 2026-07-29
+lastmod: 2026-08-11
 tags:
   - ai/training
   - scaling-laws
@@ -744,6 +744,7 @@ The right interpretation is:
 ## Related
 
 - [Scaling Laws](/atlas/ai/training/scaling/scaling-laws)
+- [Skaling: Coupled Model-Data Scaling Laws](/atlas/ai/training/scaling/skaling-coupled-model-data-scaling-laws)
 - [Hyperparameter Scaling Laws for LLM Training](/atlas/ai/training/scaling/hyperparameter-scaling-laws-for-llm-training)
 - [Data-Constrained Scaling Laws](/atlas/ai/training/scaling/data-constrained-scaling-laws)
 - [Overtraining and Inference-Aware Scaling](/atlas/ai/training/scaling/overtraining-and-inference-aware-scaling)

@@ -1,7 +1,7 @@
 ---
 title: "LLM Training Capacity Planning"
 date: 2026-08-05
-lastmod: 2026-08-05
+lastmod: 2026-08-11
 tags:
   - ai/training
   - llm
@@ -593,6 +593,7 @@ If these fields are internally consistent, the rest of the design discussion bec
 ## Related
 
 - [LLM Pretraining System Design: Interview Guide](/atlas/ai/training/pretraining-system-design-interview-guide)
+- [Skaling: Coupled Model-Data Scaling Laws](/atlas/ai/training/scaling/skaling-coupled-model-data-scaling-laws)
 - [Transformer Performance Accounting](/atlas/ai/training/scaling/transformer-performance-accounting)
 - [Transformer Scaling Rules](/atlas/ai/training/scaling/transformer-scaling-rules)
 - [Scaling Laws](/atlas/ai/training/scaling/scaling-laws)
