@@ -1,7 +1,7 @@
 ---
 title: "Reinforcement Learning with Verifiable Rewards"
 date: 2026-07-21
-lastmod: 2026-07-21
+lastmod: 2026-08-17
 tags:
   - ai/training
   - reinforcement-learning
@@ -294,6 +294,7 @@ As verification becomes softer, RLVR inherits more of the misspecification and r
 
 ## Related
 
+- [Why Sparse-Reward LLM RL Can Work](/atlas/ai/training/optimization/why-sparse-reward-llm-rl-can-work)
 - [Reinforcement Learning for LLMs](/atlas/ai/training/optimization/reinforcement-learning-for-llms)
 - [Group Relative Policy Optimization](/atlas/ai/training/optimization/group-relative-policy-optimization)
 - [Reasoning Effort Control](/atlas/ai/inference-serving/performance/reasoning-effort-control)

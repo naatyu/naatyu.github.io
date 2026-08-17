@@ -1,7 +1,7 @@
 ---
 title: "Reinforcement Learning for LLMs"
 date: 2026-06-08
-lastmod: 2026-08-05
+lastmod: 2026-08-17
 tags:
   - ai/training
   - reinforcement-learning
@@ -197,6 +197,7 @@ So for agentic coding and tool-use training, the closer the rollout harness is t
 
 ## Related
 
+- [Why Sparse-Reward LLM RL Can Work](/atlas/ai/training/optimization/why-sparse-reward-llm-rl-can-work)
 - [RL Fine-Tuning for LLMs: Interview Guide](/atlas/ai/training/optimization/rl-fine-tuning-for-llms-interview-guide)
 - [On-Policy Distillation](/atlas/ai/training/optimization/on-policy-distillation)
 - [Group Relative Policy Optimization](/atlas/ai/training/optimization/group-relative-policy-optimization)
