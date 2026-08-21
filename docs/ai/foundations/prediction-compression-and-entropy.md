@@ -1,7 +1,7 @@
 ---
 title: "Prediction, Compression, and Entropy"
 date: 2026-06-08
-lastmod: 2026-08-10
+lastmod: 2026-08-21
 tags:
   - ai/foundations
   - information-theory
@@ -254,11 +254,13 @@ So:
 - [Entropy](/atlas/math/probability/entropy)
 - [Cross-Entropy Loss](/atlas/ai/training/losses/cross-entropy-loss)
 - [Kullback-Leibler Divergence](/atlas/math/probability/kullback-leibler-divergence)
+- [Compression-Based Similarity and Language Trees](/atlas/ai/foundations/compression-based-similarity-and-language-trees)
 - [Byte Pair Encoding](/atlas/ai/modalities/nlp/byte-pair-encoding)
 
 ## Sources
 
 - 3Blue1Brown, *Reinventing Entropy | Compression & Intelligence Part 1*: https://www.youtube.com/watch?v=l6DKRf-fAAM
+- 3Blue1Brown, [But what is Cross-Entropy? | Compression is Intelligence Part 2](https://www.3blue1brown.com/lessons/cross-entropy/)
 - Su Jianlin, [最小熵原理（五）：“层层递进”之社区发现与聚类](https://kexue.fm/archives/7006)
 - Claude Shannon, *A Mathematical Theory of Communication*: https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf
 - Claude Shannon, *Prediction and Entropy of Printed English*: https://www.princeton.edu/~wbialek/rome/refs/shannon_51.pdf

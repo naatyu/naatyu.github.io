@@ -1,7 +1,7 @@
 ---
 title: "Knowledge Distillation"
 date: 2026-06-11
-lastmod: 2026-06-12
+lastmod: 2026-08-21
 tags:
   - ai/training
   - losses
@@ -113,6 +113,26 @@ $$
 up to teacher entropy, which does not depend on the student.
 
 The $\tau^2$ factor is often included to keep gradient magnitudes comparable when temperature changes.
+
+### Cross-entropy versus KL divergence
+
+For a fixed teacher distribution:
+
+$$
+D_{\mathrm{KL}}(p_T\|p_S)
+=
+H(p_T,p_S)-H(p_T).
+$$
+
+The teacher entropy $H(p_T)$ is constant with respect to the student. Therefore minimizing teacher-to-student cross-entropy or forward KL gives the same student gradients and optimum, provided both objectives use the same temperature and support.
+
+This does **not** apply to reverse KL:
+
+$$
+D_{\mathrm{KL}}(p_S\|p_T),
+$$
+
+which weights discrepancies using the student's distribution and has different mode-seeking behavior.
 
 ## 3. Why temperature helps
 
