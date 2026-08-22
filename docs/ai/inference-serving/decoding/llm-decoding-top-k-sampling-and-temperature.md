@@ -186,5 +186,6 @@ Together, they set the tradeoff between deterministic output and diversity.
 
 ## Related
 
+- [LLM Text Watermarking with SynthID-Text](/atlas/ai/inference-serving/decoding/llm-text-watermarking-with-synthid-text)
 - [LLM Inference Economics](/atlas/ai/inference-serving/performance/llm-inference-economics)
 - [Roofline Model](/atlas/systems/performance/roofline-model)
