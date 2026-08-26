@@ -1,7 +1,7 @@
 ---
 title: "Looped Language Models (Ouro)"
 date: 2026-05-19
-lastmod: 2026-07-25
+lastmod: 2026-08-26
 tags:
   - ai/deep-learning
   - ai/llm
@@ -241,6 +241,7 @@ The key difference is that Ouro performs the extra reasoning in latent space dur
 - Ouro is especially interesting for small models because it improves parameter efficiency without increasing model size.
 
 ## Related
+- [Recirculation: Inference-Time Recurrence for Transformers](/atlas/ai/architectures/transformers/recirculation-inference-time-recurrence)
 - [Scaling Laws](/atlas/ai/training/scaling/scaling-laws)
 - [Test-Time Compute](/atlas/ai/inference-serving/performance/test-time-compute)
 - [Transformer Scaling Rules](/atlas/ai/training/scaling/transformer-scaling-rules)
