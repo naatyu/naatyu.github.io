@@ -1,7 +1,7 @@
 ---
 title: "GLM-5: From Vibe Coding to Agentic Engineering"
 date: 2026-08-25
-lastmod: 2026-08-25
+lastmod: 2026-08-26
 tags:
   - ai/llm
   - models
@@ -491,6 +491,7 @@ DSA primarily reduces the second. IndexShare exploits cross-layer similarity to 
 
 ## Related notes
 
+- [GLM-5.3-Flash: Hybrid Attention at Flash Cost](/atlas/ai/architectures/model-reports/glm-5-3-flash-hybrid-multimodal)
 - [Attention Variants](../transformers/attention-variants.md)
 - [No Positional Embeddings (NoPE)](../transformers/no-positional-embeddings-nope.md)
 - [Mixture-of-Experts Routing and Load Balancing](../../training/optimization/moe-routing-and-load-balancing.md)
