@@ -1,7 +1,7 @@
 ---
 title: "Brain Teaser Problem-Solving Toolkit"
 date: 2026-08-30
-lastmod: 2026-08-30
+lastmod: 2026-08-31
 tags:
   - interview-prep
   - brain-teasers
@@ -241,7 +241,156 @@ $$
 
 This is dynamic programming over stochastic states.
 
-## 5. Information Bounds and Decision Trees
+## 5. Poisson Processes and Random Arrivals
+
+A Poisson process models events that occur independently at a constant average rate. Typical interview wording includes calls arriving at a help desk, customers entering a store, defects appearing along a cable, or failures occurring over time.
+
+Let $N(t)$ be the number of arrivals during an interval of length $t$, and let $\lambda$ be the average number of arrivals per unit time. Under the Poisson-process assumptions:
+
+- counts in disjoint intervals are independent;
+- the distribution of a count depends only on the interval's length;
+- the rate $\lambda$ is constant;
+- two or more arrivals in a sufficiently short interval are negligible compared with one arrival.
+
+Then:
+
+$$
+N(t)\sim\operatorname{Poisson}(\lambda t),
+$$
+
+and
+
+$$
+P(N(t)=k)
+=e^{-\lambda t}\frac{(\lambda t)^k}{k!}.
+$$
+
+Both the mean and variance are $\lambda t$:
+
+$$
+\mathbb{E}[N(t)]=\operatorname{Var}(N(t))=\lambda t.
+$$
+
+Always make the units match. If the rate is six calls per hour and the interval is ten minutes, then
+
+$$
+\lambda t
+=6\frac{\text{calls}}{\text{hour}}\cdot\frac16\text{ hour}
+=1.
+$$
+
+Therefore the probability of at least one call is
+
+$$
+P(N(t)\geq1)
+=1-P(N(t)=0)
+=1-e^{-1}.
+$$
+
+### Arrival counts and waiting times are two views of the same process
+
+If $T_1$ is the waiting time until the next arrival, then
+
+$$
+P(T_1>t)
+=P(N(t)=0)
+=e^{-\lambda t}.
+$$
+
+Thus the interarrival time is exponentially distributed:
+
+$$
+T_1\sim\operatorname{Exponential}(\lambda),
+$$
+
+with
+
+$$
+P(T_1\leq t)=1-e^{-\lambda t},
+\qquad
+f_{T_1}(t)=\lambda e^{-\lambda t},
+$$
+
+and
+
+$$
+\mathbb{E}[T_1]=\frac1\lambda,
+\qquad
+\operatorname{Var}(T_1)=\frac1{\lambda^2}.
+$$
+
+This gives a useful translation:
+
+```text
+number of arrivals in time t  <->  Poisson(lambda * t)
+time until the next arrival   <->  Exponential(lambda)
+```
+
+The waiting time $T_k$ until the $k$-th arrival is Gamma distributed, or Erlang distributed when $k$ is an integer:
+
+$$
+T_k\sim\operatorname{Gamma}(k,\text{ rate }\lambda),
+\qquad
+\mathbb{E}[T_k]=\frac{k}{\lambda}.
+$$
+
+The event that the $k$-th arrival occurs by time $t$ is exactly the event that at least $k$ arrivals occur by time $t$:
+
+$$
+P(T_k\leq t)=P(N(t)\geq k).
+$$
+
+### Memorylessness
+
+The exponential distribution is memoryless:
+
+$$
+P(T_1>s+t\mid T_1>s)=P(T_1>t).
+$$
+
+If no arrival occurred during the first $s$ minutes, the remaining waiting-time distribution is the same as it was initially. Time already spent waiting does not make an arrival "due."
+
+This property follows from the Poisson assumptions; it should not be applied to scheduled buses, aging hardware, or any process whose future rate depends on its history.
+
+### Combining and splitting streams
+
+The superposition of independent Poisson processes is another Poisson process. If independent streams have rates $\lambda_1,\ldots,\lambda_m$, their combined rate is
+
+$$
+\lambda_{\text{total}}=\sum_i\lambda_i.
+$$
+
+For two streams, the time to the next arrival of either type is exponential with rate $\lambda_1+\lambda_2$, and
+
+$$
+P(\text{stream 1 arrives first})
+=\frac{\lambda_1}{\lambda_1+\lambda_2}.
+$$
+
+Conversely, if every event in a Poisson process of rate $\lambda$ is independently retained with probability $p$, the retained events form a Poisson process of rate $p\lambda$. The discarded events independently form one of rate $(1-p)\lambda$. This is called **thinning**.
+
+### Conditioning on the total count
+
+Given that exactly $n$ events occurred in an interval of length $t$, their locations within that interval behave like $n$ independent uniform points, sorted into arrival order. Consequently, for a subinterval of length $s\leq t$:
+
+$$
+N(s)\mid N(t)=n
+\sim
+\operatorname{Binomial}\left(n,\frac{s}{t}\right).
+$$
+
+This is useful when a question gives the total number of arrivals and asks where within the interval they occurred.
+
+### Common Poisson-process traps
+
+- A rate is not a probability. Convert it into the dimensionless mean $\lambda t$ first.
+- Poisson counts describe a fixed interval; exponential variables describe waiting times.
+- The average waiting time $1/\lambda$ is not a guarantee and is not the median.
+- A constant long-run average alone does not establish a Poisson process; independence and a stable rate also matter.
+- Scheduled, bursty, capacity-limited, self-exciting, or state-dependent arrivals are generally not Poisson.
+- After conditioning on a fixed total count, counts in subintervals are no longer independent.
+
+## 6. Information Bounds and Decision Trees
 
 Suppose there are $N$ possible hidden worlds and each experiment has at most $b$ distinguishable outcomes. After $k$ experiments, a decision tree has at most $b^k$ leaves. Therefore a necessary condition for identifying the world is
 
@@ -274,7 +423,7 @@ To prove an optimum, combine:
 1. a **lower bound**, showing that fewer steps are impossible;
 2. a **construction**, giving a strategy that meets the bound.
 
-## 6. Pigeonhole Principle and Guarantees
+## 7. Pigeonhole Principle and Guarantees
 
 If more than $n$ objects are placed into $n$ boxes, some box contains at least two objects.
 
@@ -290,7 +439,7 @@ Example: with 12 birth months, 13 people guarantee that two share a birth month.
 
 The word “guarantee” should trigger adversarial reasoning: construct the arrangement that delays the desired event for as long as possible, then add one more object or step.
 
-## 7. Invariants
+## 8. Invariants
 
 An invariant is a quantity or property that every legal move preserves.
 
@@ -311,7 +460,7 @@ Every domino placed on adjacent squares covers exactly one black and one white s
 
 The invariant is the difference between the numbers of covered black and white squares.
 
-## 8. Monovariants
+## 9. Monovariants
 
 A monovariant changes strictly in one direction after every legal move. If it is bounded, it can prove termination.
 
@@ -334,7 +483,7 @@ The proof needs both properties:
 
 A decreasing nonnegative integer is a particularly convenient monovariant because it can decrease only finitely many times.
 
-## 9. Symmetry
+## 10. Symmetry
 
 Symmetry can collapse many cases into one, but visual similarity alone does not prove equal probability.
 
@@ -348,7 +497,7 @@ Useful questions are:
 
 Symmetry is a proof tool, not a license to assume uniformity.
 
-## 10. Rates, Speed, and Units
+## 11. Rates, Speed, and Units
 
 ### Relative speed
 
@@ -404,7 +553,7 @@ $$
 
 An equation whose units do not match is wrong regardless of its arithmetic.
 
-## 11. Algebra and Representation
+## 12. Algebra and Representation
 
 When the trick is unclear, name the unknown quantities and translate each sentence into a constraint.
 
@@ -426,7 +575,7 @@ More generally, choose a representation that makes legal operations simple:
 - a decision tree for adaptive questions;
 - equations for conserved quantities.
 
-## 12. Small Cases, Edge Cases, and Working Backward
+## 13. Small Cases, Edge Cases, and Working Backward
 
 ### Test small cases
 
@@ -452,7 +601,7 @@ When the final state is highly constrained, ask which moves could immediately pr
 
 This is especially useful for river crossings, measuring-jug problems, switches, and constrained move sequences. Verify that every reversed move corresponds to a legal forward move.
 
-## 13. Hidden Assumptions
+## 14. Hidden Assumptions
 
 Consider the statement:
 
@@ -480,7 +629,7 @@ $$
 
 Without those assumptions, many half-hour processes are compatible with the same one-hour probability. Recognizing underdetermination is part of solving the puzzle.
 
-## 14. A Practical Solving Framework
+## 15. A Practical Solving Framework
 
 Before calculating, ask:
 
@@ -495,7 +644,7 @@ Before calculating, ask:
 9. **Optimality:** do I have both an impossibility bound and a matching strategy?
 10. **Sanity check:** are probabilities in $[0,1]$, units consistent, and edge cases correct?
 
-## 15. Common Failure Modes
+## 16. Common Failure Modes
 
 - Multiplying probabilities without establishing independence.
 - Treating mutually exclusive events as independent; except for zero-probability cases, they are not.
@@ -516,11 +665,12 @@ The highest-value progression is:
 1. complements, conditioning, independence, and Bayes' rule;
 2. product-rule counting, permutations, and combinations;
 3. expectation, indicator variables, and first-step equations;
-4. pigeonhole and worst-case reasoning;
-5. information bounds and decision trees;
-6. invariants and monovariants;
-7. rates, algebraic modeling, and dimensional analysis;
-8. lower bounds plus matching constructions.
+4. Poisson counts, exponential waiting times, and memorylessness;
+5. pigeonhole and worst-case reasoning;
+6. information bounds and decision trees;
+7. invariants and monovariants;
+8. rates, algebraic modeling, and dimensional analysis;
+9. lower bounds plus matching constructions.
 
 ## Related
 
