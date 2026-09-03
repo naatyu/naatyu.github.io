@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="620" viewBox="0 0 1400 620" role="img" aria-labelledby="title desc">
+  <title id="title">Autoregressive and speculative decoding execution</title>
+  <desc id="desc">Autoregressive decoding needs one target pass per token. Speculative decoding uses cheap draft steps followed by one parallel target verification and commits an accepted prefix plus a correction or bonus token.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#94a3b8"/></marker>
+    <style>.title{font:700 28px system-ui,sans-serif;fill:#f8fafc}.head{font:700 22px system-ui,sans-serif;fill:#e2e8f0}.label{font:600 17px system-ui,sans-serif;fill:#f8fafc}.small{font:15px system-ui,sans-serif;fill:#cbd5e1}.tiny{font:14px system-ui,sans-serif;fill:#94a3b8}.arrow{stroke:#94a3b8;stroke-width:3;fill:none;marker-end:url(#arrow)}</style>
+  </defs>
+  <rect width="1400" height="620" rx="24" fill="#0f172a"/>
+  <text x="700" y="48" text-anchor="middle" class="title">One expensive pass per token vs. draft once, verify a block</text>
+  <rect x="40" y="85" width="1320" height="190" rx="18" fill="#111c31" stroke="#334155"/>
+  <text x="70" y="122" class="head">Autoregressive decoding</text>
+  <text x="70" y="151" class="small">Each target result is required before the next position exists.</text>
+  <g transform="translate(75 182)">
+    <rect x="0" y="0" width="170" height="58" rx="10" fill="#7c3aed"/><text x="85" y="35" text-anchor="middle" class="label">Target pass</text>
+    <path d="M175 29 H225" class="arrow"/><circle cx="254" cy="29" r="25" fill="#0891b2"/><text x="254" y="35" text-anchor="middle" class="label">x₁</text>
+    <path d="M284 29 H334" class="arrow"/><rect x="340" y="0" width="170" height="58" rx="10" fill="#7c3aed"/><text x="425" y="35" text-anchor="middle" class="label">Target pass</text>
+    <path d="M515 29 H565" class="arrow"/><circle cx="594" cy="29" r="25" fill="#0891b2"/><text x="594" y="35" text-anchor="middle" class="label">x₂</text>
+    <path d="M624 29 H674" class="arrow"/><rect x="680" y="0" width="170" height="58" rx="10" fill="#7c3aed"/><text x="765" y="35" text-anchor="middle" class="label">Target pass</text>
+    <path d="M855 29 H905" class="arrow"/><circle cx="934" cy="29" r="25" fill="#0891b2"/><text x="934" y="35" text-anchor="middle" class="label">x₃</text>
+    <text x="1030" y="36" class="small">… one serial target call per token</text>
+  </g>
+  <rect x="40" y="300" width="1320" height="275" rx="18" fill="#111c31" stroke="#334155"/>
+  <text x="70" y="338" class="head">Speculative decoding</text>
+  <text x="70" y="367" class="small">The cheap drafter supplies known positions; the target scores them together.</text>
+  <rect x="75" y="401" width="220" height="72" rx="12" fill="#0369a1"/>
+  <text x="185" y="429" text-anchor="middle" class="label">Cheap drafter</text><text x="185" y="454" text-anchor="middle" class="small">d₁  d₂  d₃  d₄  d₅</text>
+  <path d="M305 437 H380" class="arrow"/>
+  <rect x="390" y="390" width="310" height="94" rx="12" fill="#7c3aed"/>
+  <text x="545" y="426" text-anchor="middle" class="label">One target verification</text><text x="545" y="453" text-anchor="middle" class="small">score all draft positions in parallel</text>
+  <path d="M710 437 H785" class="arrow"/>
+  <g transform="translate(800 400)">
+    <circle cx="30" cy="35" r="27" fill="#16a34a"/><text x="30" y="41" text-anchor="middle" class="label">d₁</text>
+    <circle cx="100" cy="35" r="27" fill="#16a34a"/><text x="100" y="41" text-anchor="middle" class="label">d₂</text>
+    <circle cx="170" cy="35" r="27" fill="#16a34a"/><text x="170" y="41" text-anchor="middle" class="label">d₃</text>
+    <circle cx="240" cy="35" r="27" fill="#dc2626"/><text x="240" y="41" text-anchor="middle" class="label">d₄</text>
+    <circle cx="310" cy="35" r="27" fill="#475569"/><text x="310" y="41" text-anchor="middle" class="label">d₅</text>
+    <circle cx="390" cy="35" r="27" fill="#d97706"/><text x="390" y="41" text-anchor="middle" class="label">x*</text>
+    <text x="100" y="87" text-anchor="middle" class="small">accepted prefix</text><text x="275" y="87" text-anchor="middle" class="small">reject + discard</text><text x="390" y="87" text-anchor="middle" class="small">correction</text>
+  </g>
+  <text x="75" y="535" class="tiny">If all five drafts survive, the same target pass also supplies a sixth, bonus token. If d₁ fails, the round still commits one corrected target token.</text>
+</svg>
