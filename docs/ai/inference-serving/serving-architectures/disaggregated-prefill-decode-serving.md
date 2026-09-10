@@ -116,6 +116,7 @@ Prefer disaggregation when measured prefill/decode interference, independent sca
 
 ## Related
 
+- [DeepSeek-V4.1-Flash: architectural prefill skipping with CED](/atlas/ai/architectures/model-reports/deepseek-v4-1-flash)
 - [KV Cache](/atlas/ai/inference-serving/caching/kv-cache)
 - [LLM Inference Economics](/atlas/ai/inference-serving/performance/llm-inference-economics)
 - [Roofline Model](/atlas/systems/performance/roofline-model)

@@ -587,6 +587,7 @@ Keeping only clean, direct successes removes examples of debugging, recovery, an
 
 ## Related
 
+- [DeepSeek-V4.1-Flash: task construction, verifier repair, and DSec sandbox scaling](/atlas/ai/architectures/model-reports/deepseek-v4-1-flash)
 - [Nanbeige4.2-3B](/atlas/ai/architectures/model-reports/nanbeige4-2-3b-unlocking-agentic-capabilities)
 - [Reinforcement Learning with Verifiable Rewards](/atlas/ai/training/optimization/reinforcement-learning-with-verifiable-rewards)
 - [Supervised Fine-Tuning for LLMs](/atlas/ai/training/optimization/supervised-fine-tuning-for-llms)
