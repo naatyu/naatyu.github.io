@@ -27,6 +27,231 @@ Constraints narrow the search, but the problem's structure determines which algo
 
 This note is a companion to the NeetCode roadmap, useful before choosing a section or pattern.
 
+## Start here: algorithm decision tree
+
+The NeetCode roadmap tells you what to study and in what order. Choosing an approach for an unfamiliar problem requires a different map: start with the requested output and the operations you need.
+
+Use these trees to produce one or two candidates. A leaf is a hypothesis to verify with an invariant and a complexity estimate. Several branches can apply: Word Search II combines a grid traversal, backtracking, and a trie; Dijkstra combines graph search with a heap.
+
+```text
+What must the solution do?
+|
++-- Follow connections between nodes, cells, or states?
+|   `-- Tree / graph / grid decisions -> A
+|
++-- Search or summarize an array or string?
+|   `-- Sequence decisions -> B
+|
++-- Choose among many possible arrangements or action sequences?
+|   `-- Backtracking / DP / greedy decisions -> C
+|
++-- Maintain priorities, events, prefixes, or linked nodes?
+|   `-- Data-structure decisions -> D
+|
+`-- Exploit arithmetic, binary representation, or coordinates?
+    `-- Math / bit manipulation decisions -> E
+
+For every candidate:
+Can I explain why it is correct AND fit the worst-case time/memory?
+    Yes -> implement and test the invariant.
+    No  -> revisit the state, repeated work, or structural property.
+```
+
+- [A. Trees, graphs, and grids](#a-trees-graphs-and-grids)
+- [B. Arrays and strings](#b-arrays-and-strings)
+- [C. Choices, counting, and optimization](#c-choices-counting-and-optimization)
+- [D. Choosing a data structure](#d-choosing-a-data-structure)
+- [E. Numbers, bits, and geometry](#e-numbers-bits-and-geometry)
+
+### A. Trees, graphs, and grids
+
+Think of a graph whenever the problem contains states and legal transitions, even if it never uses the word “graph.” A grid cell can be a state, and a valid move can be an edge.
+
+```text
+What do the connections represent?
+|
++-- A tree?
+|   +-- Need information from children? -> Postorder DFS
+|   +-- Carry information from ancestors? -> Top-down DFS
+|   +-- Need levels / nearest depth? -> BFS
+|   `-- BST lookup / range with ordering? -> Prune using BST order
+|
++-- Reachability, islands, connected components?
+|   +-- Static graph / grid -> DFS or BFS + visited tracking
+|   `-- Undirected connectivity as edges are added -> Union-find
+|
++-- Shortest path / minimum number of transitions?
+|   +-- Equal edge costs -> BFS
+|   +-- Weights only 0 and 1 -> 0-1 BFS
+|   +-- General nonnegative weights -> Dijkstra
+|   `-- Negative weights -> DAG relaxation if acyclic;
+|                          otherwise consider Bellman-Ford
+|
++-- Prerequisites / ordering constraints?
+|   `-- Topological sort; failure to order all nodes detects a cycle
+|
++-- Connect all vertices at minimum total edge cost?
+|   `-- Minimum spanning tree: Kruskal or Prim
+|
+`-- Use every edge exactly once?
+    `-- Eulerian traversal: check existence, then Hierholzer
+```
+
+**Distinguish the objective:** a shortest-path tree minimizes distances from a source; a minimum spanning tree minimizes the total selected edge weight. One does not generally solve the other objective. Negative cycles can make shortest-path values unbounded for affected destinations.
+
+For grids, ask whether movement creates cycles. Counting right/down paths can use DP because dependencies are acyclic. Finding the shortest route with obstacles and equal-cost moves suggests BFS. Finding a word without reusing a cell requires backtracking with a path-specific visited set.
+
+Read: [Trees](/atlas/interview-prep/neetcode-roadmap/trees), [Graphs](/atlas/interview-prep/neetcode-roadmap/graphs), [Advanced Graphs](/atlas/interview-prep/neetcode-roadmap/advanced-graphs).
+
+### B. Arrays and strings
+
+First distinguish a **subarray/substring** (contiguous) from a **subsequence** (may skip elements). Sliding windows describe contiguous regions and generally do not solve subsequence problems.
+
+```text
+What relationship between elements matters?
+|
++-- Membership, duplicates, counts, or a complement?
+|   `-- Hash set / hash map; frequency array for a small alphabet
+|
++-- A contiguous region?
+|   +-- Fixed length k?
+|   |   +-- Sum / counts -> Rolling window
+|   |   `-- Maximum / minimum -> Monotonic deque
+|   +-- Variable length with a valid forward-only boundary rule?
+|   |   `-- Sliding window
+|   +-- Exact sum, possibly with negative values?
+|   |   `-- Prefix sums + hash map
+|   +-- Maximum subarray sum?
+|   |   `-- Kadane: best sum ending at each position
+|   `-- Palindrome? -> Expand around centers or DP
+|
++-- A sorted order you can exploit?
+|   +-- Locate a value / boundary -> Binary search
+|   +-- Find a pair / compare opposite ends -> Two pointers
+|   `-- Merge ordered sequences -> Merge pointers
+|
++-- Next greater/smaller element?
+|   `-- Monotonic stack
+|
++-- Rearrange / compact in place?
+|   `-- Read/write pointers, swapping, or partitioning
+|
+`-- A subsequence or alignment between sequences?
+    `-- Define a DP state; check for specialized optimizations
+        such as O(n log n) longest increasing subsequence
+```
+
+**The sliding-window test:** explain exactly why moving a boundary cannot skip an answer that will become valid later. “Longest substring” alone is not enough. For no-repeat substrings, shrinking until counts are valid works; for exact sums with signed values, a sum that is currently too large can later decrease.
+
+**The binary-search test:** identify a sorted search space or prove that a feasibility predicate changes truth value at most once. For “minimum speed to finish within a deadline,” increasing speed only makes completion easier. That enables binary search on speed even when the input array is unsorted.
+
+Read: [Arrays and Hashing](/atlas/interview-prep/neetcode-roadmap/arrays-and-hashing), [Two Pointers](/atlas/interview-prep/neetcode-roadmap/two-pointers), [Sliding Window](/atlas/interview-prep/neetcode-roadmap/sliding-window), [Binary Search](/atlas/interview-prep/neetcode-roadmap/binary-search), [Stack](/atlas/interview-prep/neetcode-roadmap/stack).
+
+### C. Choices, counting, and optimization
+
+“Minimum,” “maximum,” and “number of ways” describe the output. They are not enough to identify DP: minimum hops may be BFS, and the maximum number of compatible intervals may be greedy.
+
+```text
+Do I need to explicitly produce all valid solutions?
+|
++-- Yes -> Backtracking / enumeration + pruning
+|          Check the number and size of outputs.
+|
+`-- No: need existence, a count, or an optimum
+    |
+    +-- A proven safe local choice or dominant frontier?
+    |   `-- Greedy; state the exchange or dominance argument
+    |
+    +-- Repeated subproblems with the same future possibilities?
+    |   `-- DP / memoization
+    |       +-- One index or remaining amount -> Often 1-D DP
+    |       +-- Two indices / index + capacity -> Often 2-D DP
+    |       `-- Chosen subset matters -> Bitmask state if small
+    |
+    +-- Can test feasibility monotonically at a candidate answer?
+    |   `-- Binary search on the answer + a feasibility algorithm
+    |
+    `-- No useful compression found?
+        `-- Backtracking if small; consider meet-in-the-middle
+            for splittable choices, or rethink the state if too large
+```
+
+These checks are not exclusive. A binary search can use a greedy feasibility test, and DP can run over a tree or graph. “1-D” and “2-D” refer to the state, not the shape of the original input or the final compressed storage.
+
+**The DP test:** can two different histories reach the same state and have identical future options and costs? If so, cache the answer for that state. If visited cells affect which moves remain possible, `(row, column)` alone is not a sufficient state for a no-revisit path search.
+
+**The greedy test:** can a locally preferred choice replace the corresponding choice in an optimal solution without making it worse? Try to break the proposed rule on small inputs. With coin values `[1, 4, 5]` and target `8`, taking the largest coin first yields `5 + 1 + 1 + 1`, but `4 + 4` uses fewer coins. Minimum coin count needs a stronger argument or a different method, commonly DP over the amount. See [USACO's greedy discussion](https://usaco.guide/silver/greedy-sorting) for proofs and counterexamples.
+
+Read: [Backtracking](/atlas/interview-prep/neetcode-roadmap/backtracking), [Greedy](/atlas/interview-prep/neetcode-roadmap/greedy), [1-D DP](/atlas/interview-prep/neetcode-roadmap/one-dimensional-dynamic-programming), [2-D DP](/atlas/interview-prep/neetcode-roadmap/two-dimensional-dynamic-programming).
+
+### D. Choosing a data structure
+
+Ask which operation you repeatedly perform. The data structure should make that operation cheap.
+
+```text
+Which repeated operation is expensive?
+|
++-- Find the next smallest/largest available item?
+|   +-- Repeated arrivals / removals -> Heap / priority queue
+|   +-- Static kth element only -> Quickselect or heap
+|   `-- Running median -> Two heaps
+|
++-- Resolve the most recently opened item first?
+|   `-- Stack: brackets, nested expressions, undo, deferred work
+|
++-- Process overlapping intervals?
+|   +-- Merge coverage -> Sort by start, scan
+|   +-- Maximize count of compatible intervals -> Greedy by end
+|   `-- Count simultaneous resources -> Sweep line or end-time heap
+|
++-- Search a dictionary repeatedly?
+|   +-- Exact whole-word membership -> Hash set is often enough
+|   `-- Prefixes / shared character branching -> Trie
+|
+`-- Manipulate linked nodes?
+    +-- Middle / cycle -> Slow and fast pointers
+    +-- kth from end -> Pointers separated by k nodes
+    +-- Reverse -> Maintain previous, current, and next pointers
+    `-- Merge / delete -> Dummy head and careful link ownership
+```
+
+For weighted interval rewards, choosing the earliest end no longer solves the general optimization problem; weighted interval scheduling typically uses DP. For a static top-$k$ task, sorting can be the simplest acceptable solution if the constraints allow it. A heap is especially useful when priorities must remain available as the data changes.
+
+Read: [Heap / Priority Queue](/atlas/interview-prep/neetcode-roadmap/heap-priority-queue), [Intervals](/atlas/interview-prep/neetcode-roadmap/intervals), [Tries](/atlas/interview-prep/neetcode-roadmap/tries), [Linked List](/atlas/interview-prep/neetcode-roadmap/linked-list).
+
+### E. Numbers, bits, and geometry
+
+```text
+What mathematical structure is available?
+|
++-- Pair cancellation with exactly one unpaired integer? -> XOR
++-- Subsets / boolean flags in a small universe? -> Bitmasks
++-- Powers of two / set bits? -> Bit operations
++-- Divisibility / repeating cycles? -> GCD, remainders, modular arithmetic
++-- Coordinates / rotations / matrix traversal? -> Geometry or simulation
+`-- Huge number of repeated steps? -> Look for a formula, cycle,
+                                     or faster composition of operations
+```
+
+State the assumptions before using a shortcut. XOR cancellation solves the “every value appears twice except one” pattern, but is not a universal method for finding a unique element under arbitrary multiplicities.
+
+Read: [Bit Manipulation](/atlas/interview-prep/neetcode-roadmap/bit-manipulation), [Math and Geometry](/atlas/interview-prep/neetcode-roadmap/math-and-geometry).
+
+### Walk through the decisions before coding
+
+| Problem | Route through the tree | Decisive reason |
+| :--- | :--- | :--- |
+| Longest substring without repeated characters | B: contiguous region -> sliding window + counts | Removing from the left restores validity; earlier invalid starts remain invalid when extending |
+| Count subarrays summing to k, including negative values | B: exact sum -> prefix sums + frequency map | Earlier prefix sum must equal current prefix sum minus k |
+| Daily Temperatures | B: next greater element -> monotonic stack | A warmer day resolves pending colder days |
+| Koko Eating Bananas | B/C: smallest feasible speed -> binary search | If a speed works, every higher speed also works |
+| Number of Islands | A: components in a grid -> DFS/BFS | Each traversal marks one connected land component |
+| Course Schedule | A: dependencies -> topological sort or directed-cycle DFS | A cycle makes the prerequisite order impossible |
+| Coin Change | C: repeated remaining amounts -> 1-D DP | Different choices reach the same remaining amount; largest-first can fail |
+| Word Search II | A + C + D: grid paths + backtracking + trie | Track used cells per path and prune prefixes absent from the dictionary |
+
+After solving a problem, record the clue, the invariant, and why a tempting alternative fails. This builds recognition you can transfer to unfamiliar wording.
+
 ## 1. Estimate the work of brute force
 
 First describe a correct, straightforward solution. Then substitute the maximum input size into its complexity.
@@ -212,3 +437,5 @@ A useful explanation during an interview is: “At this input size, checking eve
 
 - [USACO Guide: Time Complexity](https://usaco.guide/bronze/time-comp) — complexity estimation and common input-size ranges. The thresholds above are approximate study heuristics, not judge-specific guarantees.
 - [NeetCode Roadmap](https://neetcode.io/roadmap) — the pattern organization used by the companion notes.
+- [AlgoMonster: Algorithm Selection Flowchart](https://algo.monster/flowchart) — an external interactive selection aid. The trees in this note are an original synthesis of the local roadmap notes, not a reproduction of its chart.
+- [USACO Guide: Greedy Algorithms with Sorting](https://usaco.guide/silver/greedy-sorting) — justification of greedy choices and examples where local choices fail.
