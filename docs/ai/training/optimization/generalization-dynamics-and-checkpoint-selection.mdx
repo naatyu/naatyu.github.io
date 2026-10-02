@@ -10,6 +10,10 @@ tags:
 draft: false
 ---
 
+import {CheckpointExplorer, PaperFigure, TransferComparison} from '@site/src/components/ResearchNote';
+
+<CheckpointExplorer />
+
 ## Summary
 
 Lower pretraining loss does not guarantee a better starting point for post-training. *Generalization Dynamics of LM Pre-training* observes **mode-hopping**: neighboring checkpoints alternate between following a misleading pattern and applying the task's underlying rule. Selected earlier checkpoints also transfer better after SFT in the paper's reasoning and alignment experiments.
@@ -20,11 +24,9 @@ Source: [Wen et al., September 2026 — full paper](https://arxiv.org/html/2609.
 
 ## 1. Smooth loss can hide unstable generalization
 
-![Authors' schematic contrasting smooth pretraining loss and capability growth with repeatedly changing generalization behavior.](/img/generalization-dynamics/overview.png)
-
-![Legend identifying larger and smaller models in the authors' overview.](/img/generalization-dynamics/overview-legend.png)
-
-*Figure 1, [paper](https://arxiv.org/html/2609.33150v1#S0.F1). This is a conceptual schematic, not a measured training curve. Read the top row as the familiar training picture and the bottom row as possible generalization trajectories: frequent recovery with occasional collapse, persistent oscillation, or rare successful episodes.*
+<PaperFigure src="/img/generalization-dynamics/overview.png" legend="/img/generalization-dynamics/overview-legend.png" alt="Authors' schematic contrasting smooth loss and capability growth with repeatedly changing generalization behavior." label="Figure 1 · conceptual schematic" source="https://arxiv.org/html/2609.33150v1#S0.F1">
+  This is a conceptual schematic, not a measured training curve. Read the top row as the familiar training picture and the bottom row as possible generalization trajectories: frequent recovery with occasional collapse, persistent oscillation, or rare successful episodes.
+</PaperFigure>
 
 A model can know how to solve a problem while still favoring a competing shortcut in a particular prompt. The paper probes this conflict by deliberately making the shortcut tempting.
 
@@ -60,9 +62,9 @@ Tracking the continuous margin matters because hard accuracy can jump when a tin
 
 ## 3. The fluctuations are large and persist late in training
 
-![Measured accuracy across OLMo3 pretraining checkpoints on four successive-answer tasks, with frequent drops and recoveries.](/img/generalization-dynamics/successive-answers.png)
-
-*Figure 4, [paper](https://arxiv.org/html/2609.33150v1#S3.F4). Blue is OLMo3-7B; green is OLMo3-32B. Follow each curve horizontally: more training tokens do not produce a monotonic increase in resistance to the answer-sequence shortcut. Stars mark the authors' Chinchilla-optimal token reference, not the best checkpoint on these tasks.*
+<PaperFigure src="/img/generalization-dynamics/successive-answers.png" alt="Measured accuracy across OLMo3 pretraining checkpoints on four successive-answer tasks, with frequent drops and recoveries." label="Figure 4 · measured checkpoint dynamics" source="https://arxiv.org/html/2609.33150v1#S3.F4">
+  Blue is OLMo3-7B; green is OLMo3-32B. Follow each curve horizontally: more training tokens do not produce a monotonic increase in resistance to the answer-sequence shortcut. Stars mark the authors' Chinchilla-optimal token reference, not the best checkpoint on these tasks. Open full-size to inspect individual panels.
+</PaperFigure>
 
 One reported OLMo3-32B example on the arithmetic answer-sequence probe is:
 
@@ -87,9 +89,11 @@ These checks narrow the explanation. They do not exclude every possible optimiza
 
 The most practically relevant experiment selects two OLMo3-32B checkpoints using the diagnostic suite: **4.5T** and **4.9T** pretraining tokens. The earlier checkpoint performs better on the suite, and the authors test whether that advantage transfers through post-training.
 
-![Math SFT improves MATH-500 for both checkpoints, while GPQA-Diamond improves for the 4.5T checkpoint and declines for the 4.9T checkpoint; additional checkpoints show differing transfer gains.](/img/generalization-dynamics/post-training-gpqa.png)
+<TransferComparison />
 
-*Figure 13(a), [paper](https://arxiv.org/html/2609.33150v1#S5.F13). Read the top-left and top-right panels together: learning the fine-tuning domain and transferring beyond it are different outcomes. The bottom panels show changes after SFT across additional base checkpoints; the marked 4.5T checkpoint has particularly strong GPQA transfer.*
+<PaperFigure src="/img/generalization-dynamics/post-training-gpqa.png" alt="Math SFT improves MATH-500 for both checkpoints, while GPQA-Diamond improves for the 4.5T checkpoint and declines for the 4.9T checkpoint." label="Figure 13(a) · reasoning transfer after SFT" source="https://arxiv.org/html/2609.33150v1#S5.F13">
+  Read the top-left and top-right panels together: learning the fine-tuning domain and transferring beyond it are different outcomes. The bottom panels show changes after SFT across additional base checkpoints; the marked 4.5T checkpoint has particularly strong GPQA transfer.
+</PaperFigure>
 
 | Evaluation after post-training | Start from 4.5T | Start from 4.9T | Difference |
 |---|---:|---:|---:|
@@ -98,9 +102,9 @@ The most practically relevant experiment selects two OLMo3-32B checkpoints using
 
 For the alignment experiment, general SFT uses **49K non-safety examples** from OLMo3's official post-training data and **1K safety examples** from STAR-1. A prefilling attack supplies an initial assistant continuation that tries to steer the model toward an unsafe response; robustness here measures resistance under the evaluated attack setup.
 
-<img src="/img/generalization-dynamics/post-training-alignment.png" alt="The earlier 4.5T checkpoint gains substantially more robustness to prefilling attacks during SFT than the later 4.9T checkpoint." loading="lazy" style={{width: '100%', maxWidth: '560px', height: 'auto'}} />
-
-*Figure 13(b), [paper](https://arxiv.org/html/2609.33150v1#S5.F13). The upper panel follows robustness during SFT. The lower panel compares robustness gains across base checkpoints. This is a specific safety-transfer experiment, not a comprehensive safety score.*
+<PaperFigure src="/img/generalization-dynamics/post-training-alignment.png" alt="The earlier 4.5T checkpoint gains substantially more robustness to prefilling attacks during SFT than the later 4.9T checkpoint." label="Figure 13(b) · alignment transfer after SFT" source="https://arxiv.org/html/2609.33150v1#S5.F13" narrow>
+  The upper panel follows robustness during SFT. The lower panel compares robustness gains across base checkpoints. This is a specific safety-transfer experiment, not a comprehensive safety score.
+</PaperFigure>
 
 Do not generalize this into “earlier checkpoints are better.” The result is that **chronological order is an insufficient selection rule**. In-distribution performance can improve while downstream transfer deteriorates.
 
@@ -114,9 +118,9 @@ Larger models often generalize more frequently on the same prompts, but still fl
 
 ## 6. Can selecting data stabilize the behavior?
 
-![Continued pretraining on selected data windows stabilizes arithmetic shortcut resistance in the desired direction, while random data gives fluctuating accuracy.](/img/generalization-dynamics/data-selection.png)
-
-*Figure 14, [paper](https://arxiv.org/html/2609.33150v1#S5.F14). Green uses data associated with generalization in the original run, orange uses data associated with pattern-following, and gray is uncontrolled sampling. This is a small preliminary continuation experiment focused on one arithmetic probe. The horizontal tick labels appear non-monotonic in the published figure; do not infer exact elapsed-token intervals from them.*
+<PaperFigure src="/img/generalization-dynamics/data-selection.png" alt="Selected data windows stabilize arithmetic shortcut resistance in the desired direction, while random data gives fluctuating accuracy." label="Figure 14 · preliminary data-selection experiment" source="https://arxiv.org/html/2609.33150v1#S5.F14">
+  Green uses data associated with generalization in the original run, orange uses data associated with pattern-following, and gray is uncontrolled sampling. This is a small preliminary continuation experiment focused on one arithmetic probe. The horizontal tick labels appear non-monotonic in the published figure; do not infer exact elapsed-token intervals from them.
+</PaperFigure>
 
 The selection uses knowledge of which original pretraining windows improved or harmed the target probe. It is not a ready-made classifier that labels arbitrary documents “generalizable.”
 
