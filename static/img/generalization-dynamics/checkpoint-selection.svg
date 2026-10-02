@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="620" viewBox="0 0 1000 620" role="img" aria-labelledby="title desc">
+  <title id="title">Selecting a pretraining checkpoint for post-training transfer</title>
+  <desc id="desc">Saved checkpoints are evaluated on ordinary capability and shortcut resistance. Several candidates receive matched pilot SFT. Held-out transfer and robustness determine the choice, which is then confirmed at the intended training budget.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="none" stroke="#526581" stroke-width="1.6"/></marker>
+  </defs>
+  <rect width="1000" height="620" rx="20" fill="#f5f7fc"/>
+  <g font-family="system-ui, sans-serif" text-anchor="middle">
+    <text x="500" y="42" font-size="25" font-weight="700" fill="#172a46">Choose the base for what it becomes after training</text>
+    <text x="500" y="70" font-size="15" fill="#526581">Proposed workflow · not a measured result or the paper’s exact protocol</text>
+    <rect x="290" y="94" width="420" height="65" rx="12" fill="#e6edff" stroke="#8ca6df"/>
+    <text x="500" y="122" font-size="19" font-weight="650" fill="#172a46">Saved pretraining checkpoints</text>
+    <text x="500" y="145" font-size="15" fill="#334b71">Earlier candidates + final checkpoint</text>
+    <g fill="none" stroke="#526581" stroke-width="2" marker-end="url(#arrow)">
+      <path d="M500 159V178H255V198"/><path d="M500 178H745V198"/>
+    </g>
+    <rect x="60" y="201" width="390" height="89" rx="12" fill="#fff" stroke="#8ca6df"/>
+    <text x="255" y="233" font-size="19" font-weight="650" fill="#172a46">Ordinary capability</text>
+    <text x="255" y="258" font-size="15" fill="#334b71">Held-out loss + domain benchmarks</text>
+    <text x="255" y="279" font-size="14" fill="#526581">Can it perform the task?</text>
+    <rect x="550" y="201" width="390" height="89" rx="12" fill="#fff" stroke="#8ca6df"/>
+    <text x="745" y="233" font-size="19" font-weight="650" fill="#172a46">Shortcut resistance</text>
+    <text x="745" y="258" font-size="15" fill="#334b71">Conflicting patterns + probability margins</text>
+    <text x="745" y="279" font-size="14" fill="#526581">Does it still solve the task when misled?</text>
+    <g fill="none" stroke="#526581" stroke-width="2" marker-end="url(#arrow)">
+      <path d="M255 290V311H500V331"/><path d="M745 290V311H500"/>
+    </g>
+    <rect x="235" y="334" width="530" height="73" rx="12" fill="#e6edff" stroke="#8ca6df"/>
+    <text x="500" y="365" font-size="19" font-weight="650" fill="#172a46">Shortlist several candidates → matched pilot SFT</text>
+    <text x="500" y="390" font-size="15" fill="#334b71">Same data, recipe, token budget, harness; repeated seeds</text>
+    <path d="M500 407V433" fill="none" stroke="#526581" stroke-width="2" marker-end="url(#arrow)"/>
+    <rect x="235" y="436" width="530" height="73" rx="12" fill="#def4e9" stroke="#6eae93"/>
+    <text x="500" y="466" font-size="19" font-weight="650" fill="#164c3a">Select using held-out transfer + robustness</text>
+    <text x="500" y="491" font-size="15" fill="#245b48">Evaluate beyond the fine-tuning distribution</text>
+    <path d="M500 509V535" fill="none" stroke="#526581" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="500" y="563" font-size="19" font-weight="650" fill="#172a46">Confirm at the intended post-training budget</text>
+    <text x="500" y="589" font-size="15" fill="#526581">The latest weights or lowest loss alone do not decide the winner.</text>
+  </g>
+</svg>

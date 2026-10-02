@@ -429,6 +429,7 @@ Sparse reward works when it only needs to steer a competent policy. It is not an
 
 ## Related
 
+- [Sharpening Tax and Posterior-Tempered Group Sampling](/atlas/ai/training/optimization/sharpening-tax-and-posterior-tempered-group-sampling)
 - [Reinforcement Learning for LLMs](/atlas/ai/training/optimization/reinforcement-learning-for-llms)
 - [Reinforcement Learning with Verifiable Rewards](/atlas/ai/training/optimization/reinforcement-learning-with-verifiable-rewards)
 - [On-Policy Distillation](/atlas/ai/training/optimization/on-policy-distillation)

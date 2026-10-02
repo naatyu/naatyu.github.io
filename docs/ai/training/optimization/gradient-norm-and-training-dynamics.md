@@ -101,6 +101,7 @@ If loss is the "direction of improvement," the gradient norm is the "strength of
 That makes it one of the most useful scalar diagnostics for training dynamics.
 
 ## Related
+- [Generalization Dynamics and Pretraining Checkpoint Selection](/atlas/ai/training/optimization/generalization-dynamics-and-checkpoint-selection) — stable optimization signals can coexist with fluctuating shortcut resistance.
 - [Training Loss Patterns](/atlas/ai/training/optimization/training-loss-patterns)
 - [Gradient Clipping](/atlas/ai/training/optimization/gradient-clipping)
 - [Gradient Direction and Magnitude](/atlas/math/calculus/gradient-direction-and-magnitude)

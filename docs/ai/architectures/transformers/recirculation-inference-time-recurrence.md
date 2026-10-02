@@ -1,7 +1,7 @@
 ---
 title: "Recirculation: Inference-Time Recurrence for Transformers"
 date: 2026-08-26
-lastmod: 2026-08-26
+lastmod: 2026-09-07
 tags:
   - ai/llm
   - transformers
@@ -564,6 +564,7 @@ The quality/throughput curve is not evaluated.
 
 ## Related
 
+- [Full-Bandwidth Transformer: Latent Feedback Across Tokens](/atlas/ai/architectures/transformers/full-bandwidth-transformer-latent-feedback)
 - [Looped Language Models (Ouro)](/atlas/ai/architectures/transformers/looped-language-models-ouro)
 - [Sparse Layers in Looped Language Models](/atlas/ai/architectures/transformers/moe-looped-language-models)
 - [Attention Residuals](/atlas/ai/architectures/transformers/attention-residuals)

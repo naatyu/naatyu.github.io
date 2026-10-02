@@ -320,6 +320,7 @@ It also highlights a common tradeoff:
 
 ## Related
 
+- [Generalization Dynamics and Pretraining Checkpoint Selection](/atlas/ai/training/optimization/generalization-dynamics-and-checkpoint-selection) — preliminary evidence that selected pretraining windows can stabilize shortcut resistance.
 - [Deduplication and Memorization Control](/atlas/ai/training/data/deduplication-and-memorization-control)
 - [Data-Constrained Scaling Laws](/atlas/ai/training/scaling/data-constrained-scaling-laws)
 - [Scaling Ladders and Efficiency Gain](/atlas/ai/training/scaling/scaling-ladders-and-efficiency-gain)

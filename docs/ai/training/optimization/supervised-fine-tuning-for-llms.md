@@ -158,6 +158,8 @@ This is why SFT should be paired with:
 
 ## Related
 
+- [Generalization Dynamics and Pretraining Checkpoint Selection](/atlas/ai/training/optimization/generalization-dynamics-and-checkpoint-selection) — the base checkpoint can change how well the same SFT recipe transfers beyond its training domain.
+- [Jev and Tev: Typed Decision Models](/atlas/ai/architectures/jev-tev-typed-decision-models)
 - [Chat Templates for LLMs](/atlas/ai/inference-serving/chat-templates-for-llms)
 - [Hybrid Reasoning Models](/atlas/ai/architectures/hybrid-reasoning-models)
 - [LoRA vs Full Fine-Tuning](/atlas/ai/training/optimization/lora-vs-full-finetuning)
