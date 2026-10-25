@@ -1,0 +1,12 @@
+import {assertGeneratedMarkup,assertGeneratedMarkupCount} from './check-generated-markup.mjs';
+import assert from 'node:assert/strict';
+import {performanceRoofBody,performanceLayerBody,performanceUsefulBody,performanceScenes} from '../prototypes/readers/performance-scenes.js';
+let cases=0;
+const check=html=>{assertGeneratedMarkup(html,"test-performance-scenes.mjs");assert.ok(!/NaN|undefined|Infinity/.test(html));assert.ok(!html.includes('${'));assert.ok(html.includes('data-performance-result'));assert.ok(html.includes('role="img"'));assert.ok(html.includes('tabindex="0"'));if(html.includes('Causal uses exact useful pairs')){assert.equal((html.match(/class="inline-math"/g)||[]).length,1);assert(html.includes(String.raw`<annotation encoding="application/x-tex">\frac{S(S+1)}2</annotation>`));}cases++;};
+for(let s=0;s<=9;s++)for(const w of [1024,4096])for(const b of [1,2,4])check(performanceRoofBody(s,w,b));
+for(let s=0;s<=8;s++)for(const kv of [1,2,8])for(const p of ['full','causal'])for(const r of ['no','yes'])for(const e of ['dense','moe'])check(performanceLayerBody(s,kv,p,r,e));
+for(let d=0;d<=10;d++)for(const r of ['no','yes'])check(performanceUsefulBody(d,r));
+assert.equal(cases,298);
+assert.equal(Object.keys(performanceScenes()).length,3);
+assertGeneratedMarkupCount("test-performance-scenes.mjs",cases);
+console.log(`Performance scenes:${cases} bounded bodies render; native browser checks remain separate.`);

@@ -1,0 +1,19 @@
+{
+  "reviewed": "2026-10-14",
+  "scope": "Complete pinned config plus attention dimension/projection/reshape paths only; not entire model, all optional code paths, GPU execution, benchmarks or report figures.",
+  "revision": "b82e54bd609793562a75cbf9337970a93369eab5",
+  "configURL": "https://huggingface.co/Nanbeige/Nanbeige4.2-3B/resolve/b82e54bd609793562a75cbf9337970a93369eab5/config.json",
+  "implementationURL": "https://huggingface.co/Nanbeige/Nanbeige4.2-3B/resolve/b82e54bd609793562a75cbf9337970a93369eab5/modeling_nanbeige.py",
+  "configSha256": "f6cb15b22847664f3a6049dc4b58fdd10f1650d112ac99a1da3d051f17c2ca19",
+  "implementationSha256": "e4f2ef33b3fc5f0f1cb8cb0dfcf9ae1e1c8bdbc52d590f0a3849283d3109ff45",
+  "fields": {
+    "hidden_size": 3072,
+    "num_attention_heads": 48,
+    "num_key_value_heads": 8,
+    "head_dim": 128,
+    "attention_bias": false,
+    "num_hidden_layers": 22,
+    "num_loops": 2
+  },
+  "observedMechanism": "Explicit head_dim overrides hidden_size // num_heads fallback. q projection hidden→query_heads*head_dim; k/v hidden→kv_heads*head_dim; output query_heads*head_dim→hidden; output reshapes to concatenated head width before output projection."
+}

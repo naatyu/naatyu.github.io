@@ -1,0 +1,21 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import GithubSlugger from 'github-slugger';
+import {frontierReader,frontierAliases} from '../prototypes/readers/frontier.js';
+import {dataReader} from '../prototypes/readers/data.js';
+import {scalingReader} from '../prototypes/readers/scaling.js';
+import {parallelismReader} from '../prototypes/readers/parallelism.js';
+import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+const root=new URL('../../',import.meta.url),path='docs/ai/architectures/model-reports/the-llama-3-herd-of-models.md';
+const source=readFileSync(new URL(path,root),'utf8');
+assert.equal(source,execFileSync('git',['show','HEAD:'+path],{cwd:root,encoding:'utf8'}));
+const slug=path.slice(5,-3),g=new GithubSlugger(),headings=[...source.matchAll(/^#{1,6} (.+)$/gm)].map(m=>g.slug(m[1]));
+assert.equal(headings.length,8);assert.deepEqual(Object.keys(reviewedFragments[slug]),headings);
+const html=frontierReader(s=>s),ids=new Set([...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]));
+for(const h of headings){const d=resolveReviewedNote(slug+'#'+h);assert.equal(d.slug,'training/frontier-recipes');assert.ok(ids.has(d.anchor));}
+assert.ok(frontierAliases.includes(slug));assert.ok(!html.includes('href="'+slug+'"'));
+for(const phrase of ['8B, 70B and 405B','1,875 tokens per parameter','160–200B','50%','25%','17%','8%','16,384 H100','400 Gbps','[TP, CP, PP, DP]','All-gather exchanges KV','sixteen subflows','Tectonic','38–43% BF16','800B','base 500,000','final 40M-token','40B-token data-quality'])assert.ok(html.includes(phrase),phrase);
+for(const render of [dataReader,scalingReader,parallelismReader])assert.ok(!render(s=>s).includes('href="'+slug+'"'));
+assert.ok(parallelismReader(s=>s).includes('training/frontier-recipes#llama-system'));
+console.log('Llama preservation: committed original,eight heading destinations,dense/exposure/data corrections,4D ownership,network/checkpoint/MFU and context/annealing conditions pass.');

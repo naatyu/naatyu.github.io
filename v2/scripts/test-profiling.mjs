@@ -1,0 +1,14 @@
+import './test-profiling-model.mjs';
+import './test-profiling-scenes.mjs';
+import './test-profiling-preservation.mjs';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {profilingMeta,profilingAliases,profilingSections,profilingReader} from '../prototypes/readers/profiling.js';
+import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
+import {rank} from '../prototypes/search.js';
+const html=profilingReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(x=>x[1]);assert.equal(ids.length,new Set(ids).size);assert.equal(profilingSections.length,30);for(const[id]of profilingSections)assert.ok(ids.includes(id));
+assert.deepEqual(profilingAliases,['tooling/profiling/nsys-profiler','tooling/profiling/pytorch-profiler-and-gpu-trace-reading']);assert.equal(profilingMeta.date,'2026-08-03');assert.ok(profilingMeta.prototype);assert.equal(profilingMeta.visibility,'public');assert.equal(renderDenseReader(profilingMeta.slug,s=>s),profilingReader(s=>s));assert.equal((html.match(/data-profiling-lab=/g)||[]).length,3);assert.ok(!/NaN|undefined/.test(html));
+for(const text of ['self_cuda_time_total','prof.step()','wait=1','warmup=2','active=3','repeat=1','record_shapes','profile_memory','with_stack','with_flops','--kill=none','.qdstrm','nsys import','cuda_gpu_kern_sum','cuda_api_sum','osrt_sum','nproc_per_node=1','world size','25.5','107','244.7','A100','330','reduce-overhead','fullgraph=True','static cache','prefill','decode','GEMM epilogue','HBM','AOTAutograd','TorchInductor','SDPBackend.FLASH_ATTENTION','autograd','occupancy','reserved','four'])assert.ok(html.toLowerCase().includes(text.toLowerCase()),text);
+const catalog=JSON.parse(fs.readFileSync(new URL('../prototypes/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes];for(const[,slug]of html.matchAll(/href="directions\.html\?slug=([^"#]+)"/g))assert.ok(notes.some(n=>n.slug===slug),slug);
+for(const q of ['Nsight Systems','torch.profiler','kernel fusion','GPT-Fast'])assert.ok(rank(notes,q).some(r=>r.note===profilingMeta),q);
+console.log(`Profiling reader:30 sections,three scenes,registry/search/links/scope checks pass;${html.replace(/<[^>]*>/g,' ').split(/\s+/).length} words.`);

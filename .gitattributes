@@ -1,0 +1,2 @@
+# Preserve upstream vendor distributions byte-for-byte.
+v2/prototypes/vendor/** -whitespace

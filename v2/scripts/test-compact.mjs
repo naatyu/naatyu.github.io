@@ -1,0 +1,15 @@
+import './test-compact-model.mjs';
+import './test-cache-credit-notation.mjs';
+import './test-compact-nan42-preservation.mjs';
+import './test-compact-nan4-preservation.mjs';
+import './test-compact-liquid-preservation.mjs';
+import './test-compact-apple-preservation.mjs';
+import './test-compact-gemma-preservation.mjs';
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {compactMeta,compactReader,compactSections} from '../prototypes/readers/compact.js';
+import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
+import {rank} from '../prototypes/search.js';
+const html=compactReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(x=>x[1]);assert.equal(ids.length,new Set(ids).size);assert.equal(compactSections.length,27);for(const[id]of compactSections)assert(ids.includes(id));assert.equal(compactMeta.date,'2026-04-20');assert(compactMeta.prototype);assert.equal(compactMeta.visibility,'public');for(const s of ['5.5 GiB','44 GiB','not inactive or useless','not example shares','no gradient anywhere','4.020789B','two through fourteen','caption says'])assert(html.includes(s),s);
+const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes];for(const[,s]of html.matchAll(/href="directions\.html\?slug=([^"#]+)"/g))assert(notes.some(n=>n.slug===s),s);assert.equal(renderDenseReader(compactMeta.slug,s=>s),compactReader(s=>s));for(const q of ['on-device','Nanbeige','Gemma','Apple','embedding tax'])assert(rank(notes,q).some(r=>r.note===compactMeta),q);
+console.log('Compact: 27 unique sections, original/canonical destinations, lineage, semantic search and scope corrections pass.');

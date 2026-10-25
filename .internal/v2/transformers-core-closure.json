@@ -1,0 +1,346 @@
+{
+  "updated": "2026-10-09",
+  "topic": "models/transformers",
+  "status": "All twelve original bodies reconciled; primary and production gates remain separate",
+  "sources": [
+    {
+      "slug": "ai/architectures/transformers/lets-build-gpt-from-scratch",
+      "sha256": "ccee9acea2b41dfd09b6acc1a98f2e03893e372af859b4c9111097d8d06e723d",
+      "git": "HEAD:docs/ai/architectures/transformers/lets-build-gpt-from-scratch.md",
+      "destination": {
+        "slug": "models/transformers",
+        "anchor": "block"
+      },
+      "headings": {
+        "summary": "block",
+        "concepts": "block",
+        "content": "block",
+        "1-the-bigram-baseline": "block",
+        "2-implementing-self-attention": "block",
+        "3-scaling-to-a-transformer": "block",
+        "4-generation": "block",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "ai/architectures/transformers/residual-normalization-and-initialization",
+      "sha256": "d61ff652cbbda63370239cab24add1a4480d64d3429546e8533c627fb5255670",
+      "git": "HEAD:docs/ai/architectures/transformers/residual-normalization-and-initialization.md",
+      "destination": {
+        "slug": "models/transformers",
+        "anchor": "residual"
+      },
+      "headings": {
+        "summary": "residual",
+        "concepts": "residual",
+        "1-why-residuals-are-needed": "residual",
+        "2-increment-explosion": "initialization",
+        "3-pre-norm-vs-post-norm": "placement",
+        "pre-norm": "placement",
+        "post-norm": "placement",
+        "4-why-initialization-matters": "initialization",
+        "5-why-berts-002-initialization-is-not-arbitrary": "initialization",
+        "6-residual-scaling-for-very-deep-transformers": "initialization",
+        "7-attention-residuals-learn-the-aggregation-over-depth": "depth",
+        "8-normalization-replacements": "normalization-lab",
+        "9-practical-heuristics": "checks",
+        "related": "sources",
+        "sources": "sources"
+      }
+    },
+    {
+      "slug": "ai/foundations/activation-functions",
+      "sha256": "b5cbf6bd9474c7039e64741ac38e5397b97ef260c8c83666ec607ce78eb0ca60",
+      "git": "HEAD:docs/ai/foundations/activation-functions.md",
+      "destination": {
+        "slug": "models/transformers",
+        "anchor": "activations"
+      },
+      "headings": {
+        "summary": "activations",
+        "concepts": "activations",
+        "relu": "activations",
+        "leaky-relu": "activations",
+        "sigmoid": "activations",
+        "tanh": "activations",
+        "softmax": "head",
+        "gelu": "activations",
+        "swish": "activations",
+        "glu": "gates",
+        "swiglu": "gates",
+        "silu": "activations",
+        "hardtanh": "activations",
+        "caractéristiques": "activations",
+        "comparaison": "activations",
+        "cas-dutilisation": "activations"
+      }
+    },
+    {
+      "slug": "ai/foundations/batch-normalization",
+      "sha256": "bd3895eda0a60d56db4b12872b1f232e062939404377f2b81fd0216416923ff9",
+      "git": "HEAD:docs/ai/foundations/batch-normalization.md",
+      "destination": {
+        "slug": "models/transformers",
+        "anchor": "normalization"
+      },
+      "headings": {
+        "summary": "normalization",
+        "concepts": "normalization",
+        "content": "normalization",
+        "mathematical-formulation": "normalization",
+        "pros--cons": "normalization",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "ai/foundations/layer-normalization",
+      "sha256": "6bfd0a44875e95d600002fb07e4b0b5b5c1e1439e60164c70a8f7bad6a7adf9d",
+      "git": "HEAD:docs/ai/foundations/layer-normalization.md",
+      "destination": {
+        "slug": "models/transformers",
+        "anchor": "normalization"
+      },
+      "headings": {
+        "summary": "normalization",
+        "concepts": "normalization",
+        "content": "normalization",
+        "why-layernorm-over-batchnorm": "normalization",
+        "mathematical-formulation": "normalization",
+        "impact": "normalization",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "ai/foundations/root-mean-square-layer-normalization",
+      "sha256": "ea1b0d4d9586f6926cf1831febec35eec8d761c468160e9a38363014631bc060",
+      "git": "HEAD:docs/ai/foundations/root-mean-square-layer-normalization.md",
+      "destination": {
+        "slug": "models/transformers",
+        "anchor": "normalization"
+      },
+      "headings": {
+        "summary": "normalization",
+        "concepts": "normalization",
+        "content": "normalization",
+        "the-simplification": "normalization",
+        "mathematical-formulation": "normalization",
+        "usage": "placement",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "ai/foundations/stop-gradients",
+      "sha256": "ef9b32a0e2d472ccdbad2bc7850f401a59c25e741419c90c2a5c87342a807bc0",
+      "git": "HEAD:docs/ai/foundations/stop-gradients.md",
+      "destination": {
+        "slug": "models/transformers",
+        "anchor": "stop-gradient"
+      },
+      "headings": {
+        "summary": "stop-gradient",
+        "concepts": "stop-gradient",
+        "content": "stop-gradient",
+        "how-it-works": "stop-gradient",
+        "purpose-preventing-collapse": "stop-gradient",
+        "limitations": "stop-gradient",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "ai/architectures/general/reversible-networks",
+      "sha256": "9558b6196af87afe69ca316a06bd66fe99498d0a56679ec204b39ea77518b94d",
+      "git": "HEAD:docs/ai/architectures/general/reversible-networks.md",
+      "destination": {
+        "slug": "models/transformers",
+        "anchor": "reversible"
+      },
+      "headings": {
+        "summary": "reversible",
+        "1-the-feistel-construction": "reversible",
+        "2-why-use-it": "reversible"
+      }
+    },
+    {
+      "slug": "ai/architectures/transformers/embedding-tying-in-small-llms",
+      "sha256": "82b8ef465a0efa7f20398611e6414048b99e5b97349fafb7f387c91b92741a4b",
+      "git": "HEAD:docs/ai/architectures/transformers/embedding-tying-in-small-llms.md",
+      "destination": {
+        "slug": "models/transformers",
+        "anchor": "tying"
+      },
+      "headings": {
+        "summary": "tying",
+        "concepts": "tying",
+        "content": "tying",
+        "the-basic-parameter-tradeoff": "tying",
+        "why-it-matters-more-for-small-models": "tying",
+        "the-fair-comparison-problem": "tying",
+        "why-larger-models-often-skip-this-trick": "tying",
+        "practical-interpretation": "tying",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "ai/architectures/transformers/attention-residuals",
+      "sha256": "00f7e3c7a71edce80b37f4b2b2c146ca727e5dc9ba2f93845037a0a13974275f",
+      "git": "HEAD:docs/ai/architectures/transformers/attention-residuals.md",
+      "destination": {
+        "slug": "models/transformers",
+        "anchor": "depth"
+      },
+      "headings": {
+        "summary": "depth",
+        "concepts": "depth",
+        "1-the-residual-stream-is-already-a-depth-mixer": "depth",
+        "2-why-pre-norm-dilution-is-the-target": "placement",
+        "3-full-attention-residuals": "depth",
+        "complexity": "depth",
+        "4-block-attention-residuals": "block-attnres",
+        "5-why-the-pseudo-query-is-deliberately-simple": "attnres-evidence",
+        "6-systems-design": "attnres-systems",
+        "training": "attnres-systems",
+        "inference": "attnres-systems",
+        "long-context-prefill": "attnres-systems",
+        "7-scaling-results": "attnres-evidence",
+        "8-the-48b-kimi-linear-experiment": "attnres-evidence",
+        "9-what-the-learned-weights-reveal": "attnres-evidence",
+        "10-relation-to-other-residual-mechanisms": "attnres-evidence",
+        "11-caveats": "attnres-evidence",
+        "practical-takeaways": "checks",
+        "related": "sources",
+        "sources": "sources"
+      }
+    },
+    {
+      "slug": "ai/foundations/softmax-bottleneck",
+      "sha256": "6bf1b17bcc2336ddcb30dd91e50e9a957d0a5a6c3664f849eef17ba35ca48b8e",
+      "git": "HEAD:docs/ai/foundations/softmax-bottleneck.md",
+      "destination": {
+        "slug": "models/transformers",
+        "anchor": "rank"
+      },
+      "headings": {
+        "summary": "rank",
+        "concepts": "rank",
+        "1-standard-language-model-output-layer": "head",
+        "2-language-modeling-as-matrix-factorization": "head",
+        "3-does-softmax-remove-the-rank-limitation": "rank",
+        "4-the-precise-row-shift-argument": "rank",
+        "5-log-odds-intuition": "rank",
+        "6-why-a-deeper-transformer-does-not-automatically-fix-it": "rank",
+        "7-mixture-of-softmaxes": "mixtures",
+        "8-why-mixing-hidden-states-is-not-enough": "mixtures",
+        "9-what-else-changes-the-bound": "mixtures",
+        "10-relationship-with-embedding-tying": "tying",
+        "11-evidence-from-the-original-paper": "head-evidence",
+        "12-important-qualifications": "head-evidence",
+        "high-exact-rank-does-not-imply-that-every-singular-direction-matters-equally": "head-evidence",
+        "the-theorem-does-not-prove-the-true-language-distributions-rank": "head-evidence",
+        "more-expressivity-is-not-free": "head-evidence",
+        "this-is-different-from-a-computational-softmax-bottleneck": "head-evidence",
+        "13-practical-diagnostic": "head-evidence",
+        "main-takeaway": "rank",
+        "related": "sources",
+        "sources": "sources"
+      }
+    },
+    {
+      "slug": "ai/training/scaling/transformer-scaling-rules",
+      "sha256": "0d7ad62e61435453ce677db96f5806cf66655de0fddeceff079877f03e4b21a6",
+      "git": "HEAD:docs/ai/training/scaling/transformer-scaling-rules.md",
+      "destination": {
+        "slug": "models/transformers",
+        "anchor": "budget"
+      },
+      "headings": {
+        "summary": "budget",
+        "concepts": "budget",
+        "core-formulas": "budget",
+        "what-the-formulas-tell-you": "budget",
+        "rules": "budget",
+        "1-choose-dense-by-default": "budget-design",
+        "2-use-gqa-before-mqa": "budget-design",
+        "21-use-periodic-global-attention-when-long-context-matters": "budget-design",
+        "3-translate-formulas-into-design-choices": "budget-design",
+        "4-keep-head-dim-in-a-hardware-friendly-band": "budget",
+        "5-add-depth-before-extreme-width": "budget-design",
+        "6-tune-ffn-ratio-last": "budget",
+        "61-interleave-dense-and-sparse-feed-forward-blocks": "budget-design",
+        "7-long-context-is-a-cache-problem": "budget-design",
+        "8-batch-size-saturates": "budget-design",
+        "9-tie-embeddings-when-the-model-is-small": "tying",
+        "practical-templates": "budget-design",
+        "small-dense-baseline": "budget",
+        "mid-size-dense-baseline": "budget",
+        "long-context-agent-baseline": "budget-design",
+        "moe-frontier-baseline": "budget-design",
+        "looped-moe-baseline": "budget-design",
+        "model-examples": "budget-design",
+        "recent-architectures-to-know": "budget-design",
+        "related": "sources"
+      }
+    }
+  ],
+  "assets": [
+    {
+      "url": "/attachments/ai/deep-learning/activation-functions/activation-functions-01.png",
+      "path": "static/attachments/ai/deep-learning/activation-functions/activation-functions-01.png",
+      "sha256": "209e55e4e55c74ee0ae130e036e2d90f96fffc2f1c1f2addc9d68b281816b092",
+      "source": "ai/foundations/activation-functions",
+      "meaning": "ReLU",
+      "anchor": "activations",
+      "decision": "replace with declared scalar curve and equations; recover art from Git",
+      "visualReview": "Six PNGs inspected in initial Transformer audit; cropped curve illustrations, not measurements. New SVG declares axes and parameters; rights not certified."
+    },
+    {
+      "url": "/attachments/ai/deep-learning/activation-functions/activation-functions-02.png",
+      "path": "static/attachments/ai/deep-learning/activation-functions/activation-functions-02.png",
+      "sha256": "67d3eb9588c2099b4b409597113ab399c76232d49b7ec3ef24d6e3cafcc7f472",
+      "source": "ai/foundations/activation-functions",
+      "meaning": "Leaky ReLU",
+      "anchor": "activations",
+      "decision": "replace with declared scalar curve and equations; recover art from Git",
+      "visualReview": "Six PNGs inspected in initial Transformer audit; cropped curve illustrations, not measurements. New SVG declares axes and parameters; rights not certified."
+    },
+    {
+      "url": "/attachments/ai/deep-learning/activation-functions/activation-functions-03.png",
+      "path": "static/attachments/ai/deep-learning/activation-functions/activation-functions-03.png",
+      "sha256": "a0be74cea7fb96a8e0755d1819a6d9d92dec4bf9926ec0dc281e47864e964d67",
+      "source": "ai/foundations/activation-functions",
+      "meaning": "Sigmoid",
+      "anchor": "activations",
+      "decision": "replace with declared scalar curve and equations; recover art from Git",
+      "visualReview": "Six PNGs inspected in initial Transformer audit; cropped curve illustrations, not measurements. New SVG declares axes and parameters; rights not certified."
+    },
+    {
+      "url": "/attachments/ai/deep-learning/activation-functions/activation-functions-04.png",
+      "path": "static/attachments/ai/deep-learning/activation-functions/activation-functions-04.png",
+      "sha256": "96f9d720b586c3f7a2b21dfd6cddc167468eee112fc42da69e4ea2b81af6005c",
+      "source": "ai/foundations/activation-functions",
+      "meaning": "Tanh",
+      "anchor": "activations",
+      "decision": "replace with declared scalar curve and equations; recover art from Git",
+      "visualReview": "Six PNGs inspected in initial Transformer audit; cropped curve illustrations, not measurements. New SVG declares axes and parameters; rights not certified."
+    },
+    {
+      "url": "/attachments/ai/deep-learning/activation-functions/activation-functions-05.png",
+      "path": "static/attachments/ai/deep-learning/activation-functions/activation-functions-05.png",
+      "sha256": "fc26c842570ceeffadc404b885e4cfb32fe82aa297663a601b7962e328f50da1",
+      "source": "ai/foundations/activation-functions",
+      "meaning": "GELU",
+      "anchor": "activations",
+      "decision": "replace with declared scalar curve and equations; recover art from Git",
+      "visualReview": "Six PNGs inspected in initial Transformer audit; cropped curve illustrations, not measurements. New SVG declares axes and parameters; rights not certified."
+    },
+    {
+      "url": "/attachments/ai/deep-learning/activation-functions/activation-functions-06.png",
+      "path": "static/attachments/ai/deep-learning/activation-functions/activation-functions-06.png",
+      "sha256": "89376a0417ffadaffe26a9b1a596f2f9a0e9f75fdefce90c1f20d19b2e381f8c",
+      "source": "ai/foundations/activation-functions",
+      "meaning": "Swish",
+      "anchor": "activations",
+      "decision": "replace with declared scalar curve and equations; recover art from Git",
+      "visualReview": "Six PNGs inspected in initial Transformer audit; cropped curve illustrations, not measurements. New SVG declares axes and parameters; rights not certified."
+    }
+  ]
+}

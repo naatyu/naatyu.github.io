@@ -1,0 +1,36 @@
+import {assertGeneratedMarkup,assertGeneratedMarkupCount} from './check-generated-markup.mjs';
+import "./test-agents-model.mjs";
+import "./test-agents-harness-closure.mjs";
+import assert from "node:assert/strict";
+import {readFile} from "node:fs/promises";
+import {agentsMeta,agentsReader,agentsSections,agentsAliases} from "../prototypes/readers/agents.js";
+import {readerMetas,renderDenseReader} from "../prototypes/readers/index.js";
+import {rank} from "../prototypes/search.js";
+import {reviewedNavigation} from "../prototypes/reviewed-navigation.js";
+import {recoveryBody,mixtureBody,gradingBody,completionBody,captureBody} from "../prototypes/readers/agents-scenes.js";
+const html=agentsReader(s=>"directions.html?slug="+s);
+const ids=[...html.matchAll(/ id="([^"]+)"/g)].map(x=>x[1]);
+assert.equal(agentsSections.length,45);assert.equal(ids.length,new Set(ids).size);
+for(const[id]of agentsSections)assert.ok(ids.includes(id),id);
+assert.equal(agentsMeta.date,"2026-07-25");assert.ok(agentsMeta.prototype);assert.equal(agentsMeta.visibility,"public");assert.deepEqual(agentsAliases,["ai/training/optimization/multi-harness-agentic-rl"]);
+assert.equal(renderDenseReader(agentsMeta.slug,s=>s),agentsReader(s=>s));
+for(const phrase of ["202,752","1,000","10,000","90%","55.3","62.0","75.9","82.7%","29.5%","68.9%","pass@8","66.0","71.0","68%","13%","16","50%","66%","2%","90×","66×","2,500","SCHED_IDLE","AppArmor","eBPF","42.2%","54.2%","52.3%","1.9 percentage-point","31%","same task and harness","not generally restore","all-pass","not vector gradient","target-token","No LFM ablation","one seed","public diagnostics","hidden final","All four evaluation harnesses"])assert.ok(html.includes(phrase),phrase);
+assert.ok(!/undefined|NaN/.test(html.replace("undefined: no positive binary credit","")));
+assert.equal((html.match(/data-agents-lab=/g)||[]).length,5);
+let states=0;
+const check=s=>{assertGeneratedMarkup(s,"test-agents.mjs");assert.ok(!/NaN|undefined/.test(s));states++;};
+for(let n=0;n<=4;n++)check(recoveryBody(n));
+for(let n=8;n<=128;n+=8)check(mixtureBody(n));
+for(let n=5;n<=100;n+=5)for(const cap of [1,2,Infinity])for(const hack of [false,true])check(gradingBody(n/100,cap,hack));
+for(let n=0;n<=32;n++)for(const balanced of [false,true])check(completionBody(n,balanced));
+check(captureBody());
+assert.equal(states,208);
+const catalog=JSON.parse(await readFile(new URL("../prototypes/catalog.json",import.meta.url),"utf8")),notes=[...readerMetas,...catalog.notes.filter(n=>!reviewedNavigation[n.slug])];
+assert.ok(!html.includes("Original notes and report context"));
+for(const slug of ["ai/training/data/agentic-training-data-and-environment-synthesis","ai/training/optimization/groupwise-agentic-grading"]){assert.equal(reviewedNavigation[slug].slug,agentsMeta.slug);assert.ok(!notes.some(n=>n.slug===slug));}
+for(const phrase of ["Task-synthesis loop","Proxy integration boundary","Σuⱼ>0","cluster by topic and structure","no automatic correctness veto","not a measured system throughput"]){assert.ok(html.includes(phrase),phrase);}
+for(const[,slug]of html.matchAll(/href='directions\.html\?slug=([^'#]+)'/g))assert.ok(notes.some(n=>n.slug===slug),slug);
+for(const q of ["harness","GRS","GAR","recovery masking","task synthesis","token-in token-out"])assert.ok(rank(notes,q).some(r=>r.note===agentsMeta),q);
+const words=html.replace(/<[^>]*>/g," ").split(/\s+/).length;assert.ok(words>4500,words);
+assertGeneratedMarkupCount("test-agents.mjs",states);
+console.log("Agents: 45 unique sections, five scenes, 208 rendered analytical states, historical dates, scoped evidence, links and semantic search pass.");

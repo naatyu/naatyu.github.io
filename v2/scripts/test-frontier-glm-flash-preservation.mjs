@@ -1,0 +1,23 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import GithubSlugger from 'github-slugger';
+import {frontierReader,frontierAliases} from '../prototypes/readers/frontier.js';
+import {flashExpertAccounting,glmFlashArchitecture} from '../prototypes/readers/glm-flash-architecture.js';
+import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+const root=new URL('../../',import.meta.url),path='docs/ai/architectures/model-reports/glm-5-3-flash-hybrid-multimodal.md',source=readFileSync(new URL(path,root),'utf8');
+assert.equal(source,execFileSync('git',['show','HEAD:'+path],{cwd:root,encoding:'utf8'}));
+assert.equal(createHash('sha256').update(source).digest('hex'),'46f77ac8c04d164f6628125781b78c74a8239d387cb8727fe7cc9c81580c41c5');
+const slug=path.slice(5,-3),g=new GithubSlugger(),headings=[...source.matchAll(/^#{1,6} (.+)$/gm)].map(m=>g.slug(m[1]));
+assert.equal(headings.length,25);assert.deepEqual(Object.keys(reviewedFragments[slug]),headings);
+const html=frontierReader(s=>s),ids=new Set([...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]));
+for(const h of headings){const d=resolveReviewedNote(slug+'#'+h);assert.equal(d.slug,'training/frontier-recipes');assert(ids.has(d.anchor));}
+assert(frontierAliases.includes(slug));assert(!html.includes('href="'+slug+'"'));
+for(const phrase of ['154,880','untied','MTP module','1,048,576','twenty Sinkhorn','10⁻⁶','transpose','averaged only','Blocks 0–2','Blocks 3–44','12,288','2,048','FP32','scaled by 2.5','[−10, 10]','FP8 E4M3','dynamic activations','MIT','width-64','10,240','placeholders','ReplaySSM','W8A8','Layer Split','Chinese accelerators','not properties guaranteed'])assert(html.includes(phrase),phrase);
+for(const id of ['glm-flash-streams','glm-flash-experts','glm-flash-vision'])assert(ids.has(id));
+assert.equal((glmFlashArchitecture(s=>s).match(/class="katex-mathml"/g)||[]).length,3);
+const a=flashExpertAccounting();assert.deepEqual(a,{perExpert:25165824,perBlock:7272923136,stored:305462771712,active:9512681472,dense:452984832});
+assert(!/!\[|<PaperFigure|<img/.test(source));
+for(const owner of ['models/moe','training/numerics','execution/serving'])assert(html.includes('href="'+owner+'"'));
+console.log('GLM-5.3 preservation: Git-equal source,25 actual section destinations,corrected recurrence/precision/orientation,expert-only counts,vision/serving/evaluation conditions and preserved citations pass. Full external-source and production gates remain separate.');

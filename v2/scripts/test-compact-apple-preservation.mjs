@@ -1,0 +1,30 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import GithubSlugger from 'github-slugger';
+import {parse} from 'parse5';
+import {compactReader,compactAliases} from '../prototypes/readers/compact.js';
+import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {moeEvidence} from '../prototypes/readers/moe-evidence.js';
+const root=new URL('../../',import.meta.url),path='docs/ai/architectures/model-reports/third-generation-apple-foundation-models.md';
+const source=readFileSync(new URL(path,root),'utf8');
+assert.equal(source,execFileSync('git',['show','HEAD:'+path],{cwd:root,encoding:'utf8'}));
+const slug=path.slice(5,-3),g=new GithubSlugger(),headings=[...source.matchAll(/^#{1,6} (.+)$/gm)].map(m=>g.slug(m[1]));
+assert.equal(headings.length,22);assert.deepEqual(Object.keys(reviewedFragments[slug]),headings);
+const html=compactReader(s=>s),ids=new Set([...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]));
+for(const h of headings){const d=resolveReviewedNote(slug+'#'+h);assert.equal(d.slug,'models/compact-recipes');assert.ok(ids.has(d.anchor));}
+assert.ok(compactAliases.includes(slug));assert.ok(!html.includes('href="'+slug+'"'));
+for(const phrase of ['June 8, 2026','about 3B dense','20B stored, 1–4B active','NVIDIA GPUs in Google Cloud','lightweight dense block','Instruction-Following Pruning (IFP)','predetermined active-parameter budget','always-active shared weights','cloud TPUs','Supervised fine-tuning and multi-stage RL','quantization-aware training','token counts','Offline operation','Daily per-user limits','4K','32K','expressive TTS and dictation','September 9 update'])assert.ok(html.toLowerCase().includes(phrase.toLowerCase()),phrase);
+for(const section of ['apple','apple-training','apple-api','apple-evidence'])assert.ok(ids.has(section));
+assert.ok(html.includes('https://developer.apple.com/videos/play/wwdc2026/319/'));
+assert.ok(html.includes('https://machinelearning.apple.com/research/apple-foundation-models-tech-report-2025'));
+const body=moeEvidence(s=>s).request;assert.ok(!body.includes(slug));assert.ok(body.includes('models/compact-recipes#apple'));
+const all=[];function visit(n){all.push(n);for(const c of n.childNodes||[])visit(c);}visit(parse(html));
+const a=(n,k)=>n.attrs?.find(x=>x.name===k)?.value;
+const caption=n=>n.childNodes?.find(c=>c.tagName==='caption')?.childNodes?.map(c=>c.value||'').join('');
+const appleTables=all.filter(n=>n.tagName==='table'&&['Apple June','WWDC26','Apple overview'].some(prefix=>caption(n)?.startsWith(prefix)));
+assert.equal(appleTables.length,3);
+for(const t of appleTables){const parent=t.parentNode;assert.equal(a(parent,'tabindex'),'0');assert.equal(a(parent,'role'),'region');}
+const css=readFileSync(new URL('../prototypes/dense-reader.css',import.meta.url),'utf8');
+assert.ok(css.includes('[data-dense-topic="models/compact-recipes"] table{min-width:640px;overflow-wrap:normal;word-break:normal}'));
+console.log('Apple preservation: Git-equal original,22 exact headings,five tiers,IFP sequence,developer/evaluation tables,source caveats and canonical MoE link pass. Security/primary-figure/production gates remain separate.');

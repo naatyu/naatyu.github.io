@@ -1,0 +1,142 @@
+{
+  "schemaVersion": 1,
+  "reviewDate": "2026-10-09",
+  "destination": "training/optimization",
+  "scope": "Complete six-original-body reconciliation and Git-equal recovery checks. Selective primary checks documented in the audit; not a full external-paper or production certification.",
+  "sources": [
+    {
+      "slug": "ai/training/optimization/adamw",
+      "sha256": "c7e3b71ab801e4dced5bebcbc38f4a59856e6a3804feee3e6c8ebf39ca84fbc5",
+      "headings": {
+        "summary": "adam",
+        "concepts": "adam",
+        "1-why-adamw-exists": "update",
+        "2-the-core-adam-mechanism": "adam",
+        "first-ema-gradient-direction": "momentum",
+        "second-ema-gradient-magnitude": "adam",
+        "3-why-emas-are-useful-here": "momentum",
+        "4-bias-correction": "bias",
+        "5-adam-update-rule": "adam",
+        "6-why-adam-is-not-adamw": "decay",
+        "7-decoupled-weight-decay-in-adamw": "decay",
+        "8-main-hyperparameters": "defaults",
+        "learning-rate-eta": "defaults",
+        "beta_1": "momentum",
+        "beta_2": "adam",
+        "epsilon": "bias",
+        "weight-decay-lambda": "decay",
+        "learning-rate-and-weight-decay-as-memory-length": "memory",
+        "9-why-adamw-remains-the-default-in-llm-training": "defaults",
+        "10-practical-intuition": "checks",
+        "11-common-practical-defaults-for-llms": "defaults",
+        "related": "sources",
+        "sources": "sources"
+      }
+    },
+    {
+      "slug": "ai/training/optimization/batch-size-and-learning-rate",
+      "sha256": "a11f2b8677136ec52ca2a53edbb12de0dca2f13a6ca1d7ab4bd7f714c945e674",
+      "headings": {
+        "summary": "noise",
+        "concepts": "noise",
+        "1-batch-size-b-and-gradient-accuracy": "noise",
+        "2-learning-rate-eta-and-gradient-effect": "noise",
+        "3-balancing-signal-and-noise-regularization-vs-efficiency": "noise-lab",
+        "the-benefits-of-noise-lower-snr": "noise-lab",
+        "the-benefits-of-signal-high-snr": "noise-lab",
+        "4-optimal-scaling-linear-vs-square-root": "scaling-rules",
+        "a-the-mathematical-basis-for-square-root-scaling": "scaling-rules",
+        "b-comparison-linear-vs-square-root": "scaling-rules",
+        "c-practical-rule-for-adamw": "scaling-rules",
+        "d-deeper-view-adam-as-signsgd": "sign-noise",
+        "e-large-batches-can-saturate-or-even-reverse-the-lr-trend": "sign-noise",
+        "conclusion-the-contingency-of-optimal-hyperparameters": "batch-design",
+        "further-insights--optimization-folklore": "checks",
+        "sources": "sources"
+      }
+    },
+    {
+      "slug": "ai/training/optimization/learning-rate-warmup",
+      "sha256": "fe0b7978322ac1187035939d138a90e7074513d4b338c498962eb5a66e493951",
+      "headings": {
+        "summary": "warmup",
+        "concepts": "warmup",
+        "content": "warmup",
+        "why-use-warmup": "warmup",
+        "1-preventing-gradient-explosion": "warmup",
+        "2-adaptive-optimizer-stability": "warmup",
+        "3-layer-normalization--weight-initialization": "warmup",
+        "how-it-works": "warmup",
+        "determining-warmup-duration-t_textwarmup": "warmup",
+        "1-the-1-5-rule-pre-training": "warmup",
+        "2-large-batch-heuristic": "warmup",
+        "3-fine-tuning-short--sharp": "warmup",
+        "4-the-inverse-square-root-schedule": "warmup",
+        "visualizing-the-schedule": "schedule-lab",
+        "common-issues": "warmup",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "ai/training/optimization/muon-optimizer",
+      "sha256": "165c7ca09ea5897c1ecd15a9eba86e0e8e7cae81ea7400f43952a9f71b7b7102",
+      "headings": {
+        "summary": "matrix",
+        "concepts": "matrix",
+        "1-adamw-is-elementwise-muon-is-matrixwise": "matrix",
+        "2-basic-muon-update": "matrix",
+        "3-matrix-sign-through-svd": "matrix",
+        "4-relationship-to-signsgd-and-adam": "matrix",
+        "5-steepest-descent-view": "geometry",
+        "6-why-newton-schulz-is-used": "newton",
+        "7-why-muon-update-scale-needs-care": "matrix-scale",
+        "8-per-head-muon-for-attention-projections": "heads",
+        "9-which-parameters-should-use-muon": "groups",
+        "10-what-muon-seems-to-change-in-trained-weights": "spectra",
+        "11-muon-and-pretraining-vs-fine-tuning": "spectra",
+        "12-practical-checklist": "checks",
+        "13-practical-testing-recipe": "checks",
+        "related": "sources",
+        "sources": "sources"
+      }
+    },
+    {
+      "slug": "ai/training/optimization/warmup-stable-decay-learning-rate-schedule",
+      "sha256": "6f28d87fb0a2770059aff984319afe8b6041c0bfa2f88a324a8c2da1bad965dc",
+      "headings": {
+        "summary": "schedules",
+        "concepts": "schedules",
+        "content": "schedules",
+        "schedule-shape": "schedule-lab",
+        "why-teams-like-it": "schedules",
+        "why-the-stable-phase-matters": "schedules",
+        "multi-step-wsd": "schedules",
+        "why-it-can-beat-cleaner-looking-schedules-in-practice": "schedules",
+        "practical-heuristics": "schedules",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "ai/training/scaling/hyperparameter-scaling-laws-for-llm-training",
+      "sha256": "4db50fcae4ef47655dc1b00acc3a361ade3b976690cb0ca1df307491f1c09cb4",
+      "headings": {
+        "summary": "transfer",
+        "concepts": "transfer",
+        "content": "transfer",
+        "compute-as-the-scaling-variable": "transfer",
+        "why-this-matters": "transfer",
+        "how-the-playbook-uses-scaling-laws": "batch-design",
+        "the-broad-sweet-spot-insight": "batch-design",
+        "why-distribution-matters": "transfer",
+        "operational-implication": "transfer",
+        "mup-hyperparameter-transfer-across-width": "transfer",
+        "why-standard-parametrization-can-fail-to-transfer": "functional-scaling",
+        "spectral-scaling-intuition": "functional-scaling",
+        "practical-mup-workflow": "transfer",
+        "practical-heuristics": "transfer",
+        "related": "sources",
+        "sources": "sources"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+.attention-film{background:#261d2b;color:#f5eef3;border-radius:18px;padding:24px 20px;margin:30px 0;overflow:hidden;scroll-margin-top:100px}
+.attention-film-heading{display:flex;justify-content:space-between;gap:12px;font:11px ui-monospace,monospace;color:#c9b8c6}
+.dense-note .attention-film h3{color:#f5eef3;font-size:25px;font-weight:400;margin:20px 0 12px}
+.attention-film .attention-film-stage{font:12px ui-monospace,monospace;color:#aed0ed}
+.attention-film svg{display:block;width:100%;max-height:460px;margin:16px 0}
+.attention-film svg text{fill:#f5eef3;font:13px ui-monospace,monospace}.attention-film svg .attention-svg-muted{fill:#c9b8c6;font-size:12px}.attention-svg-axis{fill:none;stroke:#645263}
+.attention-film-equation{font:16px Georgia,serif;border-top:1px solid #ffffff20;padding:18px 0;overflow-wrap:anywhere;min-height:70px}
+.attention-film [data-attention-caption]{font-size:14px;line-height:1.65;color:#c9b8c6;min-height:70px}
+.attention-film-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.attention-film button{font:12px ui-monospace,monospace;min-height:38px;padding:8px 14px;background:transparent;color:#f5eef3;border:1px solid #ffffff30;border-radius:24px;cursor:pointer}
+.attention-film [data-attention-play]{background:#aed0ed;color:#261d2b;border:0}.attention-film button:hover{filter:brightness(1.15)}
+.attention-film button:focus-visible,.attention-film input:focus-visible{outline:2px solid #aed0ed;outline-offset:4px}
+.attention-film label{display:flex;gap:10px;align-items:center;flex:1;min-width:180px;font:11px ui-monospace,monospace;color:#c9b8c6}.attention-film input{flex:1;width:0;accent-color:#aed0ed}
+.attention-film figcaption{font-size:11px;color:#c9b8c6;line-height:1.6;margin-top:18px}
+.attention-cache{margin:30px 0;padding:24px;background:var(--soft,#e7eff6);border-radius:14px}.attention-cache figcaption{margin:0 0 20px}
+.cache-line{display:grid;grid-template-columns:170px 1fr 70px;gap:14px;align-items:center;margin:14px 0;font-size:12px}.cache-line b{font-weight:500}.cache-line i{height:14px;width:var(--share);min-width:4px;background:#713c53;border-radius:4px}.cache-line span{text-align:right;font:12px ui-monospace,monospace}
+@media(max-width:600px){.attention-film{padding:18px 12px}.attention-film-heading{font-size:10px}.attention-film .attention-film-equation{font-size:14px}.attention-film [data-attention-caption]{min-height:100px}.attention-film label{flex-basis:100%}.cache-line{grid-template-columns:1fr 65px}.cache-line b{grid-column:1/-1}.attention-cache{padding:18px}}

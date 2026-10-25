@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Three design directions for Nathan Laoué's research atlas.">
+  <title>Atlas v2 · Design review</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="experience.css">
+  <script src="app.js" type="module"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div id="app"></div>
+  <dialog id="search-dialog" aria-labelledby="search-title">
+    <div class="dialog-head"><h2 id="search-title">Find a concept</h2><button id="close-search" aria-label="Close search">×</button></div>
+    <label for="global-search">Search the Atlas</label>
+    <input id="global-search" type="search" placeholder="Try entropy, attention, reinforcement learning…">
+    <div id="global-results"></div>
+  </dialog>
+</body>
+</html>

@@ -1,0 +1,10 @@
+const vector=v=>Array.isArray(v)&&v.length===2&&v.every(Number.isFinite);
+export function rotate(v,angle){if(!vector(v)||!Number.isFinite(angle))throw new Error('Invalid rotation');const c=Math.cos(angle),s=Math.sin(angle);return [c*v[0]-s*v[1],s*v[0]+c*v[1]];}
+export const dot=(a,b)=>{if(!vector(a)||!vector(b))throw new Error('Invalid vectors');return a[0]*b[0]+a[1]*b[1];};
+export function rotaryFrequencies(width,base){if(!Number.isInteger(width)||width<2||width%2||!Number.isFinite(base)||base<=1)throw new Error('Even rotary width and base > 1 required');return Array.from({length:width/2},(_,i)=>base**(-2*i/width));}
+export function shiftFrame(shift,omega=.4){if(!Number.isFinite(shift)||!Number.isFinite(omega)||omega<=0)throw new Error('Invalid shift/frequency');const m=2+shift,n=5+shift,q=rotate([1,0],m*omega),k=rotate([1,0],n*omega);return {m,n,q,k,delta:n-m,score:dot(q,k),reference:Math.cos(3*omega)};}
+export function positionalBlock(kind,t,{omega=.4,lambda=.1}={}){if(!Number.isFinite(t)||!Number.isFinite(omega)||!Number.isFinite(lambda)||lambda<0)throw new Error('Invalid block');const c=Math.cos(omega*t),s=Math.sin(omega*t),a=Math.exp(-lambda*t);if(kind==='identity')return [[1,0],[0,1]];if(kind==='rotation')return [[c,-s],[s,c]];if(kind==='decay')return [[a,0],[0,a]];if(kind==='damped')return [[a*c,-a*s],[a*s,a*c]];if(kind==='jordan')return [[1,t],[0,1]];throw new Error('Unknown generator');}
+export function apply2(a,v){if(!Array.isArray(a)||a.length!==2||a.some(r=>!vector(r))||!vector(v))throw new Error('Invalid matrix/vector');return a.map(r=>dot(r,v));}
+export function multiply2(a,b){return [apply2(a,[b[0][0],b[1][0]]),apply2(a,[b[0][1],b[1][1]])].reduce((out,col,j)=>{out[0][j]=col[0];out[1][j]=col[1];return out;},[[],[]]);}
+// An illustrative local/distant warp, not a production ReRoPE implementation.
+export function localDistanceWarp(delta,window,scale){if(![delta,window,scale].every(Number.isFinite)||window<0||scale<1)throw new Error('Invalid distance warp');const a=Math.abs(delta);return Math.sign(delta)*(a<=window?a:window+(a-window)/scale);}

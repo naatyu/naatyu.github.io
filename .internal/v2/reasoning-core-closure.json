@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "reviewDate": "2026-10-09",
+  "destination": "post-training/reasoning",
+  "scope": "Complete original-body reconciliation for all four sources; full external primary/book/code/figure and production certification remains separate.",
+  "sources": [
+    {
+      "slug": "ai/architectures/hybrid-reasoning-models",
+      "sha256": "d8e2d8b72caf4ffd60ee3e6574c1cd866abce53c97469a4391308fc5e5a5c206",
+      "headings": {
+        "summary": "hybrid",
+        "concepts": "hybrid",
+        "1-why-hybrid-reasoning-is-attractive": "hybrid",
+        "2-the-model-is-not-just-learning-correctness": "hybrid",
+        "3-why-this-complicates-data-design": "mode-mixture",
+        "4-chat-templates-become-more-important": "templates",
+        "5-why-rl-becomes-harder": "learned-effort",
+        "6-a-practical-implication": "hybrid",
+        "practical-heuristics": "experiment-contract",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "ai/inference-serving/performance/reasoning-effort-control",
+      "sha256": "8c0748fc9ca43453f00f8193e45a4cbc84804dc656f191f0bbb9da940d7919fd",
+      "headings": {
+        "summary": "learned-effort",
+        "concepts": "learned-effort",
+        "1-two-independent-scaling-knobs": "serving",
+        "2-what-an-effort-setting-does-at-inference": "templates",
+        "3-how-models-learn-effort-levels": "learned-effort",
+        "effort-conditioned-supervised-fine-tuning": "learned-effort",
+        "effort-conditioned-reinforcement-learning": "learned-effort",
+        "combining-sft-and-rl": "learned-effort",
+        "4-learned-effort-versus-hard-token-budgets": "budget-contract",
+        "difficulty-aware-length-control": "nanbeige",
+        "5-representative-implementation-patterns": "qwen-inkling",
+        "6-why-higher-effort-eventually-stops-paying": "limits",
+        "7-effort-selection-as-a-serving-policy": "routing",
+        "practical-heuristics": "experiment-contract",
+        "related": "sources",
+        "sources": "sources"
+      }
+    },
+    {
+      "slug": "ai/inference-serving/performance/test-time-compute",
+      "sha256": "4f932307a04c8c1f27612e7812f3a3b7f6cec5d0fd07e7939a551cb85960a82f",
+      "headings": {
+        "summary": "intermediate-compute",
+        "concepts": "proposer-verifier",
+        "content": "proposer-verifier",
+        "proposer-verifier-framework": "proposer-verifier",
+        "scaling-strategies": "search-evidence",
+        "mathematical-scaling": "compute-exchange",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "ai/training/build-a-reasoning-model-from-scratch",
+      "sha256": "6e90efa23ee5675e7ce663ac767209900996278ae00e8b5ecaaa185d0b65524a",
+      "headings": {
+        "summary": "from-scratch",
+        "concepts": "system",
+        "1-what-from-scratch-means": "from-scratch",
+        "2-the-end-to-end-pipeline": "pipeline",
+        "3-evaluation-is-the-foundation": "extraction",
+        "keep-evaluation-and-training-data-separate": "evaluation-split",
+        "4-reasoning-without-changing-the-weights": "intermediate-compute",
+        "chain-of-thought-prompting": "intermediate-compute",
+        "self-consistency": "voting",
+        "self-refinement": "refinement",
+        "empirical-trade-off-in-the-book": "book-inference",
+        "5-training-with-verifiable-rewards": "rlvr",
+        "the-minimal-grpo-loop": "training-loop",
+        "why-groups-with-uniform-rewards-teach-nothing": "rlvr",
+        "6-the-basic-objective-is-not-the-training-recipe": "stability",
+        "what-to-monitor": "stability",
+        "stabilizers-and-controls": "stability",
+        "format-is-part-of-the-task": "format",
+        "7-distillation-is-the-efficient-alternative": "distillation",
+        "8-choosing-where-to-spend-compute": "compute-allocation",
+        "9-practical-implementation-checklist": "experiment-contract",
+        "10-limits-of-the-books-recipe": "limits",
+        "main-takeaway": "system",
+        "related": "sources",
+        "sources": "sources"
+      }
+    }
+  ]
+}

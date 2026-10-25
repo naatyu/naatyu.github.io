@@ -1,0 +1,21 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import GithubSlugger from 'github-slugger';
+import {scalingReader,scalingAliases} from '../prototypes/readers/scaling.js';
+import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+const root=new URL('../../',import.meta.url),ledger=JSON.parse(readFileSync(new URL('.internal/v2/scaling-data-closure.json',root),'utf8'));
+const p='docs/'+ledger.slug+'.md',source=readFileSync(new URL(p,root),'utf8');
+assert.equal(source,execFileSync('git',['show','HEAD:'+p],{cwd:root,encoding:'utf8'}));
+assert.equal(createHash('sha256').update(source).digest('hex'),ledger.sha256);
+const g=new GithubSlugger(),headings=[...source.matchAll(/^#{1,6} (.+)$/gm)].map(m=>g.slug(m[1]));
+assert.deepEqual(Object.keys(ledger.headings),headings);assert.equal(headings.length,16);
+assert.deepEqual(reviewedFragments[ledger.slug],ledger.headings);
+assert(!/!\[|<img\b|<PaperFigure\b|^import /m.test(source));
+const html=scalingReader(s=>s);assert(scalingAliases.includes(ledger.slug));assert(!html.includes(ledger.slug));
+for(const h of headings){const d=resolveReviewedNote(ledger.slug+'#'+h);assert.equal(d.slug,'training/scaling');assert(html.includes('id="'+d.anchor+'"'));}
+for(const url of new Set([...source.matchAll(/https:\/\/[^\s)]+/g)].map(m=>m[0])))assert(html.includes(url),url);
+for(const term of ['negative excess ratio','cannot by itself make validation loss rise','rights, deduplication and coverage','stronger decay can also underfit','2T-token unique corpus seen three times','low-novelty repetition'])assert(html.includes(term),term);
+assert.equal((html.match(/class="katex-display"/g)||[]).length,35);
+console.log('Data-constrained scaling closure: Git-equal body,16 exact headings,four citations,no embedded assets,35 displays and no public duplicate pass.');

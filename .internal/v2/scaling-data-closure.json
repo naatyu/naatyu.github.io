@@ -1,0 +1,25 @@
+{
+  "updated": "2026-10-09",
+  "slug": "ai/training/scaling/data-constrained-scaling-laws",
+  "sha256": "48af2e3585cf42b6063af63d509be30e2130c3236c2e7a1b11c92f057bd813aa",
+  "headings": {
+    "summary": "repetition",
+    "concepts": "units",
+    "1-why-classic-chinchilla-is-data-infinite": "repetition",
+    "2-separate-raw-tokens-from-unique-tokens": "repetition",
+    "3-effective-data-under-repetition": "repetition",
+    "4-repetition-vs-model-size": "repetition",
+    "5-explicit-overfitting-penalty": "penalties",
+    "6-practical-implications": "sources-data",
+    "count-effective-data-not-just-tokens": "sources-data",
+    "data-quality-changes-scaling": "sources-data",
+    "repetition-should-be-source-specific": "sources-data",
+    "weight-decay-can-matter-more": "penalties",
+    "7-relation-to-overtraining": "lifecycle",
+    "8-practical-takeaway": "sources-data",
+    "related": "sources-data",
+    "sources": "sources"
+  },
+  "assets": [],
+  "status": "One of five core sources closed locally; full primary and production gates remain separate"
+}

@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "reviewDate": "2026-10-09",
+  "destination": "post-training/agents",
+  "scope": "Complete remaining local original-body reconciliation. The source is untracked and physically preserved; this is not Git recovery, published legacy provenance, complete-primary verification or permission to retire it.",
+  "sources": [
+    {
+      "slug": "ai/training/optimization/multi-harness-agentic-rl",
+      "sha256": "80a375a85047d39eb3dc7731257e345522541e68a7e0d07b90eaff36dbcb094c",
+      "headings": {
+        "summary": "harnesses",
+        "1-what-changes-when-the-harness-changes": "boundaries",
+        "2-a-mathematical-view-of-harness-diversity": "harnesses",
+        "3-training-through-a-model-call-proxy": "capture",
+        "4-why-text-logs-are-insufficient": "policy-contract",
+        "5-what-the-fineenvs-experiment-establishes": "multi-harness-evidence",
+        "6-design-implications": "groups",
+        "match-comparison-conditions-within-a-group": "groups",
+        "track-the-effective-mixture": "mixture",
+        "separate-efficiency-from-failure": "efficiency",
+        "measure-robustness-explicitly": "evaluation",
+        "related": "sources",
+        "sources": "sources"
+      },
+      "recovery": {
+        "state": "private-snapshot-committed",
+        "gitRecoverable": true,
+        "retire": false,
+        "decisionDate": "2026-10-25",
+        "decision": "User delegated the handling choice. Keep v2 Agents as canonical; include a byte-equal private recovery snapshot in the migration commit, not a separately published legacy note. Retire the docs original only at the coordinated switch after recovery is committed.",
+        "snapshot": ".internal/v2/recovery/multi-harness-agentic-rl.md",
+        "snapshotGitState": "committed",
+        "recoveryCommit": "8ccadb1"
+      },
+      "publication": {
+        "state": "unpublished-local-source",
+        "routeKind": "local compatibility candidate, not a claim of historical publication"
+      }
+    }
+  ]
+}

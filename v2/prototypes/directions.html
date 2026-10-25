@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Gallery, Canvas, and Desk: three distinct Atlas v2 design prototypes.">
+  <title>Atlas v2 · New directions</title>
+  <link rel="stylesheet" href="directions.css">
+  <link rel="stylesheet" href="gallery-lab.css">
+  <link rel="stylesheet" href="gallery-refinement.css">
+  <link rel="stylesheet" href="gallery-soft.css">
+  <link rel="stylesheet" href="atlas-workspace.css">
+  <link rel="stylesheet" href="atlas-terminal.css">
+  <link rel="stylesheet" href="file-explorer.css">
+  <link rel="stylesheet" href="dense-reader.css">
+  <link rel="stylesheet" href="readers/moe-visuals.css">
+  <link rel="stylesheet" href="readers/attention.css">
+  <link rel="stylesheet" href="readers/topic-labs.css">
+  <link rel="stylesheet" href="vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="readers/math.css">
+  <link rel="stylesheet" href="reader-utilities.css">
+  <script type="module" src="directions.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div id="app"></div>
+  <dialog id="search-dialog" aria-labelledby="search-title">
+    <div class="dialog-top"><h2 id="search-title">Find an idea</h2><button id="close-search" aria-label="Close search">✕</button></div>
+    <label for="global-search">Search titles, summaries, and tags</label>
+    <input id="global-search" type="search" placeholder="Try ‘mixture of exparts’…">
+    <div id="global-results"></div>
+  </dialog>
+</body>
+</html>

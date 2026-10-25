@@ -1,0 +1,32 @@
+/* Terminal-first Atlas: viewport-sized, independently scrolling, balanced panes. */
+body[data-atlas-full=true]{height:100dvh;overflow:hidden}
+body[data-atlas-full=true] #app{height:100%;display:flex;flex-direction:column}
+body[data-atlas-full=true] .topbar{width:100%;max-width:none;margin:0;border-radius:0;padding:12px 24px;height:60px;flex-shrink:0;box-shadow:none;border-bottom:1px solid var(--line);background:var(--surface)}
+body[data-atlas-full=true] .brand span{display:none}
+body[data-atlas-full=true] .gallery-lab-controls,body[data-atlas-full=true] footer,body[data-atlas-full=true] .atlas-page>.prototype-label{display:none}
+body[data-atlas-full=true] .atlas-page{padding:0;margin:0;max-width:none;width:100%;flex:1;min-height:0;display:flex}
+body[data-atlas-full=true] .terminal-workbench{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);height:100%;width:100%;flex:1;min-height:0;border:0;border-radius:0;box-shadow:none}
+body[data-atlas-full=true] .explorer-pane{height:auto;min-width:0;min-height:0;border-right:1px solid #ffffff14}
+body[data-atlas-full=true] .console .explorer-pane{--bg:#171c25;--surface:#202735;--tint:#202735;--ink:#e5eaf2;--deep:#e5eaf2;--muted:#a1adc2;--accent:#a9c9ed;--line:#ffffff18;background:var(--bg)}
+body[data-atlas-full=true] .explorer-toolbar{height:64px;flex-shrink:0;padding:12px 18px;gap:10px;background:#202735}
+body[data-atlas-full=true] .explorer-toolbar>span{flex:1}
+body[data-atlas-full=true] .explorer-toolbar button{white-space:nowrap;font:10px ui-monospace,monospace;border:1px solid var(--line);padding:6px 9px;border-radius:5px;background:transparent;color:var(--ink);margin:0!important}
+body[data-atlas-full=true] #terminal-path{font-size:11px}
+body[data-atlas-full=true] .command-log{padding:24px!important;font:12px/1.9 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;min-height:0;flex:1}
+body[data-atlas-full=true] .terminal-results button{font-size:12px;padding:10px 6px}
+body[data-atlas-full=true] .command-form{flex-shrink:0;flex-wrap:wrap;align-items:center;padding:14px 20px;gap:10px;background:#171c25!important;border-top:1px solid var(--line)}
+body[data-atlas-full=true] .command-form label{flex-basis:100%;max-width:100%;display:flex;align-items:stretch;white-space:normal;font:11px/1.5 ui-monospace,monospace;gap:0}
+.prompt-user{font-style:normal;background:#314355;color:#bfe5d4;padding:6px 13px;clip-path:polygon(0 0,calc(100% - 9px) 0,100% 50%,calc(100% - 9px) 100%,0 100%);margin-right:-8px;z-index:1}
+body[data-atlas-full=true] .command-form label>span{background:#a9c9ed;color:#182331;padding:6px 24px 6px 19px;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%);overflow-wrap:anywhere}
+body[data-atlas-full=true] .command-form label>b{color:#a9d8be;padding:6px 10px;font-size:14px}
+body[data-atlas-full=true] .command-form input{font:13px ui-monospace,monospace;flex:1;min-width:0;padding:5px 0}
+body[data-atlas-full=true] #command-hint{padding:5px 20px 10px;background:#171c25;font-size:9px;flex-shrink:0}
+body[data-atlas-full=true] .explorer-preview{min-height:0;max-height:none;height:100%}
+body[data-atlas-full=true] .explorer-preview>header{height:64px;flex-shrink:0;padding-inline:24px}
+body[data-atlas-full=true] .explorer-preview-content{flex:1;min-height:0;overflow:auto;padding:24px 40px 60px;scrollbar-width:thin}
+body[data-atlas-full=true] .terminal-workbench.note-hidden{grid-template-columns:minmax(0,1fr)}
+body[data-atlas-full=true] .note-hidden .explorer-preview{display:none}
+body[data-atlas-full=true] .terminal-workbench.preview-expanded{grid-template-columns:minmax(0,1fr)!important}
+body[data-atlas-full=true] .preview-expanded .explorer-preview-content{max-width:1000px}
+body[data-atlas-full=true] .finder-visible .explorer-tree{height:240px;flex-shrink:0}
+@media(max-width:760px){body[data-atlas-full=true] .topbar{height:54px;padding:10px 14px;flex-wrap:nowrap;gap:10px}body[data-atlas-full=true] .brand{font-size:14px}body[data-atlas-full=true] .topbar nav{gap:12px;font-size:11px}body[data-atlas-full=true] .topbar nav>a:nth-child(3){display:none}body[data-atlas-full=true] .terminal-workbench{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) minmax(0,1fr)}body[data-atlas-full=true] .terminal-workbench.note-hidden,body[data-atlas-full=true] .terminal-workbench.preview-expanded{grid-template-rows:minmax(0,1fr)}body[data-atlas-full=true] .explorer-toolbar,body[data-atlas-full=true] .explorer-preview>header{height:50px;padding:8px 12px}body[data-atlas-full=true] .command-log{padding:12px!important}body[data-atlas-full=true] .command-form{padding:8px 12px}body[data-atlas-full=true] #command-hint{display:none}body[data-atlas-full=true] .explorer-preview-content{padding:16px 22px 35px}body[data-atlas-full=true] .finder-visible .explorer-tree{height:110px}}

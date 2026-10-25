@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "reviewDate": "2026-10-09",
+  "destination": "models/vision",
+  "scope": "Three remaining core original bodies reconciled; DINOv2 prior closure remains separate. Full external-primary/theory/figure and production gates are not certified by this ledger.",
+  "sources": [
+    {
+      "slug": "ai/training/losses/self-supervised/ibot",
+      "sha256": "cb65da2b8f7907aa9cbf3d22bd4a8226f2b0fc2cce16bbcf7ae22304d80e7af7",
+      "headings": {
+        "summary": "ibot",
+        "concepts": "tokens",
+        "content": "ibot",
+        "ibot-loss-architecture--objectives": "ibot",
+        "student-teacher-framework": "teacher",
+        "loss-components": "patch-loss",
+        "training-details": "centering",
+        "why-online-tokenizer-matters": "ibot",
+        "ibot-extending-loss-to-all-tokens": "ibot-plus",
+        "motivation": "text-alignment",
+        "modified-loss": "ibot-plus",
+        "impact-on-patch-text-alignment": "tips-evidence",
+        "tipsv2-framework": "tips-recipe",
+        "performance-highlights": "ibot-evidence",
+        "comparison-ibot-vs-traditional-mim": "target-contracts",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "ai/training/losses/self-supervised/lejepa",
+      "sha256": "8cd56c33ccd4907e926c8be5e15ef3102ec713890e561348d94357fa61fdb398",
+      "headings": {
+        "summary": "lejepa",
+        "concepts": "lejepa",
+        "content": "lejepa",
+        "the-loss-function": "lejepa",
+        "1-predictive-loss-mathcall_textpredictive": "agreement",
+        "2-sigreg-loss-mathcall_textsigreg": "gaussian-target",
+        "comparison-lejepa-vs-traditional-ssl": "lejepa",
+        "key-advantages": "complexity",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "ai/training/losses/regularization/sketched-isotropic-gaussian-regularization",
+      "sha256": "96ebc346394ee2a73026e0f833632baf406b4588f7a0cee5ea823aa6f1c745b4",
+      "headings": {
+        "summary": "gaussian-target",
+        "concepts": "cf",
+        "content": "projections",
+        "1-the-core-philosophy": "fisher",
+        "theoretical-proof-of-optimality": "fisher",
+        "2-mathematical-implementation": "ecf",
+        "a-quadrature--the-target": "quadrature",
+        "b-the-forward-pass-sketching": "ecf",
+        "c-the-epps-pulley-statistic": "quadrature",
+        "3-key-technical-details": "finite-sample",
+        "4-scalability-advantage": "complexity",
+        "related": "sources"
+      }
+    }
+  ]
+}

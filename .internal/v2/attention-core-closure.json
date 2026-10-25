@@ -1,0 +1,254 @@
+{
+  "updated": "2026-10-09",
+  "topic": "models/attention",
+  "status": "all five core original bodies reconciled; full-primary and production gates separate",
+  "assets": [
+  {
+    "url": "/attachments/ai/nlp/attention-mechanism/attention-mechanism-01.png",
+    "path": "static/attachments/ai/nlp/attention-mechanism/attention-mechanism-01.png",
+    "sha256": "22c640932d61d09fe6cba6655300693c462e7021be4185b40d93a224770840b9",
+    "source": "ai/foundations/attention-mechanism",
+    "meaning": "word-vector analogy",
+    "anchor": "residual-write",
+    "decision": "replace with original explanatory content; recover art from Git",
+    "visualReview": "All eleven inspected in prior attention-preservation pass; no fresh rights grant. Source art is not republished."
+  },
+  {
+    "url": "/attachments/ai/nlp/attention-mechanism/attention-mechanism-02.png",
+    "path": "static/attachments/ai/nlp/attention-mechanism/attention-mechanism-02.png",
+    "sha256": "6575a0162194650da9d05f7b08d64e1d8d3b43e43233296704e39e5724d1c398",
+    "source": "ai/foundations/attention-mechanism",
+    "meaning": "direction and magnitude",
+    "anchor": "mechanism",
+    "decision": "replace with original explanatory content; recover art from Git",
+    "visualReview": "All eleven inspected in prior attention-preservation pass; no fresh rights grant. Source art is not republished."
+  },
+  {
+    "url": "/attachments/ai/nlp/attention-mechanism/attention-mechanism-03.png",
+    "path": "static/attachments/ai/nlp/attention-mechanism/attention-mechanism-03.png",
+    "sha256": "6a52c6315a27270bb0a92471fe718c25d73fd11633ae56dda1d56d1f8d21f748",
+    "source": "ai/foundations/attention-mechanism",
+    "meaning": "context disambiguation",
+    "anchor": "residual-write",
+    "decision": "replace with original explanatory content; recover art from Git",
+    "visualReview": "All eleven inspected in prior attention-preservation pass; no fresh rights grant. Source art is not republished."
+  },
+  {
+    "url": "/attachments/ai/nlp/attention-mechanism/attention-mechanism-04.png",
+    "path": "static/attachments/ai/nlp/attention-mechanism/attention-mechanism-04.png",
+    "sha256": "8bfdd7ea110798a163548baad0cc1b898a7a34767bfa5af20bfdd5de613c9bfc",
+    "source": "ai/foundations/attention-mechanism",
+    "meaning": "token-to-token context",
+    "anchor": "mechanism",
+    "decision": "replace with original explanatory content; recover art from Git",
+    "visualReview": "All eleven inspected in prior attention-preservation pass; no fresh rights grant. Source art is not republished."
+  },
+  {
+    "url": "/attachments/ai/nlp/attention-mechanism/attention-mechanism-05.png",
+    "path": "static/attachments/ai/nlp/attention-mechanism/attention-mechanism-05.png",
+    "sha256": "e6abc41bcf6b3feeeb21f1f527ba71200d2632594cc49c6ff07dbf89528fe513",
+    "source": "ai/foundations/attention-mechanism",
+    "meaning": "learned Q/K projections",
+    "anchor": "mechanism",
+    "decision": "replace with original explanatory content; recover art from Git",
+    "visualReview": "All eleven inspected in prior attention-preservation pass; no fresh rights grant. Source art is not republished."
+  },
+  {
+    "url": "/attachments/ai/nlp/attention-mechanism/attention-mechanism-06.png",
+    "path": "static/attachments/ai/nlp/attention-mechanism/attention-mechanism-06.png",
+    "sha256": "e540207ad8ef1fe1cace4b665b4842ce8f86dc422fbc8d27b72f546e869c8749",
+    "source": "ai/foundations/attention-mechanism",
+    "meaning": "score and normalization orientation",
+    "anchor": "attention-animation",
+    "decision": "replace with original explanatory content; recover art from Git",
+    "visualReview": "All eleven inspected in prior attention-preservation pass; no fresh rights grant. Source art is not republished."
+  },
+  {
+    "url": "/attachments/ai/nlp/attention-mechanism/attention-mechanism-07.png",
+    "path": "static/attachments/ai/nlp/attention-mechanism/attention-mechanism-07.png",
+    "sha256": "c27f8ec218f83a204e15599e65621b7a4d5b01a7151264062aceffa3372f0980",
+    "source": "ai/foundations/attention-mechanism",
+    "meaning": "autoregressive prefix visibility",
+    "anchor": "worked-row",
+    "decision": "replace with original explanatory content; recover art from Git",
+    "visualReview": "All eleven inspected in prior attention-preservation pass; no fresh rights grant. Source art is not republished."
+  },
+  {
+    "url": "/attachments/ai/nlp/attention-mechanism/attention-mechanism-08.png",
+    "path": "static/attachments/ai/nlp/attention-mechanism/attention-mechanism-08.png",
+    "sha256": "3895065a21926471ffc0d51c4d6b512bb0183312c08f103025640ff8db9c0603",
+    "source": "ai/foundations/attention-mechanism",
+    "meaning": "causal visibility",
+    "anchor": "attention-animation",
+    "decision": "replace with original explanatory content; recover art from Git",
+    "visualReview": "All eleven inspected in prior attention-preservation pass; no fresh rights grant. Source art is not republished."
+  },
+  {
+    "url": "/attachments/ai/nlp/attention-mechanism/attention-mechanism-09.png",
+    "path": "static/attachments/ai/nlp/attention-mechanism/attention-mechanism-09.png",
+    "sha256": "3863a4be0e494aceca28aa7a9d708684f6592960f7a3e02b265111015e32fdcf",
+    "source": "ai/foundations/attention-mechanism",
+    "meaning": "value transformation",
+    "anchor": "residual-write",
+    "decision": "replace with original explanatory content; recover art from Git",
+    "visualReview": "All eleven inspected in prior attention-preservation pass; no fresh rights grant. Source art is not republished."
+  },
+  {
+    "url": "/attachments/ai/nlp/attention-mechanism/attention-mechanism-10.png",
+    "path": "static/attachments/ai/nlp/attention-mechanism/attention-mechanism-10.png",
+    "sha256": "262c865a8de20fa47d7ab1a058f2beefdc4a68e24ec78807c20ec0092e3ba3ba",
+    "source": "ai/foundations/attention-mechanism",
+    "meaning": "weighted write and residual",
+    "anchor": "residual-write",
+    "decision": "replace with original explanatory content; recover art from Git",
+    "visualReview": "All eleven inspected in prior attention-preservation pass; no fresh rights grant. Source art is not republished."
+  },
+  {
+    "url": "/attachments/ai/nlp/attention-mechanism/attention-mechanism-11.png",
+    "path": "static/attachments/ai/nlp/attention-mechanism/attention-mechanism-11.png",
+    "sha256": "b74b4b794d8245fe14bf63b8d7657d7cd6a8b6bb981c6875e3a1c53b08f74fea",
+    "source": "ai/foundations/attention-mechanism",
+    "meaning": "multihead output projection",
+    "anchor": "residual-write",
+    "decision": "replace with original explanatory content; recover art from Git",
+    "visualReview": "All eleven inspected in prior attention-preservation pass; no fresh rights grant. Source art is not republished."
+  }
+],
+  "sources": [
+{
+  "slug": "ai/foundations/attention-mechanism",
+  "sha256": "7bffaf048d3e7861bb9ea749fdc45a403289738edb57a7a27991c8be485b8e6e",
+  "git": "HEAD:docs/ai/foundations/attention-mechanism.md",
+  "destination": {
+    "slug": "models/attention",
+    "anchor": "mechanism"
+  },
+  "headings": {
+    "summary": "mechanism",
+    "concepts": "mechanism",
+    "content": "mechanism",
+    "optimization-kv-cache": "cache",
+    "related": "sources"
+  }
+},
+{
+  "slug": "ai/architectures/transformers/attention-softmax-and-scaling",
+  "sha256": "fbc059f7533006d77cea8582ffcd672f5016d2bc11bb7d8780c29a893494fd94",
+  "git": "HEAD:docs/ai/architectures/transformers/attention-softmax-and-scaling.md",
+  "destination": {
+    "slug": "models/attention",
+    "anchor": "scaling"
+  },
+  "headings": {
+    "summary": "scaling",
+    "concepts": "scaling",
+    "1-standard-variance-argument": "scale-assumptions",
+    "2-why-variance-is-not-the-whole-story": "scale-assumptions",
+    "3-entropy-invariance-view": "scale-assumptions",
+    "4-gradient-maximization-view": "scale-assumptions",
+    "5-why-softmax-often-beats-unnormalized-attention": "scaling",
+    "6-keynorm-and-querynorm": "scale-assumptions",
+    "7-practical-implications": "practice",
+    "related": "sources",
+    "sources": "sources"
+  }
+},
+{
+  "slug": "ai/architectures/transformers/linear-attention",
+  "sha256": "207f1710e77047e9e7fdde3d137cd4440c50a413dda1be1380689c7485e93466",
+  "git": "HEAD:docs/ai/architectures/transformers/linear-attention.md",
+  "destination": {
+    "slug": "models/attention",
+    "anchor": "linear"
+  },
+  "headings": {
+    "summary": "linear",
+    "concepts": "linear",
+    "1-standard-attention-bottleneck": "linear",
+    "2-simplest-linear-attention": "linear-cost",
+    "3-kernelized-softmax-approximation": "kernel-rearrangement",
+    "4-why-linear-attention-can-underperform": "linear-cost",
+    "5-why-short-convolution-helps": "linear-cost",
+    "6-delta-rule-intuition": "delta",
+    "7-l2-normalization-in-deltanet-like-models": "delta",
+    "8-bounded-decay-in-kimi-delta-attention": "delta",
+    "9-when-linear-attention-is-attractive": "practice",
+    "10-practical-mental-model": "linear-cost",
+    "related": "sources",
+    "sources": "sources"
+  }
+},
+{
+  "slug": "ai/architectures/transformers/attention-variants",
+  "sha256": "a0866c75943cc86b238786379cc45e270a22f6e5474ee80ff16f46413a491cb3",
+  "git": "HEAD:docs/ai/architectures/transformers/attention-variants.md",
+  "destination": {
+    "slug": "models/attention",
+    "anchor": "head-sharing"
+  },
+  "headings": {
+    "summary": "practice",
+    "concepts": "practice",
+    "1-why-attention-has-so-many-variants": "cache",
+    "2-multi-head-attention-the-baseline": "head-sharing",
+    "3-multi-query-attention-minimum-kv-sharing": "head-sharing",
+    "4-grouped-query-attention-the-middle-ground": "head-sharing",
+    "5-latent-attention-and-mla": "mla",
+    "a-latent-attention-as-a-general-idea": "mla",
+    "b-multi-head-latent-attention": "mla",
+    "c-gqa-is-already-partly-low-rank": "mla",
+    "d-mla-identity-transform": "mla",
+    "e-why-rope-complicates-mla": "mla",
+    "f-why-head-dimension-can-matter-more-than-number-of-kv-groups": "mla",
+    "6-sliding-window-attention": "connectivity",
+    "7-local-attention-and-global-attention": "connectivity",
+    "a-local-vs-global-by-connectivity-pattern": "connectivity",
+    "b-local-vs-global-in-longformer-style-designs": "connectivity",
+    "c-local-vs-global-in-mai-thinking-1": "connectivity",
+    "d-gemma-4-localglobal-layers-plus-key-as-value-attention": "connectivity",
+    "8-cross-attention": "connectivity",
+    "9-how-these-variants-differ": "practice",
+    "10-practical-design-heuristics": "practice",
+    "when-to-use-mha": "head-sharing",
+    "when-to-use-gqa": "head-sharing",
+    "when-to-use-mqa": "head-sharing",
+    "when-to-use-mla": "mla",
+    "when-to-use-sliding-window-attention": "connectivity",
+    "when-to-use-linear-attention": "linear-cost",
+    "when-to-use-cross-attention": "connectivity",
+    "11-the-important-unifying-idea": "practice",
+    "related": "sources",
+    "sources": "sources"
+  }
+},
+    {
+      "slug": "ai/architectures/transformers/flashattention",
+      "sha256": "76f4a3029bda234560138812c62d0638cfee07a1ce7967593ac041239098e215",
+      "git": "HEAD:docs/ai/architectures/transformers/flashattention.md",
+      "destination": {
+        "slug": "models/attention",
+        "anchor": "flash"
+      },
+      "headings": {
+        "summary": "flash",
+        "concepts": "flash",
+        "1-standard-attention-bottleneck": "flash",
+        "2-what-flashattention-changes": "flash",
+        "3-online-softmax": "flash-worked",
+        "4-backward-pass-and-recomputation": "flash",
+        "5-why-it-speeds-up-real-training": "flash-kernels",
+        "6-flashattention-vs-efficient-attention-variants": "flash",
+        "7-version-history": "flash-kernels",
+        "flashattention-1": "flash",
+        "flashattention-2": "flash-kernels",
+        "flashattention-3": "flash-kernels",
+        "flashattention-4": "flash",
+        "8-practical-version-selection": "flash-kernels",
+        "9-limitations-and-caveats": "flash-kernels",
+        "10-practical-mental-model": "flash",
+        "related": "sources",
+        "sources": "sources"
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+# Hidden mathematical caption repair — 2026-10-12
+
+Previous goal turn repaired the Numerics `l<h` caption. This continuation inspected all54static reader HTML bodies for the same closing-tag-swallowing pattern. Three more actual defects found: Scaling `Lᵢ<Lⱼ`, MiMo `0<fᵢ≤1` and Diffusion `s<t`. Each opened an unintended element and consumed the remaining caption as attributes up to the closing `figcaption` marker. This is missing public explanatory text,not just a cosmetic formula preference.
+
+Repairs preserve the same inequalities and explanation. Scaling now has35display+69inline104MathML;MiMo helper3display+1inline;Frontier29display+1inline;Diffusion27display+16inline43MathML. Their inherited publication dates remain;update dates2026-10-12. No new source claim,reported number,model or interaction introduced.
+
+Shared `swallowedMarkup` parses source locations, detects closing markup swallowed inside an opening tag outside quoted attributes,and excludes foreign math/SVG subtrees. Five broken fixtures include an otherwise valid HTML `b` tag,not only unknown variables. Escaped/spaced comparisons and single/double-quoted attribute text pass. The default static suite imports this check and separately requires parsed captions to retain the missing explanations in all four affected readers including Numerics. This does not establish general HTML validity,correct MathML tree structure or coverage of every dynamically generated state.
+
+Focused51015 observedexit0:54-reader caption check,display/inline counts,Scaling core closure,MiMo original/Git/31heading/1024uncapped-mass andDiffusion15,904numerical/10,902rendered-state checks pass. Full47-script75069 observed terminal exit0 after all content/test changes (subsequent MiMo test-log wording only). StaticK9xAiN54/206/25/3235/535displays/15images/544files/zero old dependencies. Build47327exit0/candidateKPbQZi.
+
+NativeKPbQZi:all three revised captions retain their complete condition/prose at1280and390px,zero page overflow/math errors. Each mobile caption visually inspected in screenshots;scope is restored-caption visibility,not entire note keyboard/layout certification. Browser warning/error logs empty. Viewport reset,temporary tab closed,preview21203stoppedexit130. Raw-math queue remains194manual candidates:the malformed hidden portions were not reliably visible to the old text detector. This demonstrates why that queue alone cannot certify preservation.
+
+Original bodies/production untouched. Source/Git/topic tests pass within their recorded scope;no new full-primary/figure audit claimed. Content coherence,remaining mathematical/inline/dynamic checks,whole-corpus native accessibility/lifecycle and final production/retirement gates remain. No commit,push or deployment;goal active.

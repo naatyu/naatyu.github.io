@@ -1,0 +1,24 @@
+import './test-performance-model.mjs';
+import './test-performance-scenes.mjs';
+import './test-cache-payload.mjs';
+import './test-performance-preservation.mjs';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {performanceMeta,performanceAliases,performanceSections,performanceReader} from '../prototypes/readers/performance.js';
+import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
+import {rank} from '../prototypes/search.js';
+import {reviewedNavigation,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+const html=performanceReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(x=>x[1]);
+assert.equal(ids.length,new Set(ids).size);assert.equal(performanceSections.length,35);for(const[id]of performanceSections)assert.ok(ids.includes(id));
+assert.deepEqual(performanceAliases,[]);assert.equal(performanceMeta.date,'2026-04-08');assert.equal(performanceMeta.visibility,'public');assert.ok(performanceMeta.prototype);assert.equal(renderDenseReader(performanceMeta.slug,s=>s),performanceReader(s=>s));assert.equal((html.match(/data-performance-lab=/g)||[]).length,3);assert.ok(!/NaN|undefined/.test(html));
+for(const text of ['Little’s law','p99','0.5 ns','150,000,000','6PT','8PT','3DF','Causal attention has','GQA','MoE','Iridge','1,555','129.6','388.8','1,365','375%','37.5%','46.9%','989','7.875','5.906','14.1T','7.6T','3.28T','1.41T','563,000','820,000','4,194,304','FP32 master','480 GB','1.12 TB','GiB','24 s','3.23%','26.8','13.12','552,960','1.66M','3.32M','5.53M','largest uncertainty'])assert.ok(html.includes(text),text);
+assert.ok(html.includes(String.raw`C_{\rm lifetime}=C_{\rm train}+V\,c_{\rm inference}(P)`));
+const catalog=JSON.parse(fs.readFileSync(new URL('../prototypes/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes.filter(n=>!reviewedNavigation[n.slug])];
+for(const s of ['systems/performance/latency-vs-throughput','systems/performance/performance-vs-scalability']){assert.equal(reviewedNavigation[s].slug,performanceMeta.slug);assert.ok(!notes.some(n=>n.slug===s));}
+assert.deepEqual(resolveReviewedNote('systems/performance/latency-vs-throughput#back-of-the-envelope-estimations'),{slug:performanceMeta.slug,anchor:'latency-orders'});
+assert.deepEqual(resolveReviewedNote('ai/training/scaling/transformer-performance-accounting#memory-accounting'),{slug:performanceMeta.slug,anchor:'cache-payload'});
+assert.ok(!notes.some(n=>n.slug==='ai/training/scaling/transformer-performance-accounting'));
+for(const text of ['Redis','HTTP/3','gRPC','database sharding','deployment choices, not definitions'])assert.ok(html.includes(text));
+for(const[,slug]of html.matchAll(/href="directions\.html\?slug=([^"#]+)"/g))assert.ok(notes.some(n=>n.slug===slug),slug);
+for(const q of ['roofline','MFU','capacity planning','arithmetic intensity'])assert.ok(rank(notes,q).some(r=>r.note===performanceMeta),q);
+console.log(`Performance reader:35 sections,three scenes,registry/search/related links and conditions pass;${html.replace(/<[^>]*>/g,' ').split(/\s+/).length} words.`);

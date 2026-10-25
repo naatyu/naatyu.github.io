@@ -1,0 +1,115 @@
+# Pretraining: Experiments and Run Design — content audit
+
+## Budget arithmetic and percentage denominators — 2026-10-18
+
+Revised Scaling and Run Design with 29 further inline formulas (15/14). Scaling now has 35 displays + 84 inline = 119 MathML roots; Practice has seven displays + 14 inline = 21. Original publication dates remain 2026-04-08 and 2026-06-02; updates are 2026-10-18. No model, citation, source body, source-figure asset or route changed.
+
+The independent integer-budget test exposed an actual inherited numerical error: the 64-GPU, 30-day, 989-TFLOP/s, utilization-0.35 scenario gives exactly 5.74221312×10^22 FLOPs under that multiplication. Under the rough 20-TPP/6ND rule, the token budget rounds to 438B, not 437B. The reader now gives the corrected value and explains the original 5.75×10^22 figure rather than calling both token values rounding variants. This remains an assumed-throughput planning scenario, not measured cluster performance or an empirical optimum.
+
+Run Design now has a two-row static percentage comparison: candidate cost 100 versus equivalent baseline 130 at the same target loss. Extra baseline cost divides by 100 (30%); candidate saving divides by 130 (about 23.1%). Original inverse example, fitted-floor domain, separate FLOP/time gains, source-conditioned learning rates and processed-token update count remain explicit.
+
+New test-budget-notation.mjs checks all 29 exact transcriptions, parsed conditions, percentage-table cells and date lineage. BigInt arithmetic independently checks four token/parameter ratios and the compute multiplication; the 438B nearest-integer result and 447,316 assumed-batch updates are verified. Thirty independent inverse/saving identities and invalid fitted-floor cases pass. Existing five Scaling core bodies (four main plus the separate data-constrained closure) and nine Practice core bodies retain their Git/hash/heading/citation/source checks. This pass reread the selected original efficiency, GPU-budget and overtraining passages, not every linked primary/figure or the full Smol Space.
+
+Initial focused test correctly failed its inherited 437B expectation; reader and expected result were corrected from the arithmetic. First full 97253 exited 0 after formula/content changes. Native mobile inspection then exposed squeezed budget columns. Added two scoped 640px table minimums (budget estimates and training densities), not a global table/style change. Final focused/build 6678 and full 47-script 31076 exited 0. Final static xPbrTP: 54 readers, 206 landings, 25 notices, 3,235 anchors, 536 displays, 1,413 namespace-valid MathML roots, 15 media, 544 files, zero old dependencies; 373 named comparison regions and 161 code surfaces. Raw queue: 74 manual candidates; none in Scaling, one intentional fixed scene summary in Practice.
+
+Native final hDkhYi: Scaling mobile 390×844 has 640px budget/density tables inside 258px surfaces. Keyboard Right settles at 40px in both; budget pointer scroll reaches 382px, exposing the corrected result without page overflow. Final desktop density table inspected at 1280×900; 119 MathML, zero parser/foreign-namespace/page-overflow errors, no warning/error logs. Earlier unchanged Practice JupNnC desktop/mobile inspection covers inverse, new percentage comparison (480px inside 258px), keyboard 40px and pointer 222px. Initial uI11dI screenshot documents the budget squeeze before repair. No fresh all-scene/reduced-motion/BFCache/screen-reader certification. Viewport reset, temporary tab closed, previews 89862/21180/12888 stopped with exit 130. Whitespace passes with untracked-scope caveat.
+
+Corpus preservation/coherence, remaining mathematical contexts, primary/figure uncertainty, broad native accessibility/lifecycle, recovery and release gates remain separate. Untracked harness source and production workflow unchanged. No original removed, commit, push or deployment.
+
+## All nine core bodies consolidated locally — 2026-10-09
+
+Complete fresh reads of the333-line Smol Playbook and709-line worked pretraining guide close the remaining core bodies. All nine sources are Git/SHA recoverable with185 exact heading destinations,all source citations and no embedded figures/imports/JSX. Removed the public archive and all duplicate core entries. The source's interview framing/preparation narration is replaced by its usable planning guidance and three scenarios,not recreated as an exercise artifact. Production originals remain untouched.
+
+Restored Smol's staged English/multilingual/code/math/Q&A trade-offs,NoPE/mask scope,baby SFT baseline,DPO/APO comparison scope and concise-mode RL length policy. Restored immutable data snapshots,quality axes,deduplication units/thresholds/coverage trade-offs,versioned mixture transitions,evaluation derivative registry,batch retuning,clipping/update ratios,failing-versus-known-good batch diagnosis,node quarantine/compiler/logging/synchronization checks and deliberate checkpoint selection. Existing36 sections keep a connected run-design spine. Added an explicit feasibility inequality and one aligned memory display;seven displays total. Non-overlap and same-device/time conditions prevent summing unrelated memory peaks. Canonical links replace SFT/preferences/hybrid old references;report profiles remain canonical owners.
+
+Targeted Practice/closure/math checks pass. Static candidate:54readers/182legacylandings/2815reviewedanchors/512displays/14images/471files/threeold-dependentreaders. Full47-suite73274 outcome is in migration progress. Native old memory/hybrid fragments reach batch/post-training;desktop and390px7MathML,zero errors/page overflow and no public archive. New memory region keyboard-scroll reaches87px maximum. Desktop screenshot inspected;browser warnings/errors empty;viewport restored/tab9handoff. Proof `practice-memory-consolidation.png`.
+
+This closes source-body reconciliation,not full primary Space/report/figure review or editorial/accessibility/lifecycle/HTTP/production certification. Smol's full primary Space content remains the previously recorded open review gate. Three old-dependent readers remain overall:MoE,RL andReasoning. No physical source deletion,commit,push or deployment. Historical entries below retain their earlier scope.
+
+## Seven core sources reconciled locally — 2026-10-09
+
+Fresh complete reads of Ablation Strategy, Smol Foundations, Rules of Engagement and Goodput/Determinism supplement the previous three closures. All seven are byte-equal to HEAD with95 exact source-heading destinations. No embedded assets/imports/JSX in these bodies. Source URLs retained and public duplicates/archive entries filtered. Restored concrete parameter-count changes, early experiment choices, system-prompt/multi-turn debugging, exploration deadline/promotion criteria and validated replicated-state broadcast to avoid storage hotspots. The overconfident negative-proxy rule is qualified: failure rejects only the tested regime; implementation failure is distinct from a research hypothesis.
+
+Full47-suite14618 exited0. Static54readers/180legacylandings/2725reviewedanchors/511displays/14images/469files/fourold-dependentreaders. Exact closure tests check source bytes,SHA,headings,citations,assets and aliases; independent Practice numerical tests remain. Native four old fragments reach matching/proxy/baseline/checkpoint; desktop and390px6MathML with zero errors/page overflow. Full-state recovery event10 reaches logical/durable6,executed8,cursor6,RNG11,moment715,accumulator1350. Empty browser warning/error logs; viewport restored/tab9handoff. Proof `practice-checkpoint-preservation.png`.
+
+Two core bodies still require full reconciliation: Complete Smol Playbook and Worked Pretraining System Design. Report scopes retain canonical report owners. Full primary/figure/editorial/accessibility/lifecycle/HTTP/production gates remain separate. No originals deleted,commit,push or deployment. Earlier entries below describe their historical scope.
+
+## Three core sources reconciled locally — 2026-10-09
+
+Complete fresh rereads of Framework Choice, Scaling Ladders and Progressive Context Extension. All three bodies are byte-equal to HEAD; SHA fingerprints and40 exact source headings are checked in `practice-core-closure.json`. Mechanisms, examples, recipe conditions, limitations and the Smol source URL survive. No embedded figures/imports/JSX. Replaced their public archive entries and duplicate search entries with explicit canonical aliases; original production files remain untouched.
+
+Framework details include abstraction clarity under the full workload and internal/external support ownership. Ladders explicitly preserve family/objective/density controls and scale-dependent ranking causes. Context sections restore staged repacking, fresh-schedule comparison, broad-mixture conditions, short-context regression checks and the distinction between pipeline position and supervised fine-tuning. General source claims about cheap adaptation and negligible short-context degradation are qualified to the reported recipe; complete fresh primary report/Space review remains open. Existing six displays, static examples and bounded interactions remain.
+
+Targeted Practice/closure checks pass. Static candidate has54readers/176legacylandings/2670reviewedanchors/511displays/465files/fourold-dependentreaders. Full47-suite1866 result is recorded in migration progress. Native old modifiability/fresh-stage/EG links reach framework/context-evidence/efficiency. Desktop and390px:6MathML,zero math errors/page overflow; context100%endpoint explicitly says no extension training. Browser warning/error logs empty; viewport restored/tab9handoff;proof `practice-context-preservation.png`. Six other core bodies and final primary/editorial/accessibility/lifecycle/HTTP/production gates remain. No deletion,commit,push or deployment.
+
+## Framework preservation follow-up — 2026-10-09
+
+Fresh complete reread of `choosing-an-llm-training-framework.md`. The existing selection table and rehearsal/restart sections cover feature support, robustness, representative throughput and full-state validation. Restored previously compressed details in `framework`: trace the optimizer/checkpoint/restart execution path; check abstraction clarity under MoE/context parallelism/custom numerics; internal maintainer access versus ownership burden; external community versus abstraction constraints; and total implementation/debugging/instability/runtime cost. Framework maturity comparisons are conditional tendencies, not a current product ranking. The multiplicative useful-progress expression remains explicitly a metaphor, not a physical equation. No source figures/imports/JSX are present. Exact source-route closure and the remaining eight core bodies are still open; this follow-up does not remove the old archive or claim complete reader reconciliation.
+
+2026-10-04. Local substantial draft at `training/practice`, not production-ready or deployed. Original publication 2026-06-02 from the earliest core sources. Nine complete core bodies read; relevant methodology, phase/context and infrastructure sections of two model reports read. No originals changed, aliases installed or routes retired.
+
+## Connected spine and preservation
+
+Thirty-six navigable sections (about 5,400 words) connect capability compass → correct baseline → resource-matched proxies → scale confirmation → recipe freeze → compute/data/architecture/topology plan → rehearsal → context and late-data stages → assistant contract → durable state and committed progress → evaluation, incidents and export. Native budget/context controls and an opt-in restart animation preserve static formulas and explanations. A six-gate comparison is the experiment decision sequence. This is a personal run-design reference, not another interview category or course.
+
+| Source | Section destinations and unique material |
+| --- | --- |
+| LLM Ablation Strategy | `baseline`–`experiment`: architecture-short-horizon versus small proxies; mechanism/TPP/repetition/evaluation fidelity; resource contracts; isolated and interaction tests; scale ladder; EG inversion; promotion sequence and implementation/time cost |
+| Rules of Engagement | `compass`, `baseline`, `freeze`, `annealing`, `post-training`: expected leverage and exploration delay; data/evaluation priorities; stable operational optima/WSD; deliberate source reuse; systems/model co-design; behavioral debugging; templates/masks/mode contract |
+| Scaling Ladders and Efficiency Gain | `matching`, `ladder`, `efficiency`, `size`: fixed active-TPP ladder regime, scale-dependent ranks, fitted law/inverse conditions, FLOP/time distinction, exact assigned inversion and relative-savings denominator; complete original references retained |
+| Progressive Context Extension | `context`–`context-evidence`: short/main and mid/final stages; repacking versus distribution shift and masks; positional-calibration hypothesis; reported MAI adaptation scope; Smol 4K→32K→64K stages, specialized-data experiment, 64K→128K versus 32K and 256K degradation; ABF/YaRN tuning; Position keeps the detailed phase math |
+| Smol Foundations | `compass`–`freeze`, `smol`: why/what/how, capacity-dependent data value including arXiv, correct cheap baseline, proxy asymmetry qualified, practicality, scaling priors and interactions between architecture/data/optimization/framework/evaluation |
+| Complete Smol Playbook | `architecture`, `data`, `freeze`, `rehearsal`, `context-evidence`, `smol`–`post-training`: 3B dense deployment goal, GQA/NoPE and intradocument masks, AdamW/WSD and LR/batch priors, multilingual/English/code/math staging, late common-parent annealing, storage/restart and tensor-parallel seeding incident, full base→SFT→DPO/APO→selective RL→serving sequence, hybrid/direct answer length behavior, RLVR length pressure; detailed connected source owners remain linked |
+| Worked Pretraining System Design | `compass`, `budget`–`rehearsal`, `telemetry`–`serving`: 256-GPU/90-day constraint; product/data/model/distributed/eval planes; 6PT and recomputation/MFU accounting; feasible reserved allocation; capacity/token and inference trade-off; architecture/tokenizer/precision/memory/batch choices; code provenance/forks/vendors/licenses/secrets/temporal separation; input queues/cache/cursors/quarantine; ownership/topology and six communication questions; six-stage rehearsal; full state/retention/restore; paired model/system signals; code evaluation/harness contamination; troubleshooting alternatives, stops/deadline and train/serve skew. Original full worked guide and every primary citation remain available |
+| Choosing a Framework | `framework`, `rehearsal`: features/robustness/throughput/modifiability/support dimensions, ownership/community burden, versioned real-workload comparison, descriptive sharding versus implicit communication; complete original linked rather than turn legacy brand comparison into a current ranking |
+| Goodput, Determinism and Fault Tolerance | `metrics`–`elastic`: MFU versus committed progress and duration ratio; rollback/startup/degraded placement; RNG/reductions/routing ties/topology/FP8 state; async/distributed transactional saving/hot standby/watchdogs; localized TPU slice elasticity and objective/batch/rejoin constraints |
+| MAI report (scoped) | `compass`, `ladder`, `efficiency`, `context-evidence`, `frontier`, `framework`, `determinism`, `metrics`: weighted internal objective, fixed-TPP ladder and rank reversal, FLOP/time EG difference, active-parameter convention, main/mid training table and appendix discrepancy, hypothesis/short-quality limits, YOLO annotations, complete-state and duration-goodput conventions. Other data/architecture/RL content remains owned by corresponding topics and original report; no claim of whole-report absorption |
+| DeepSeek report (scoped) | `frontier`, linked Speculation/Parallelism/Optimization: 45T/100.6M conditional step calculation; 64K→1M transition, warmup/constant/cosine phases; frozen-backbone DSpark stage and stopped objective path; cross-stage shared attention/indexer ownership and microbatch lifetime; row-sharded/pre-fetched Engram and image load placement. Complete report retains architecture/data/RL/vision details, not claimed fully reviewed in this topic |
+
+All eleven original Markdown sources have zero image/import/component references under a targeted scan. No figure assets were omitted from these source bodies. Linked primary reports contain figures and tables: their full visual/appendix review is a separate open gate, not waived because originals contain no images. Original old URLs remain available and searchable; this draft installs no redirects.
+
+## Corrections and factual scope
+
+- A negative proxy is not a theorem that scale cannot rescue an idea. Positive and negative transfer both depend on the tested regime; broken implementation differs from an unsuccessful research hypothesis.
+- Matching parameters, tokens, FLOPs and time simultaneously is not generally possible. State the question and denominator.
+- E is a fitted floor, not known irreducible source entropy. Inversion requires L′>E and a calibrated fit range. EG=1.3 implies 23.1% savings against equivalent baseline, not 30%.
+- MAI's 100–200 TPP wording is not the universal Chinchilla reference. Fresh report confirms 35B active final base: 30T/35B≈857, not a total/stored-parameter or erroneous thousands-TPP denominator.
+- Main-table 150B and Appendix B final 140B context budgets are preserved with scope. The calibration explanation is a hypothesis. Short-context observations and quick adaptation do not guarantee arbitrary models/lengths.
+- Sequence-level L² arithmetic becomes roughly per-token L dependence under fixed total tokens. The context bars are assigned arithmetic, not quality or wall-time evidence. At 100% short tokens there is no extension training.
+- 6PT versus recomputed executed arithmetic and model-FLOP versus hardware-FLOP utilization must not be double counted. Healthy rate × goodput differs from already end-to-end rate. Reserved contingency is separate from within-main-window overhead.
+- Framework “throughput × correctness × stability × recoverability” is a metaphor, not a dimensional formula. Old framework recommendations do not certify current releases.
+- Dimensionless duration goodput and committed token rate are different metrics. Ideal reference rate needs definition.
+- Async saving requires a consistent committed transaction. Weights alone, reset loader/RNG or reset moments do not preserve the experiment.
+- Checkpoint interval formula explicitly assumes rare independent failures and uniform lost progress; no universal production optimum. Elastic continuation requires state/batch/reduction and rejoin cost accounting.
+
+Fresh primary scope: MAI §§2.2–2.3 targeted ladder/EG/weighted objective and Table 2; Table 6/§2.6 selected settings; §§2.8 and 6.2 targeted sharding/goodput; Appendix B evaluation/progressive/adaptation/final-recipe passages and captions. Web PDF extraction used; not all 109 pages, figures, appendices or cited papers visually reviewed. Gemma 4 HTML §2.7 confirms localized TPU slice elasticity and its reported interruption scale. DeepSeek report claims are retained from its scoped original sections, not newly certified by a full primary read this pass. Smol wrapper opens, but the Space's full content exceeds the fetch size and raw README attempt does not resolve the article. All Smol-specific claims retain local-source scope; primary full article/figures and exact stage-token/seeding details remain a closure gate. No inaccessible source is reported as fully read.
+
+## Numerical and rendering verification
+
+Twenty-six local test scripts pass. The new independent references cover 1,023 run budgets, 22 context shares/lengths, 600 inverse-cost/gain cases, 33 restore-policy/event states, 48 checkpoint intervals and 1,911 elastic repair settings. Invalid inputs, exact six-step reference state, rollback/durable versus executed counts, first/last stages, unique section IDs, all canonical/original internal destinations, semantic search, draft visibility and publication lineage are checked.
+
+Native browser checks: 44 budget control positions plus initial 3B choice, all 22 context configurations and all 33 recovery states. Play/Pause/Replay works; filtered section navigation retains nondefault step/policy. Desktop 1280 and mobile 390×844 examined. No document horizontal overflow; local wide tables have native keyboard focus/scroll and visible outlines. Fixed a budget label/bar collision and shortened a context SVG title that clipped on mobile. Shared opt-in/reduced-motion/offscreen/disposal lifecycle is reused; actual OS reduced-motion preference and physical GPU fault injection are not claimed. Final console warnings/errors empty. Screenshot `practice-v2-check.png` saved in the Codex workspace; viewport override reset. Production build, static fallback, old-URL redirect closure and final accessibility/privacy gates remain open.
+
+## Unchanged source fingerprints
+
+All eleven compared against `dense-preservation.json` unchanged:
+
+- Ablation: `e96f1249c4346404fc3aa088fb5f9672a46f65d8ac2b38b99931644c2b6a45a6`
+- Rules: `d9d87f5a4e6755b2b78dad85786a3a008618d6b41837e8a71ed382af106d6ef6`
+- Ladders: `5be9e3abd2cafa745a2a687412bebb7dce86d12aa0a861caf80ca26bad8b9e55`
+- Context: `6a28ae0f3e70d26a88b16f4f8f563433857fdcbcf7e10a3337dd54ca1f3c54a6`
+- Smol foundations: `c520c494389ec8d3b9a2f30292e82d0e51a2159b12df4fdbc1176858e50b956c`
+- Smol playbook: `5688f7d766dbbc9fd957217c596d722212ed68c2afad653532250ccdf8189946`
+- Worked guide: `474f732f5131bf997d670b6ba03b7a6cf1f3db0190441432ad445ff2e736ef6c`
+- Framework: `9a0dd8b5efb622e47aea0cc725dbd6208a8c660388667b006ee022f2aeeeaa99`
+- Goodput: `e27353194cede4eca44fa1d4f2eca1d1b3a37d0869d05a5f35e83e32336fd462`
+- MAI: `92071ea0c6be7cd30ed8baca3915a33437cabc7d9f5b571c193f4929ff97fa44`
+- DeepSeek: `8ae8ba315b0643f15b69dda60bc5b38c86341c47d3b842971f008cfd53c024af`
+
+Thirty-four local readers: one reviewed pilot, thirty-three drafts, twenty not started; zero production-ready/deployed. Full primary/figure/reference and final editorial preservation checks remain before retirement. Original production, all source bodies and unrelated harness work unchanged. No commit, push, deployment, deletion or archive operation.
+
+## Equation pass — 2026-10-06
+
+Six displays manually typeset: inverse efficiency curve, model/available compute, batch/step tokens, fixed-token context cost, distinct utilization/rate/goodput quantities and checkpoint interval. The checkpoint approximation states positive save cost/MTBF/interval and matching time units; rare-failure assumptions are retained.
+
+Dedicated practice/math tests pass. Desktop/390px:6 MathML formulas,no errors/overflow. Native healthy-throughput endpoint works. Viewport reset,browser logs empty. Full source/figure/reference and production gates remain; no old source retired by this formatting pass.

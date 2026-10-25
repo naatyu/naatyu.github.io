@@ -1,0 +1,22 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {parse} from 'parse5';
+import {glmFlashEvidence} from '../prototypes/readers/glm-flash-evidence.js';
+const root=new URL('../../',import.meta.url),path='docs/ai/architectures/model-reports/glm-5-3-flash-hybrid-multimodal.md';
+const source=readFileSync(new URL(path,root),'utf8');
+assert.equal(source,execFileSync('git',['show','HEAD:'+path],{cwd:root,encoding:'utf8'}));
+const html=glmFlashEvidence(),nodes=[];function walk(n){nodes.push(n);for(const c of n.childNodes||[])walk(c);}walk(parse(html));
+const text=n=>n.nodeName==='#text'?n.value:(n.childNodes||[]).map(text).join('');
+const tables=nodes.filter(n=>n.tagName==='table');assert.equal(tables.length,2);
+const actual=tables.flatMap(t=>{const body=t.childNodes.find(n=>n.tagName==='tbody');return body.childNodes.filter(n=>n.tagName==='tr').map(row=>row.childNodes.filter(n=>n.tagName==='td').map(text));});
+const evidence=source.split('## 12. Reported results')[1].split('## 13. Critical interpretation')[0];
+const expected=evidence.split('\n').filter(line=>/^\|/.test(line)&&/`\d/.test(line)).map(line=>line.split('|').slice(1,-1).map(cell=>cell.trim().replaceAll('`','')));
+assert.equal(expected.length,12);assert.deepEqual(actual,expected);
+for(const table of tables){assert.equal(table.parentNode.attrs.find(a=>a.name==='tabindex').value,'0');assert.equal(table.parentNode.attrs.find(a=>a.name==='role').value,'region');}
+for(const phrase of ['62.4','89.4','78.0','77.8','Claude Code','mini-swe-agent','1M context','context management','verifier accuracy','same hardware','4.4×','one-tenth the price','subsidies','modality mixture'])assert.ok(html.includes(phrase),phrase);
+for(const phrase of ['maximum reasoning effort','2.1.207','65,536','400K context','163,840','300K context','GPT-5.6-luna (medium)','three independent runs','null-type handling fix'])assert.ok(html.includes(phrase),phrase);
+assert.deepEqual(actual.slice(0,5).map(row=>Number(row[2])>Number(row[1])),[false,false,false,true,false]);
+assert.ok(actual.slice(5).every(row=>Number(row[1])>Number(row[2])));
+assert.deepEqual(actual.slice(5).map(row=>Number(row[1])>Number(row[3])),[false,true,false,true,true,false,false]);
+console.log('GLM-5.3 evidence: Git-equal original,all twelve exact base/agent rows,four visual scores,task/harness and vendor-claim limits pass. Full source closure remains separate.');

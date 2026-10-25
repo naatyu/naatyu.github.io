@@ -1,0 +1,29 @@
+/* Persistent controls occupy their own margin, never the scrolling prose. */
+body[data-atlas-full=true] .atlas-page{box-sizing:border-box;padding-right:60px}
+body[data-atlas-full=true] .atlas-utility{top:12px;right:8px;flex-direction:column;gap:8px;width:44px}
+body[data-atlas-full=true] .atlas-utility>a,
+body[data-atlas-full=true] .atlas-utility .terminal-switch{
+  box-sizing:border-box;display:flex;align-items:center;justify-content:center;
+  width:44px;min-height:44px;padding:0;border:1px solid var(--line);
+  border-radius:12px;background:var(--surface);color:var(--accent);font-size:20px;
+}
+body[data-atlas-full=true] .atlas-utility>a>span:first-child{margin:0}
+body[data-atlas-full=true] .atlas-utility>a>span:last-child,
+body[data-atlas-full=true] .terminal-switch>span:nth-child(2),
+body[data-atlas-full=true] .terminal-switch i{display:none}
+body[data-atlas-full=true] .terminal-switch[aria-pressed=true]{background:var(--tint);border-color:var(--accent)}
+body[data-atlas-full=true] .dense-note .dense-jump{
+  position:fixed;top:116px;right:8px;width:44px;max-width:none;
+  margin:0!important;padding:0;z-index:11;
+}
+body[data-atlas-full=true] .dense-note .dense-jump summary{
+  box-sizing:border-box;width:44px;min-height:44px;justify-content:center;
+  padding:0;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-size:0;
+}
+body[data-atlas-full=true] .dense-jump summary .section-jump-icon{font-size:22px;line-height:1;color:var(--accent)}
+body[data-atlas-full=true] .dense-jump-panel{
+  box-sizing:border-box;width:360px;max-width:calc(100vw - 76px);
+  max-height:calc(100dvh - 184px);container-type:normal;
+}
+body[data-atlas-full=true] .atlas-utility :focus-visible,
+body[data-atlas-full=true] .dense-jump summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}

@@ -1,0 +1,27 @@
+import assert from 'node:assert/strict';
+import {parseFragment} from 'parse5';
+import {attentionReader} from '../prototypes/readers/attention.js';
+import {assertGeneratedMarkup} from './check-generated-markup.mjs';
+const html=assertGeneratedMarkup(attentionReader(s=>s),'Attention notation');
+const annotations=[],captions=[],tables=[],parts=[];
+const text=n=>(n.nodeName==='#text'?n.value:'')+(n.childNodes||[]).map(text).join('');
+function walk(n){if(n.tagName==='annotation')annotations.push(text(n));if(n.tagName==='figcaption')captions.push(text(n));if(n.tagName==='table')tables.push(n);if(n.nodeName==='#text')parts.push(n.value);for(const c of n.childNodes||[])walk(c);}walk(parseFragment(html));
+assert.equal((html.match(/<math /g)||[]).length,64);
+for(const tex of ["v_1=[1,0]","v_2=[0,1]","v_3=[1,1]","v_4=[-1,0]","c_1=[1,0],\\quad c_2=[0,2]","W_V=\\begin{bmatrix}1&2\\\\3&0\\end{bmatrix}","v_1=[1,2],\\quad v_2=[6,0]","0.25v_1+0.75v_2=[4.75,0.5]","W_O=\\begin{bmatrix}1&0\\\\0&2\\end{bmatrix}","[4.75,0.5]W_O=[4.75,1]","0.25c_1+0.75c_2=[0.25,1.5]","W_VW_O=\\begin{bmatrix}1&4\\\\3&0\\end{bmatrix}","[0.25,1.5](W_VW_O)=[4.75,1]","V=K","\\beta=1","x=[1,-1]","[1,0]","[2,0]","[0,-1]","[0,-3]","\\Delta x=[2,-3]","x\\prime=[3,-4]"])assert(annotations.includes(tex),tex);
+const table=tables.find(t=>text(t).includes('Synthetic two-token'));assert(table);
+assert(table.attrs.some(a=>a.name==='style'&&a.value==='min-width:720px'));
+const cells=[];function collect(n){if(n.tagName==='td')cells.push(n);for(const c of n.childNodes||[])collect(c);}collect(table);assert.equal(cells.length,9);
+assert(text(cells[8]).includes('[4.75,1]'));
+for(const condition of ['fixed at 0.25 and 0.75','same masks, weights and parameters','omit biases and dropout','A nonlinear operation','compare numerical tolerances, not bitwise equality','not constant-size recurrent memory','unit-length key','isolated ungated update','Other correlated keys','not total model memory'])assert(parts.join(' ').includes(condition),condition);
+assert(captions.some(c=>c.includes('v_4=[-1,0]')&&c.includes('sum discrepancy')));
+// Independently evaluate every intermediate of the displayed row-vector example.
+const matmul=(a,b)=>a.map(row=>b[0].map((_,j)=>row.reduce((sum,x,k)=>sum+x*b[k][j],0)));
+const c=[[1,0],[0,2]],wv=[[1,2],[3,0]],wo=[[1,0],[0,2]],p=[.25,.75];
+const read=rows=>[rows[0].map((_,j)=>rows.reduce((s,row,i)=>s+p[i]*row[j],0))];
+const values=matmul(c,wv);assert.deepEqual(values,[[1,2],[6,0]]);
+assert.deepEqual(read(values),[[4.75,.5]]);assert.deepEqual(read(c),[[.25,1.5]]);
+assert.deepEqual(matmul(wv,wo),[[1,4],[3,0]]);
+assert.deepEqual(matmul(read(values),wo),[[4.75,1]]);
+assert.deepEqual(matmul(read(c),matmul(wv,wo)),[[4.75,1]]);
+assert.deepEqual([1+2,-1-3],[3,-4]);
+console.log('Attention notation:22 inline additions, exact parsed annotations/captions, two local comparisons, all MLA arithmetic intermediates and preserved conditions pass.');

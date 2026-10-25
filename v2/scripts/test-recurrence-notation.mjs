@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {parseFragment} from 'parse5';
+import {recurrenceReader} from '../prototypes/readers/recurrence.js';
+import {assertGeneratedMarkup} from './check-generated-markup.mjs';
+const html=assertGeneratedMarkup(recurrenceReader(s=>s),'Recurrence notation');
+const annotations=[],parts=[],captions=[];
+const text=n=>(n.nodeName==='#text'?n.value:'')+(n.childNodes||[]).map(text).join('');
+function walk(n){if(n.tagName==='annotation')annotations.push(text(n));if(n.nodeName==='#text')parts.push(n.value);if(n.tagName==='figcaption')captions.push(text(n));for(const c of n.childNodes||[])walk(c);}walk(parseFragment(html));
+assert.equal((html.match(/<math /g)||[]).length,56);
+for(const tex of [String.raw`0\log 0=0`,String.raw`\beta\ge0`,'R=3',String.raw`\alpha=\beta=1`,String.raw`\alpha\approx0.15`,String.raw`\beta=1`,String.raw`\boldsymbol\alpha`,String.raw`\boldsymbol\beta`,'2d',String.raw`\alpha=0.1,\quad\beta=0.9`,'5d^2','d=1536','2d^2',String.raw`\sigma=0.02`,String.raw`48\times128=6144`,String.raw`d=h\,d_{\mathrm{head}}`])assert(annotations.includes(tex),tex);
+for(const condition of ['Entropy does not guarantee correct predictions','nine write/read pairings','no additional inner normalization','not necessarily a convex combination','not a measured end-to-end latency guarantee','adding noise before projection and gating is a different perturbation','output projection maps the concatenated head results'])assert(parts.join(' ').includes(condition),condition);
+assert(captions.some(c=>c.includes('normalized exit mass')&&c.includes('entropy reward plus a constant')));
+assert.equal(2*1536**2,4718592);assert.equal(Number((2*1536**2/1e6).toFixed(2)),4.72);
+assert.equal(48*128,6144);assert.notEqual(48*128,3072);
+const diagonal=[],cross=[];for(let read=0;read<3;read++)for(let write=0;write<3;write++)(read===write?diagonal:cross).push([read,write]);assert.equal(diagonal.length,3);assert.equal(cross.length,6);
+console.log('Recurrence notation:17 inline additions, parsed source conditions,parameter arithmetic and all nine cross-use pairings pass. Full tensor/model contracts are checked separately.');

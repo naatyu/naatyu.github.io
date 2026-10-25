@@ -1,0 +1,52 @@
+import assert from 'node:assert/strict';
+import './test-page-metadata.mjs';
+import {parse} from 'parse5';
+import {renderHome,noteURL,explorerNoteURL} from '../prototypes/site-shell.js';
+import {readerMetas} from '../prototypes/readers/index.js';
+import {latestAtlasPublished} from '../prototypes/publication.js';
+import {rangePlayback} from '../prototypes/readers/topic-tools.js';
+
+const walk=node=>[node,...(node.childNodes||[]).flatMap(walk)];
+const attr=(node,name)=>node.attrs?.find(a=>a.name===name)?.value;
+const home=walk(parse(renderHome(readerMetas)));
+const header=home.find(n=>n.tagName==='header'&&attr(n,'class')==='topbar');
+assert(!walk(header).some(n=>attr(n,'class')==='brand'));
+assert(!renderHome(readerMetas).includes('Research. Engineering.'));
+assert(!renderHome(readerMetas).includes('Exploring how models learn'));
+const mantra=home.find(n=>attr(n,'class')==='hero-mantra');assert(mantra);
+assert.deepEqual((mantra.childNodes||[]).filter(n=>n.tagName==='span'&&attr(n,'aria-hidden')!=='true').map(n=>n.childNodes[0].value),['Learn','Build','Repeat']);
+const cards=home.filter(n=>attr(n,'aria-roledescription')==='slide');
+assert.deepEqual(cards.map(n=>attr(n,'href')),latestAtlasPublished(readerMetas).map(n=>noteURL(n.slug)));
+assert.equal(cards.length,3);
+assert.equal(home.filter(n=>attr(n,'id')==='main').length,1);
+assert.equal(home.filter(n=>attr(n,'id')==='projects').length,1);
+assert.equal(home.filter(n=>attr(n,'class')?.split(' ').includes('work-item')).length,3);
+assert(!renderHome(readerMetas).includes('directions.html'));
+assert(!renderHome(readerMetas).includes('Compare designs'));
+assert.equal(noteURL(''),'/atlas/');
+assert.equal(explorerNoteURL({slug:'models/moe'}),'/atlas/models/moe/');
+assert.equal(explorerNoteURL({slug:'models/moe',path:['models','architectures'],query:'mixture of exparts'}),'/atlas/models/moe/?path=models%2Farchitectures&q=mixture+of+exparts');
+const selectedURL=new URL(explorerNoteURL({slug:'models/moe',path:['models'],query:'a&b#c?d'}),'https://naatyu.github.io');
+assert.equal(selectedURL.pathname,'/atlas/models/moe/');assert.equal(selectedURL.searchParams.get('q'),'a&b#c?d');assert.equal(selectedURL.hash,'');
+assert(renderHome(readerMetas.map(n=>({...n,description:'<script>unsafe</script>'}))).includes('&lt;script&gt;unsafe&lt;/script&gt;'));
+
+const saved={};for(const key of ['matchMedia','IntersectionObserver','requestAnimationFrame','cancelAnimationFrame'])saved[key]=globalThis[key];
+try{
+  let requested=0,canceled=0,disconnects=0,removed=0;
+  globalThis.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){removed++;}});
+  globalThis.IntersectionObserver=class{observe(){}disconnect(){disconnects++;}};
+  globalThis.requestAnimationFrame=()=>++requested;
+  globalThis.cancelAnimationFrame=()=>canceled++;
+  const events=new Map(),playEvents=new Map();
+  const article={addEventListener:(name,fn)=>events.set(name,fn)};
+  const slider={max:'100',min:'0',value:'0',addEventListener(){}};
+  const play={textContent:'Play',addEventListener:(name,fn)=>playEvents.set(name,fn)};
+  const lab={querySelector:selector=>selector==='[data-play]'?play:selector==='[data-reset]'?null:slider};
+  rangePlayback(article,lab,()=>{});
+  playEvents.get('click')();assert.equal(play.textContent,'Pause');assert.equal(requested,1);
+  events.get('atlas-reader-suspend')();assert.equal(play.textContent,'Play');assert(canceled>0);
+  playEvents.get('click')();assert.equal(play.textContent,'Pause');assert.equal(requested,2,'Suspend must not permanently disable restored controls');
+  events.get('atlas-reader-dispose')();assert.equal(play.textContent,'Play');assert.equal(disconnects,1);assert.equal(removed,1);
+  playEvents.get('click')();assert.equal(requested,2,'Disposed controls must not restart playback');
+}finally{for(const [key,value] of Object.entries(saved)){if(value===undefined)delete globalThis[key];else globalThis[key]=value;}}
+console.log('Selected site shell: canonical carousel dates/links,three project cards,escaping and suspend-versus-dispose playback pass. Native BFCache certification remains separate.');

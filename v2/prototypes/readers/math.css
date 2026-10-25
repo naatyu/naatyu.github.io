@@ -1,0 +1,9 @@
+.dense-note .typeset-equation{background:color-mix(in srgb,var(--surface,#fff) 85%,#bad6ef);border:1px solid #702b4018;border-radius:12px;padding:20px 18px;max-width:100%;min-width:0}
+.dense-note .typeset-equation>.math-scroll{font:inherit;overflow-x:auto;overflow-y:hidden;max-width:100%;padding:4px 2px 12px;scrollbar-width:thin;overscroll-behavior-x:contain}
+.typeset-equation .katex-display{margin:.25em 0;text-align:left}
+.typeset-equation .katex-display>.katex{white-space:nowrap;text-align:left}
+.dense-note .typeset-equation figcaption{line-height:1.65;margin-top:8px;max-width:70ch}
+.dense-note .katex{font-size:1.08em}
+.dense-note .inline-math .katex{font-size:1.03em}
+.dense-note .typeset-equation :focus-visible{outline:2px solid #702b40;outline-offset:0}
+@media(max-width:760px){.dense-note .typeset-equation{padding:14px 12px}.dense-note .katex{font-size:1em}}

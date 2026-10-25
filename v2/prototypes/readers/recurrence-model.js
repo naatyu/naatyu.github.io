@@ -1,0 +1,22 @@
+// Exact bounded teaching models. No learned checkpoint or latency prediction.
+const finite=x=>Number.isFinite(x);
+const integer=(x,lo,hi)=>Number.isInteger(x)&&x>=lo&&x<=hi;
+export function lstmCell(previous,forget,input,candidate,output){if(![previous,forget,input,candidate,output].every(finite)||[forget,input,output].some(x=>x<0||x>1)||candidate<-1||candidate>1)throw new RangeError('LSTM cell domain');const retained=forget*previous,written=input*candidate,cell=retained+written,hidden=output*Math.tanh(cell);return {retained,written,cell,hidden,directDerivative:forget};}
+export function unroll(k,r){if(!integer(k,1,8)||!integer(r,1,8))throw new RangeError('Bounded block/round counts');return Array.from({length:k*r+1},(_,step)=>({step,complete:step===k*r,round:step===k*r?r:Math.floor(step/k)+1,block:step===k*r?null:step%k+1,visited:Array.from({length:step},(_,i)=>({physical:i%k+1,round:Math.floor(i/k)+1})),stored:k,effective:k*r}));}
+export const exitProfiles={uniform:[.25,1/3,.5,1],early:[.6,.6,.6,1],late:[.05,.1,.2,1]};
+export function exitDistribution(hazards,q=.5){if(!hazards.length||!hazards.every(x=>finite(x)&&x>=0&&x<=1)||!finite(q)||q<0||q>1)throw new RangeError('Halting domain');let survival=1,cdf=0;const rows=hazards.map((h,i)=>{const before=survival,mass=i===hazards.length-1?before:before*h;survival=i===hazards.length-1?0:before*(1-h);cdf+=mass;return {loop:i+1,hazard:h,survival:before,mass,cdf:i===hazards.length-1?1:cdf};});const expected=rows.reduce((s,row)=>s+row.loop*row.mass,0),entropy=-rows.reduce((s,row)=>s+(row.mass?row.mass*Math.log(row.mass):0),0),kl=Math.log(rows.length)-entropy,selected=rows.find(row=>row.cdf>=q)?.loop??rows.length;return {rows,expected,entropy,kl,selected};}
+export function scaling(k,r,p,aligned=true){if(!integer(k,1,32)||!integer(r,1,32)||!finite(p)||p<.25||p>.5)throw new RangeError('Scaling domain');const n=k*r,m=2*n,kappa=aligned?r:1,alpha=(2*n)**p,beta=(8*n)**-p,ratio=beta/alpha,bound=m*kappa*ratio**2;return {n,m,kappa,alpha,beta,ratio,bound};}
+export function mixResidual(dst,src,alpha,beta,epsilon=1e-6){if(!Array.isArray(dst)||!Array.isArray(src)||dst.length!==src.length||!dst.length||![...dst,...src,alpha,beta,epsilon].every(finite)||alpha<0||beta<0||epsilon<=0)throw new RangeError('Residual mixing domain');const dstNorm=Math.hypot(...dst),srcNorm=Math.hypot(...src),scale=dstNorm/Math.max(srcNorm,epsilon),source=src.map(x=>x*scale),mixed=dst.map((x,i)=>beta*x+alpha*source[i]);return {dstNorm,srcNorm,source,mixed,mixedNorm:Math.hypot(...mixed)};}
+export function passCompute(mix){if(!mix.length||mix.some(x=>!finite(x)||x<0)||Math.abs(mix.reduce((a,b)=>a+b,0)-1)>1e-10)throw new RangeError('Probability mixture');return mix.reduce((s,p,i)=>s+(i+1)*p,0);}
+export function feedbackInputs(embeddings,states,prefix=1){if(!integer(prefix,1,embeddings.length)||states.length!==embeddings.length||embeddings.some(v=>v.length!==2||!v.every(finite))||states.some(v=>v.length!==2||!v.every(finite)))throw new RangeError('Feedback shapes');const sigmoid=x=>1/(1+Math.exp(-x));return embeddings.map((e,t)=>t<prefix?[...e]:[states[t-1][0]*sigmoid(e[0]),states[t-1][1]*sigmoid(e[1])]);}
+export const timingFrames=[
+{kind:'loop',label:'Read token A',active:0,detail:'Position 0 enters the shared stack. No token B has been selected.'},
+{kind:'loop',label:'Repeat at position 0',active:1,detail:'The same stack processes A’s changed hidden state again. Two executions, one stored parameter set.'},
+{kind:'loop',label:'Emit token B',active:2,detail:'Readout follows the final chosen loop. B’s computation can now begin.'},
+{kind:'feedback',label:'Read token A',active:0,detail:'One ordinary stack execution produces top state h₀ and predicts B.'},
+{kind:'feedback',label:'Sample B, then fuse',active:1,detail:'B’s embedding gates the already computed h₀. The fused vector becomes position 1’s input.'},
+{kind:'feedback',label:'Process fused input B',active:2,detail:'One stack execution at position 1 produces h₁ and predicts C. Carry h₁ for the next transition.'},
+{kind:'recirculation',label:'Ordinary readout at A',active:0,detail:'The first pass supplies next-token logits. Save A’s source and destination residuals.'},
+{kind:'recirculation',label:'Refine A’s earlier state',active:1,detail:'Mix the normalized source into the saved destination and rerun downstream blocks for A.'},
+{kind:'recirculation',label:'Expose refined history',active:2,detail:'Later attention reads the appropriate refined cache entries. Enforce this dependency even if operations overlap on hardware.'}
+];

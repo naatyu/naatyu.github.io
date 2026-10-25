@@ -1,41 +1,33 @@
-# Website
+# Nathan's Atlas
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+Personal notes and projects at [naatyu.github.io](https://naatyu.github.io).
 
-## Installation
+Production is the standalone static Atlas in `v2/`: 54 consolidated readers, interactive explanations, local math rendering, a file explorer and fuzzy search. GitHub Pages builds it through `.github/workflows/deploy.yml`.
 
-```bash
-yarn
+## Work locally
+
+Use Node.js 24 or newer:
+
+```sh
+npm --prefix v2 ci
+npm --prefix v2 test
+npm --prefix v2 run build:publication
 ```
 
-## Local Development
+The build prints an isolated output directory. Preview it:
 
-```bash
-yarn start
+```sh
+npm --prefix v2 run preview:candidate -- /absolute/output/directory
 ```
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
+Open `http://localhost:4323/`. The preview server sends noindex headers; the publication artifact has normal indexing for canonical pages.
 
-## Build
+## Authoring
 
-```bash
-yarn build
-```
+Read `AGENTS.md` and `.internal/v2/authoring-contract.md` before changing notes. Readers live in `v2/prototypes/readers/`; the directory name is historical. New research normally updates its owning topic. Preserve original publication dates.
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+## Publication and recovery
 
-## Deployment
+A push to `main` builds and deploys v2. The exporter includes only required runtime files, canonical pages, compatibility landings and referenced media. Internal guides, source Markdown and recovery snapshots are never copied into the website.
 
-Using SSH:
-
-```bash
-USE_SSH=true yarn deploy
-```
-
-Not using SSH:
-
-```bash
-GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+Legacy Docusaurus files remain as preservation/rollback inputs, not the live build. Do not use the old Docusaurus deployment command. Old URLs resolve to reviewed topic sections or explicit retirement notices.

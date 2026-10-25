@@ -1,0 +1,21 @@
+import './test-frontier-model.mjs';
+import './test-frontier-notation.mjs';
+import './test-frontier-deepseek-preservation.mjs';
+import './test-frontier-kimi-preservation.mjs';
+import './test-frontier-glm-preservation.mjs';
+import './test-frontier-mai-preservation.mjs';
+import './test-frontier-qwen-preservation.mjs';
+import './test-frontier-llama-preservation.mjs';
+import './test-frontier-glm-flash-evidence.mjs';
+import './test-frontier-kda.mjs';
+import './test-frontier-glm-flash-preservation.mjs';
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {frontierMeta,frontierReader,frontierSections} from '../prototypes/readers/frontier.js';
+import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
+import {rank} from '../prototypes/search.js';
+const html=frontierReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const[id]of frontierSections)assert(ids.includes(id));assert.equal(frontierSections.length,48);assert.equal(frontierMeta.date,'2026-04-08');assert(frontierMeta.prototype);assert.equal(frontierMeta.visibility,'public');assert(html.includes('value critic, not rewards'));assert(html.includes('150B'));assert(html.includes('140B'));assert(!html.includes('>undefined<'));
+const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes];for(const[,s,anchor]of html.matchAll(/href="directions\.html\?slug=([^"#]+)(?:#([^"]+))?"/g)){assert(notes.some(n=>n.slug===s),s);if(anchor)assert(renderDenseReader(s,x=>'directions.html?slug='+x)?.includes(`id="${anchor}"`),`${s}#${anchor}`);}
+for(const q of ['model recipes','Kimi K3','MiMo','GLM-5','Qwen2.5'])assert(rank(notes,q).some(r=>r.note===frontierMeta),q);
+console.log('Frontier: 48 unique section destinations, original/canonical links, parameter and stage scopes, semantic search and publication lineage pass.');
+import './test-frontier-mimo-preservation.mjs';

@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import GithubSlugger from 'github-slugger';
+import {frontierReader,frontierAliases} from '../prototypes/readers/frontier.js';
+import {glmRecipeDetails} from '../prototypes/readers/glm-recipe-details.js';
+import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+const root=new URL('../../',import.meta.url),path='docs/ai/architectures/model-reports/glm-5-agentic-engineering.md',source=readFileSync(new URL(path,root),'utf8');
+assert.equal(source,execFileSync('git',['show','HEAD:'+path],{cwd:root,encoding:'utf8'}));
+assert.equal(createHash('sha256').update(source).digest('hex'),'563102d0092cbf6b8a1b8bcaa38c0c8ddb9b159006570492ecaf8e829be7769f');
+const slug=path.slice(5,-3),g=new GithubSlugger(),headings=[...source.matchAll(/^#{1,6} (.+)$/gm)].map(m=>g.slug(m[1]));
+assert.equal(headings.length,29);assert.deepEqual(Object.keys(reviewedFragments[slug]),headings);
+const html=frontierReader(s=>s),ids=new Set([...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]));
+for(const h of headings){const d=resolveReviewedNote(slug+'#'+h);assert.equal(d.slug,'training/frontier-recipes');assert(ids.has(d.anchor),h);}
+assert(frontierAliases.includes(slug));assert(!html.includes('href="'+slug+'"'));
+for(const phrase of ['154,880','202,752','LayerNorm','interleaved','10⁻⁵','MIT','rolling full-gradient','weight synchronization','optimizer reset','PHP','Ruby','three training unroll','2.76','2.55','five interaction rounds','32K','42.1±1.21','52.3','25.8','default configured rule','INT4','128K continued-training'])assert(html.includes(phrase),phrase);
+for(const row of [['HLE','30.5'],['HLE with tools','50.4'],['AIME 2026 I','92.7'],['GPQA-Diamond','86.0'],['LongBench v2','64.5'],['SWE-bench Verified','77.8'],['SWE-bench Multilingual','73.3'],['tau2','89.7'],['MCP Atlas','67.8'],['Baseline','4.56'],['+IndexShare+KVShare','5.10'],['+rejection sampling','5.29'],['+end-to-end total-variation loss','5.47']])assert(html.includes('<td>'+row[0]+'</td><td>'+row[1]+'</td>'),row[0]);
+assert.equal((glmRecipeDetails(s=>s).match(/class="katex-mathml"/g)||[]).length,3);assert(!html.includes('katex-error'));assert(!/!\[|<PaperFigure|<img/.test(source));
+console.log('GLM-5 original/Git recovery,29 actual headings,architecture/recipe/system details,benchmark and cumulative ablation rows,3 mathematical displays and old dependency removal pass. Full primary/production gates remain separate.');

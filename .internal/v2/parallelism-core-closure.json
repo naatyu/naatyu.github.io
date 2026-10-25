@@ -1,0 +1,204 @@
+{
+  "updated": "2026-10-09",
+  "status": "core original-body closure; external-primary, figure and production gates separate",
+  "topic": "training/parallelism",
+  "physicalOriginals": "unchanged; removal waits production-switch validation and authorization",
+  "sources": [
+    {
+      "slug": "ai/training/distributed-optimization/zero",
+      "sha256": "61ec637244176017da407820dc6cebc14da01d0575242bb0686b0acfa9101c14",
+      "git": "HEAD:docs/ai/training/distributed-optimization/zero.md",
+      "destination": {
+        "slug": "training/parallelism",
+        "anchor": "state"
+      },
+      "headings": {
+        "summary": "state",
+        "concepts": "state",
+        "content": "state",
+        "zero-stages": "state",
+        "communication-trade-offs": "state-traffic",
+        "prefetching": "rooflines",
+        "sources": "sources",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "systems/parallel-computing/data-parallelism",
+      "sha256": "72f9c23b7348beefd0faeb64653b2dd65168ad166bf00c7cea54dac0c0eee1c9",
+      "git": "HEAD:docs/systems/parallel-computing/data-parallelism.md",
+      "destination": {
+        "slug": "training/parallelism",
+        "anchor": "data"
+      },
+      "headings": {
+        "summary": "data",
+        "one-training-step": "data",
+        "communication": "collectives",
+        "communication-roofline": "rooflines",
+        "implementation-optimizations": "data",
+        "gradient-bucketing": "data",
+        "backward-overlap": "data",
+        "gradient-accumulation": "data",
+        "hierarchical-collectives": "topology",
+        "batch-size-two-different-constraints": "data",
+        "when-to-move-beyond-replicated-dp": "layout",
+        "sources": "sources",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "systems/parallel-computing/tensor-parallelism",
+      "sha256": "8f628e269ba20a7aea6ce4e2353ca38111cb135ea53a717bb844bc155b5d16f0",
+      "git": "HEAD:docs/systems/parallel-computing/tensor-parallelism.md",
+      "destination": {
+        "slug": "training/parallelism",
+        "anchor": "tensor"
+      },
+      "headings": {
+        "summary": "tensor",
+        "column-and-row-parallel-linear-layers": "tensor",
+        "column-parallel-projection": "tensor",
+        "row-parallel-projection": "tensor",
+        "transformer-block-sharding": "tensor",
+        "mlp": "tensor",
+        "attention": "tensor",
+        "sequence-parallelism": "sequence",
+        "the-tp-roofline": "rooflines",
+        "failure-modes": "checks",
+        "sources": "sources",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "systems/parallel-computing/sequence-parallelism",
+      "sha256": "42831e58d3464311b4a3677eee607aa2144260e399baa441190d55b8aec7e1c4",
+      "git": "HEAD:docs/systems/parallel-computing/sequence-parallelism.md",
+      "destination": {
+        "slug": "training/parallelism",
+        "anchor": "sequence"
+      },
+      "headings": {
+        "summary": "sequence",
+        "concepts": "sequence",
+        "content": "sequence",
+        "why-sp-is-needed": "sequence",
+        "sp-workflow": "sequence",
+        "memory--comm-trade-offs": "sequence",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "systems/parallel-computing/context-parallelism",
+      "sha256": "1ff104d04d792c2c4a7dea0c134c71618eed5ae2ade1b31de853e9c75db6af63",
+      "git": "HEAD:docs/systems/parallel-computing/context-parallelism.md",
+      "destination": {
+        "slug": "training/parallelism",
+        "anchor": "sequence"
+      },
+      "headings": {
+        "summary": "sequence",
+        "concepts": "context-ring",
+        "content": "sequence",
+        "ring-attention-mechanism": "context-ring",
+        "load-balancing-zig-zag": "causal-balance",
+        "memory-benefits": "sequence",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "systems/parallel-computing/pipeline-parallelism",
+      "sha256": "cdc994fda82d1d8dd725dd33b7413eb7997ccdc77d1ff088318e67b229b36858",
+      "git": "HEAD:docs/systems/parallel-computing/pipeline-parallelism.md",
+      "destination": {
+        "slug": "training/parallelism",
+        "anchor": "pipeline"
+      },
+      "headings": {
+        "summary": "pipeline",
+        "why-use-it": "pipeline",
+        "schedules": "pipeline",
+        "gpipe--all-forward-all-backward": "pipeline",
+        "1f1b": "pipeline",
+        "interleaved-1f1b": "pipeline",
+        "zero-bubble-schedules": "pipeline",
+        "bubble-and-efficiency": "pipeline",
+        "stage-balance": "pipeline-payload",
+        "communication": "pipeline-payload",
+        "interaction-with-other-dimensions": "pipeline-payload",
+        "inference-caveat": "pipeline-payload",
+        "sources": "sources",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "systems/parallel-computing/hardware-topology-and-parallelism",
+      "sha256": "17cb95d92482388868563356ac688bb5419c6618277977b1de2e543db7208eaa",
+      "git": "HEAD:docs/systems/parallel-computing/hardware-topology-and-parallelism.md",
+      "destination": {
+        "slug": "training/parallelism",
+        "anchor": "topology"
+      },
+      "headings": {
+        "summary": "topology",
+        "scale-up-and-scale-out": "topology",
+        "network-quantities-that-matter": "topology",
+        "latency-and-bandwidth": "topology",
+        "bisection-bandwidth": "topology",
+        "per-gpu-versus-per-node-egress": "topology",
+        "collective-versus-point-to-point-performance": "topology",
+        "mapping-parallel-dimensions": "topology",
+        "moe-layout": "experts",
+        "topology-aware-checklist": "checks",
+        "pipeline-and-inference-caveat": "pipeline-payload",
+        "sources": "sources",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "systems/parallel-computing/llm-training-parallelism-rooflines",
+      "sha256": "865d08a8e80a17d0a498d11e2ab572feb7cd9030c41e67a49ded4de1878e0025",
+      "git": "HEAD:docs/systems/parallel-computing/llm-training-parallelism-rooflines.md",
+      "destination": {
+        "slug": "training/parallelism",
+        "anchor": "rooflines"
+      },
+      "headings": {
+        "summary": "rooflines",
+        "variables": "rooflines",
+        "data-parallelism-and-fsdp": "rooflines",
+        "tensor-parallelism": "rooflines",
+        "mixed-fsdp-and-tensor-parallelism": "mixed-mesh-intensity",
+        "pipeline-parallelism": "pipeline",
+        "expert-parallelism": "experts",
+        "topology-aware-recipe": "checks",
+        "sources": "sources",
+        "related": "sources"
+      }
+    },
+    {
+      "slug": "systems/parallel-computing/sharded-matrix-multiplication-and-collectives",
+      "sha256": "78c66c3109c67d231fcfef226a992abd3f9a8a0c2d294e59e378a07af5ec2728",
+      "git": "HEAD:docs/systems/parallel-computing/sharded-matrix-multiplication-and-collectives.md",
+      "destination": {
+        "slug": "training/parallelism",
+        "anchor": "collectives"
+      },
+      "headings": {
+        "summary": "collectives",
+        "notation": "mesh-notation",
+        "the-four-matmul-cases": "collectives",
+        "1-no-contracting-dimension-is-sharded": "collectives",
+        "2-only-one-input-is-sharded-on-the-contracting-dimension": "collectives",
+        "3-both-contracting-dimensions-are-identically-sharded": "collectives",
+        "4-the-same-mesh-axis-shards-both-non-contracting-dimensions": "collectives",
+        "collectives-as-layout-transformations": "collectives",
+        "communication-cost": "collectives",
+        "collective-matmul-overlap": "rooflines",
+        "practical-design-procedure": "checks",
+        "sources": "sources",
+        "related": "sources"
+      }
+    }
+  ]
+}

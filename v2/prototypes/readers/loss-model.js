@@ -1,0 +1,5 @@
+import {distribution} from './information-model.js';
+export function regressionFrame(outlier){if(!Number.isFinite(outlier)||outlier<0)throw new RangeError('Nonnegative outlier required');const values=[0,0,0,0,outlier],mean=outlier/5,median=0;const mse=a=>values.reduce((s,v)=>s+(v-a)**2,0)/5;const mae=a=>values.reduce((s,v)=>s+Math.abs(v-a),0)/5;return {values,mean,median,mseMean:mse(mean),mseMedian:mse(median),maeMean:mae(mean),maeMedian:mae(median)};}
+export function binaryScores(q){if(!Number.isFinite(q)||q<=0||q>=1)throw new RangeError('Probability must be strictly inside (0,1)');return {ce:-Math.log(q),brier:2*(q-1)**2,ceGradient:q-1,brierGradient:4*(q-1)*q*(1-q)};}
+export function brierRisk(p,q){distribution(p);distribution(q);if(p.length!==q.length)throw new RangeError('Mismatched alphabets');return q.reduce((s,x,i)=>s+x*x-2*p[i]*x,1);}
+export function stableBce(logit,y){if(!Number.isFinite(logit)||!Number.isFinite(y)||y<0||y>1)throw new RangeError('Invalid Bernoulli logit or target');return Math.max(logit,0)-logit*y+Math.log1p(Math.exp(-Math.abs(logit)));}

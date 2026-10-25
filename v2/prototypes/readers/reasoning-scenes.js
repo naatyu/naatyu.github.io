@@ -1,0 +1,42 @@
+import {rangePlayback} from "./topic-tools.js";
+import {samplingOutcomes,voteState,voteSequence,refinement,budgetTrace,effortRewards} from "./reasoning-model.js";
+const fmt=x=>Number(x.toFixed(4)).toString(),pct=x=>fmt(100*x)+"%";
+const controls="<div class='dense-actions'><button data-play>Play</button><button data-reset>Replay</button></div>";
+const bar=(label,value,wine=false)=>"<div class='reasoning-bar'><span>"+label+"</span><div><i style='width:"+100*value+"%;background:"+(wine?"#cf879e":"#bfdff2")+"'></i></div><strong>"+pct(value)+"</strong></div>";
+export function samplingBody(n=5,split=true,shared=0){
+ const m=samplingOutcomes(.4,n,split,shared);
+ return "<p>One candidate is correct with probability 40%. Wrong answers "+(split?"split equally between B and C":"all use B")+". Generate "+n+" candidates. With probability "+pct(shared)+", all candidates share one draw; otherwise they are independent.</p>"+bar("At least one correct",m.oracle)+bar("Selected by plurality",m.vote,true)+"<p>Oracle candidate coverage="+pct(m.oracle)+". Actual random-tie plurality success="+pct(m.vote)+". Tie probability="+pct(m.tie)+".</p><p>Candidate coverage assumes an oracle could identify any correct answer. Voting does not have that oracle. Wrong-answer concentration and dependence can erase the benefit of additional samples.</p>";
+}
+export function votingBody(step=1){
+ const m=voteState(step);
+return "<div class='reasoning-votes'>"+voteSequence.map((a,i)=>"<span class='"+(i>=step?"reasoning-unseen":"")+"'>"+(i<step?a:"?")+"</span>").join("")+"</div><p>Observed counts: A="+m.counts.A+", B="+m.counts.B+", C="+m.counts.C+". Current leader="+(m.leader??"none yet")+". Remaining="+m.remaining+". Lead margin="+m.margin+".</p><p>"+(m.canStop?"The final choice cannot change under the stated rule.":"More samples can still change or tie the leading count.")+"</p><p>Strict lock needs lead margin &gt; remaining. At the final sample, no work remains even if counts tie. Final ties use fixed order A, B, C; that order does not use correctness. This sequence is constructed, not sampled from a model.</p>";
+}
+export function refinementBody(rounds=4,damage=.3){
+ const m=refinement(.6,.2,damage,12),row=m.rows[rounds],points=key=>m.rows.slice(0,rounds+1).map(r=>(55+r.round*38)+","+(200-160*r[key])).join(" ");
+ return "<div class='reasoning-plot' tabindex='0' role='region' aria-label='Scrollable exact revision-state plot'><svg viewBox='0 0 560 260' role='img' aria-label='Probability of the current answer being correct versus oracle retention of any earlier correct answer'><path d='M55 30 V200 H511' stroke='#a794a8' fill='none'/><polyline points='"+points("current")+"' stroke='#bfdff2' fill='none' stroke-width='3'/><polyline points='"+points("best")+"' stroke='#cf879e' fill='none' stroke-width='3'/><g fill='#ede5ed' font-size='13'><text x='5' y='45'>100%</text><text x='20' y='204'>0%</text><text x='55' y='225'>0</text><text x='490' y='225'>12</text><text x='220' y='245'>Revision round</text></g></svg></div><p>After "+rounds+" revisions: current answer="+pct(row.current)+" (blue); oracle best-so-far="+pct(row.best)+" (burgundy). A wrong answer is repaired with probability 20%; a correct answer is damaged with probability "+pct(damage)+". Initial correctness is 60%.</p><p>p(next)=p(current)(1−damage)+(1−p(current))recovery. Oracle retention cannot lose an earlier success; an imperfect scorer can. These are exact two-state Markov probabilities, not a real refinement curve. The equilibrium is "+pct(m.equilibrium)+".</p>";
+}
+export function budgetBody(budget=6){
+ const m=budgetTrace(budget);
+ return "<div class='reasoning-spans'>"+m.spans.map(s=>"<div class='"+(s.target?"reasoning-supervised":"reasoning-masked")+"'><strong>"+s.role+"</strong><span>"+s.tokens+" tokens</span><small>"+(s.target?"Supervised target":"Conditioning only")+"</small></div>").join("")+"</div><p>Reasoning retained="+m.retained+"/12; reasoning removed="+m.removed+". Context="+m.context+" tokens; targets="+m.targets+". Closure is "+(m.externalClose?"inserted externally and masked":"naturally generated and supervised")+".</p><p>A reasoning-only budget does not cap the answer or the prompt. Keeping the final answer after a truncated trace changes the conditional training example. It does not guarantee that an arbitrary model can answer correctly after every interruption.</p>";
+}
+export function effortBody(cost=.001){
+ const m=effortRewards(cost);
+ return "<p>Token cost λ="+fmt(cost)+". Candidate expected rewards are correctness probability − λ×tokens.</p><div class='reasoning-effort'>"+m.rows.map((r,i)=>"<div class='"+(m.winners.includes(i)?"reasoning-selected":"")+"'><strong>"+r.tokens+" tokens</strong><span>"+pct(r.success)+" success</span><small>Expected reward "+fmt(r.reward)+(m.winners.includes(i)?" · maximum":"")+"</small></div>").join("")+"</div><p>Selected expected-score candidate: "+m.choice.tokens+" tokens. Exact ties within 10⁻¹² prefer the shorter candidate. This is a fixed four-point constructed reward table, not a trained effort policy or a measured cost-quality frontier.</p>";
+}
+const scene=(key,title,input,body,caption,play=false)=>"<figure class='topic-scene' data-reasoning-lab='"+key+"'><h3>"+title+"</h3>"+input+(play?controls:"")+"<div data-body>"+body+"</div><figcaption>"+caption+"</figcaption></figure>";
+export function reasoningScenes(){return {
+ sampling:scene("sampling","Having a correct candidate is not selecting it","<label>Number of candidates<input aria-label='Reasoning sample count' type='range' min='1' max='15' step='1' value='5'></label><label><input aria-label='Disperse wrong answers' type='checkbox' checked> Split wrong answers between B and C</label><label>Shared-draw probability<select aria-label='Shared candidate draw probability'><option value='0'>0: independent</option><option value='.5'>.5: mixed</option><option value='1'>1: identical</option></select></label>",samplingBody(),"Exact multinomial enumeration with random selection among tied highest counts. Correctness per draw is fixed at .4."),
+ voting:scene("voting","Stop only when the remaining votes cannot matter","<label>Observed candidates<input aria-label='Observed reasoning votes' type='range' min='0' max='8' step='1' value='1'></label>",votingBody(),"Eight fixed answer labels. Conservative lock criterion; fixed final tie order.",true),
+ refinement:scene("refinement","A new answer can repair or damage the previous one","<label>Revision round<input aria-label='Reasoning revision round' type='range' min='0' max='12' step='1' value='4'></label><label>Damage probability (%)<input aria-label='Revision damage probability' type='range' min='0' max='50' step='5' value='30'></label>",refinementBody(),"Fixed .6 initial accuracy and .2 recovery. Oracle retention is an ideal upper comparator.",true),
+ budget:scene("budget","An externally closed trace is context, not a closure target","<label>Reasoning-token budget<input aria-label='Reasoning truncation budget' type='range' min='0' max='12' step='1' value='6'></label>",budgetBody(),"Assigned lengths: prompt5, reasoning12, closure1, answer3. Natural closure and inserted closure have different masks."),
+ effort:scene("effort","A learned token cost selects an operating point","<label>Token cost<input aria-label='Reasoning token cost' type='range' min='0' max='40' step='1' value='10'></label>",effortBody(),"λ is slider value/10,000. Candidate correctness probabilities are invented and held fixed.")
+};}
+export function mountReasoningScenes(article){
+ for(const key of ["sampling","voting","refinement","budget","effort"]){
+  const lab=article.querySelector("[data-reasoning-lab='"+key+"']");if(!lab)continue;
+  const input=lab.querySelector("input[type='range']"),select=lab.querySelector("select"),check=lab.querySelector("input[type='checkbox']"),damage=lab.querySelector("[aria-label='Revision damage probability']");
+  const draw=()=>{const n=Math.round(Number(input.value));lab.querySelector("[data-body]").innerHTML=key==="sampling"?samplingBody(n,check.checked,Number(select.value)):key==="voting"?votingBody(n):key==="refinement"?refinementBody(n,Number(damage.value)/100):key==="budget"?budgetBody(n):effortBody(n/10000);};
+  if(key==="voting"||key==="refinement")rangePlayback(article,lab,draw,16000,input);else input.addEventListener("input",draw);
+  select?.addEventListener("change",draw);check?.addEventListener("change",draw);damage?.addEventListener("input",draw);
+ }
+}

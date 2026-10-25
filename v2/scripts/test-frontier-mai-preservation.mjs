@@ -1,0 +1,21 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import {execFileSync} from 'node:child_process';
+import {createHash} from 'node:crypto';
+import GithubSlugger from 'github-slugger';
+import {frontierReader,frontierAliases} from '../prototypes/readers/frontier.js';
+import {maiRecipeDetails} from '../prototypes/readers/mai-recipe-details.js';
+import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+const root=new URL('../../',import.meta.url),path='docs/ai/architectures/model-reports/mai-thinking-1-building-a-hill-climbing-machine.md',source=readFileSync(new URL(path,root),'utf8');
+assert.equal(source,execFileSync('git',['show','HEAD:'+path],{cwd:root,encoding:'utf8'}));
+assert.equal(createHash('sha256').update(source).digest('hex'),'92071ea0c6be7cd30ed8baca3915a33437cabc7d9f5b571c193f4929ff97fa44');
+const slug=path.slice(5,-3),g=new GithubSlugger(),headings=[...source.matchAll(/^#{1,6} (.+)$/gm)].map(m=>g.slug(m[1]));
+assert.equal(headings.length,36);assert.deepEqual(Object.keys(reviewedFragments[slug]),headings);
+const html=frontierReader(s=>s),ids=new Set([...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]));
+for(const h of headings){const d=resolveReviewedNote(slug+'#'+h);assert.equal(d.slug,'training/frontier-recipes');assert(ids.has(d.anchor),h);}
+assert(frontierAliases.includes(slug));assert(!html.includes('href="'+slug+'"'));
+for(const phrase of ['Tied embeddings','bias-free','MinHash-LSH','epoch caps','100.1','5.28','2.22','150B','140B','0.925','0.15','1–10%','FP8 E4M3','FP8 E5M2','1,024-step','batch order','tie-breaking','collective topology','random-number','Hot-standby','23.1%','Top-p mask replay','roughly one million','older short-context traces'])assert(html.includes(phrase),phrase);
+assert.equal((maiRecipeDetails(s=>s).match(/class="katex-mathml"/g)||[]).length,4);
+assert(!html.includes('katex-error'));assert(!/!\[|<PaperFigure|<img/.test(source));
+for(const owner of ['training/scaling','training/data','post-training/rl','post-training/distillation','training/parallelism','training/numerics'])assert(html.includes('href="'+owner+'"'));
+console.log('MAI preservation: Git-equal original,36 actual heading destinations,recipe/development/RL/recovery details,4 typeset equations and filtered old dependency pass. External-primary and production gates remain separate.');
