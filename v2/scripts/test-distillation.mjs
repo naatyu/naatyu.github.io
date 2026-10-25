@@ -7,7 +7,7 @@ import {rank} from "../site/search.js";
 import {reviewedNavigation} from "../site/reviewed-navigation.js";
 const html=distillationReader(s=>"directions.html?slug="+s);
 const ids=[...html.matchAll(/ id="([^"]+)"/g)].map(x=>x[1]);
-assert.equal(distillationSections.length,35);
+assert.equal(distillationSections.length,36);
 assert.equal(ids.length,new Set(ids).size);
 for(const[id]of distillationSections)assert.ok(ids.includes(id),id);
 assert.equal(distillationMeta.date,"2026-06-08");assert.equal(distillationMeta.prototype,false);assert.equal(distillationMeta.visibility,"public");assert.deepEqual(distillationAliases,[]);
@@ -29,4 +29,4 @@ for(const slug of ["ai/training/losses/knowledge-distillation","ai/training/opti
 for(const[,slug]of html.matchAll(/href='directions\.html\?slug=([^'#]+)'/g))assert.ok(notes.some(n=>n.slug===slug),slug);
 for(const q of ["on-policy distillation","GKD","self-distillation","teacher consolidation","label repair","reverse KL"])assert.ok(rank(notes,q).some(r=>r.note===distillationMeta),q);
 const words=html.replace(/<[^>]*>/g," ").split(/\s+/).length;assert.ok(words>4500);
-console.log("Distillation: 35 unique sections, five scenes, lineage, scope caveats, original/canonical links and semantic search pass.");
+console.log("Distillation: 36 unique sections, five scenes, lineage, scope caveats, original/canonical links and semantic search pass.");

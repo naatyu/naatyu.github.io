@@ -1,5 +1,9 @@
 # Precision and Quantization — content audit
 
+## Post-launch update — 2026-10-25
+
+Added `#softmax-resolution`: representability near zero differs from resolution near one. This is a brief conceptual bridge to the full precision-cliff explanation in Losses and Objectives, not a duplicate derivation or a change to the historical FP8/QAT recipes. Source: arXiv:2610.31642v1. Preserved original publication date and legacy source fingerprints; substantive update date is 2026-10-25.
+
 ## Inline notation and swallowed-condition repair — 2026-10-12
 
 Previous goal turn completed destination-ledger reconciliation. Fresh guide/skill/current progress/worklist, complete Numerics reader, dedicated tests and all three core original bodies reread. Typeset scale conventions, finite format powers, group maxima, orthogonal transform, tensor-gradient shapes, attention perturbation/variance, midpoint example, norm denominator, quantizer interval and component traffic. One-output-component/fixed-value/independent-error conditions now accompany the variance relation. The model and reported recipe numbers are unchanged; this pass does not certify a new primary report reading.

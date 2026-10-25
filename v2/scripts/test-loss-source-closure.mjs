@@ -16,13 +16,13 @@ execFileSync('python3',['-c','import sys; compile(sys.stdin.read(),"brier-refere
 assert(code.includes('reduction == "none"'));assert(code.includes('reduction == "sum"'));assert(code.includes('reduction == "mean"'));
 // Verify geometric arithmetic and slack elimination independently, not a fitted SVM solver.
 let cases=0;for(let k=1;k<=32;k++)for(let score=-20;score<=20;score++){const m=score/10,xi=Math.max(0,1-m);assert(m>=1-xi-1e-12);assert(xi>=0);if(xi>0)assert(Math.abs(m-(1-xi))<1e-12);const w=[k,k/2],norm=Math.hypot(...w),unit=w.map(v=>v/norm),plus=unit.map(v=>v/norm),minus=plus.map(v=>-v);assert(Math.abs(Math.hypot(...plus.map((v,i)=>v-minus[i]))-2/norm)<1e-12);cases++;}
-assert.equal((html.match(/class="katex-display"/g)||[]).length,19);
-assert.equal((html.match(/class="katex-mathml"/g)||[]).length,59);
-assert.equal((html.match(/class="inline-math"/g)||[]).length,40);
+assert.equal((html.match(/class="katex-display"/g)||[]).length,22);
+assert.equal((html.match(/class="katex-mathml"/g)||[]).length,63);
+assert.equal((html.match(/class="inline-math"/g)||[]).length,41);
 assert(!html.includes('${inlineMath'));
 const tables=[...html.matchAll(/<div class="dense-table-wrap"([^>]*)><table([^>]*)>/g)];
 assert.equal(tables.length,7);
 for(const [,wrapper,element]of tables){assert(wrapper.includes('tabindex="0"'));assert(wrapper.includes('role="region"'));assert(wrapper.includes('aria-label='));assert(element.includes('min-width:640px'));}
 assert(table('Quoted "caption" & value',['A'],[['B']]).includes('aria-label="Quoted &quot;caption&quot; &amp; value"'));
 for(const tex of [String.raw`\|x\|_2=\sqrt{x^\top x}`,String.raw`R^\top R=I`,String.raw`(X^\top X+\lambda I)w=X^\top y`,String.raw`q_i=\frac{e^{z_i}}{\sum_j e^{z_j}}`,String.raw`S(q,i)=\sum_j(q_j-\mathbf{1}[j=i])^2`,String.raw`\frac{|f(x)|}{\|w\|_2}`,String.raw`-\frac{wp}{q}+\frac{1-p}{1-q}=0`,String.raw`\nabla\Phi(z)=q(z)`])assert(html.includes(tex),tex);
-console.log(`Loss source closure: five Git-equal originals,${headings} actual headings,no old archive,19 typeset displays,callable Python syntax and ${cases} geometry/slack cases pass. PyTorch tensor execution and complete-primary/production review remain separate.`);
+console.log(`Loss source closure: five Git-equal originals,${headings} actual headings,no old archive,22 typeset displays,callable Python syntax and ${cases} geometry/slack cases pass. PyTorch tensor execution and complete-primary/production review remain separate.`);

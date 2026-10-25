@@ -1,5 +1,9 @@
 # Training Stability and Generalization — local content audit
 
+## Post-launch update — 2026-10-25
+
+Added `#softmax-slingshot`: the source-specific precision-cliff → decayed Adam moments → restored gradient/large step mechanism in arXiv:2610.31642v1. It is presented as a controlled grokking result and a diagnostic hypothesis, not the cause of every spike. The numerical derivation and visual remain owned by Losses and Objectives. No training-curve data invented, no source bodies retired, and no large-scale performance replication claimed.
+
 ## Clipping and first-Adam inline notation — 2026-10-14
 
 Fresh complete original clipping/norm bodies read;current connected clipping,optimizer and accumulation explanations reviewed. Typeset8 inline expressions:raw gradient (two occurrences),thresholds,first-step adaptive factor,epsilon and opposing microbatch vectors. Six displays and all source/figure/empirical values remain unchanged. First bias-corrected step with zero moments is still explicitly distinguished from a full Adam trajectory;accumulation/unscale/synchronization/zero-direction/decay conditions remain. Original publication2026-05-11 retained;updated2026-10-14.

@@ -1,0 +1,51 @@
+import {texEq,inlineMath} from './math.js';
+import {cite,rangePlayback} from './topic-tools.js';
+import {registerReaderState} from './reader-state.js';
+import {precisionCliffFrame,precisionFormats} from './softmax-precision-model.js';
+export const softmaxFixPaper='https://arxiv.org/html/2610.31642v1';
+const number=x=>x===0?'0':x===1?'1':x.toExponential(4);
+const phases=['Keep the small correction','Add it to one','Inspect the gradient','Keep the correction separate'];
+export function precisionCliffBody(margin=18,format='fp32',phase=0){
+  if(!Number.isInteger(phase)||phase<0||phase>3)throw new RangeError('Unknown precision step');
+  const f=precisionCliffFrame(margin,format),lost=f.denominator===1;
+  const explanations=[
+    'The target is the largest logit. The two other classes contribute a small positive total r. Their individual gradients can still be represented.',
+    lost?'At this margin, adding r to 1 rounds back to exactly 1. This is lost resolution near one, not exponent underflow.':'At this margin, 1 + r still differs from 1. Increase the margin, or choose a lower precision, to cross the cliff.',
+    lost?'The rounded target probability is 1, so subtracting the target label gives 0. The two other gradients are still positive. Their sum is no longer zero.':'The target gradient has not disappeared, although rounding can already distort it. The two non-target gradients remain positive.',
+    'Compute the loss with log1p/softplus and obtain the target gradient from the non-target mass. Its small numerator survives even when the denominator rounds to one.'
+  ];
+  return `<div class="precision-process" data-precision-phase="${phase}"><ol class="precision-track" aria-label="Computation steps">${phases.map((title,i)=>`<li${i===phase?' aria-current="step"':''}><span>${i+1}</span>${title}</li>`).join('')}</ol><div class="precision-operation"><span>${phase===0?'Represent the correction':phase===1?'Round the normalization':phase===2?'Subtract the hard target':'Avoid subtracting from one'}</span><code>${phase===0?`r = ${number(f.r)}`:phase===1?`1 + r → ${f.denominator.toPrecision(9)}`:phase===2?`q(target) − 1 → ${number(f.standard[0])}`:`−r / (1 + r) → ${number(f.fixed[0])}`}</code></div><div class="precision-gradients"><div><strong>Standard scalar path</strong><code>g = [${f.standard.map(number).join(', ')}]</code><span>Gradient sum: <b>${number(f.standardSum)}</b></span><span>Loss: ${number(f.standardLoss)} nats</span></div><div><strong>Rewritten scalar path</strong><code>g = [${f.fixed.map(number).join(', ')}]</code><span>Gradient sum: <b>${number(f.fixedSum)}</b></span><span>Loss: ${number(f.fixedLoss)} nats</span></div></div><p role="status"><b>Step ${phase+1} of 4.</b> ${explanations[phase]}</p><p class="topic-scenes-caption">${precisionFormats[format].label}; margin m=${margin.toFixed(2)}. Each non-target class gets half the residual mass. Approximate cliff: m=${f.cliff.toFixed(2)}. Scalar intermediate values are rounded to the selected format; gradients are added in browser double precision for the diagnostic. This is a controlled arithmetic example, not a JAX/PyTorch kernel or measured training curve.</p></div>`;
+}
+export function softmaxPrecisionContent(link){return `
+<p>Subtracting the largest logit prevents exponential overflow. It does not protect every small quantity used by the backward pass. A model can have finite logits and loss while receiving an inaccurate gradient. Barron, Gnanapragasam and Tschannen (2026) examine this failure in ${cite(softmaxFixPaper,'A Fix for Softmax and Cross-Entropy')}.</p>
+<h3>Why a correct confident prediction can lose its gradient</h3>
+<p>Consider a hard target t that already has the largest logit. Combine all other classes into one residual mass r. Define the margin against their log-sum-exp, not only against the runner-up:</p>
+${texEq(String.raw`m=z_t-\log\sum_{j\ne t}e^{z_j},\qquad r=e^{-m}=\sum_{j\ne t}e^{z_j-z_t}`,'Finite logits, at least two classes and a valid hard target. Larger m means greater confidence in the correct class.')}
+<p>The exact target probability is ${inlineMath(String.raw`q_t=1/(1+r)`)}. When r is small enough, floating-point addition rounds 1+r to 1. A standard backward path can then evaluate the target gradient as 1−1=0. The other gradients still have small positive numerators. They need not vanish at the same point.</p>
+${texEq(String.raw`\begin{aligned}g_t&=q_t-1=-\frac{r}{1+r}\\g_j&=\frac{e^{z_j-z_t}}{1+r},\qquad j\ne t\\\sum_i g_i&=0\end{aligned}`,'These are exact-arithmetic identities. A rounded target gradient of zero with positive non-target entries violates the zero-sum identity implied by invariance to a common logit shift.')}
+<p>The paper calls this softmax collapse. Its approximate round-to-nearest cliffs are m≈5.5 in BF16, 16.6 in FP32 and 36.7 in FP64. Actual kernels may upcast intermediate operations; record that arithmetic contract instead of inferring it from model-weight dtype.</p>
+<div class="topic-scene" data-softmax-cliff><h3>Follow a correction through the computation</h3><div class="precision-controls"><label>Arithmetic format<select data-precision-format aria-label="Precision cliff arithmetic format"><option value="bf16">BF16</option><option value="fp32" selected>FP32</option><option value="fp64">FP64</option></select></label><label>Correct-class margin <output data-precision-margin>18.00</output><input data-precision-margin-input type="range" min="0" max="48" step="0.25" value="18" aria-label="Correct-class margin"></label></div><label>Computation step<input data-precision-step type="range" min="0" max="3" step="1" value="0" aria-label="Precision cliff computation step"></label><div class="dense-actions"><button type="button" data-precision-back>Previous step</button><button type="button" data-precision-next>Next step</button><button type="button" data-play>Play</button><button type="button" data-reset>Replay</button></div><div data-precision-body>${precisionCliffBody()}</div></div>
+<h3>Rewrite the computation, not the objective</h3>
+<p>Keep the hard-target term out of the exponential sum and apply a stable softplus to the log-sum of the remaining terms. This is still ordinary cross-entropy. Unlike replacing softmax with StableMax, it does not introduce a different prediction map.</p>
+${texEq(String.raw`\begin{aligned}L&=\operatorname{softplus}\!\left(\log\sum_{j\ne t}e^{z_j-z_t}\right)=\log(1+r)\\g_t&=-\sum_{j\ne t}g_j\end{aligned}`,'Use a numerically stable softplus/log1p implementation. Keeping the dependence on zₜ through the non-target differences makes autodiff recover its small negative gradient without subtracting one from a rounded probability.')}
+<p>For the paper's FP32 example z=[9,−9,−9], t=0, its tested standard JAX/Optax path returns zero loss and zero target gradient. The rewritten path returns loss ≈3.046×10⁻⁸ and gradient ≈[−3.046×10⁻⁸,1.523×10⁻⁸,1.523×10⁻⁸]. These are reported implementation results, distinct from the scalar demonstration above.</p>
+<details><summary>A small hard-target implementation sketch</summary><pre><code># PyTorch sketch; z: [..., classes], t: [...] valid integer IDs.
+# Require finite logits and at least two classes. No reduction here.
+def hard_target_ce(z, t):
+    z_t = z.gather(-1, t[..., None])
+    target = F.one_hot(t, z.shape[-1]).bool()
+    others = (z - z_t).masked_fill(target, -torch.inf)
+    return F.softplus(torch.logsumexp(others, dim=-1))</code></pre><p>This pedagogical form allocates a mask; it is not a benchmarked fused-kernel replacement. Apply the note's existing token masks, ignored-label policy and global sum/count reduction. Check both forward values and autodiff gradients in the actual framework, compiler and dtype. A familiar-looking API or a finite scalar loss is not enough.</p></details>
+<p>For finite normal logits, useful checks include a high-precision reference, common-shift invariance and a near-zero sum of logit gradients. Inspect the target gradient separately. A uniform zero-sum projection is not the same as reconstructing the missing target derivative; it redistributes the error across classes.</p>
+<p>The evidence concerns small modular-arithmetic grokking tasks and controlled distillation experiments, not a demonstrated large-LLM speedup. The paper's FP32 modular-addition comparison reports 94.3±5.4% versus 100±0% test accuracy across five seeds, with AdamW, weight decay 1 and ε=10⁻⁸. Do not generalize that gain to another training recipe.</p>
+<p>A different error appears when teacher and student already agree: see <a href="${link('post-training/distillation#softmax-cancellation')}">distillation near an exact match</a>. For the optimizer consequence, see <a href="${link('training/stability#softmax-slingshot')}">Slingshot and precision cliffs</a>.</p>`;}
+export function mountSoftmaxPrecision(article){
+  const lab=article.querySelector('[data-softmax-cliff]');if(!lab)return;
+  const format=lab.querySelector('[data-precision-format]'),margin=lab.querySelector('[data-precision-margin-input]'),step=lab.querySelector('[data-precision-step]');
+  const draw=()=>{const phase=Math.round(Number(step.value));lab.querySelector('[data-precision-margin]').textContent=Number(margin.value).toFixed(2);lab.querySelector('[data-precision-body]').innerHTML=precisionCliffBody(Number(margin.value),format.value,phase);lab.querySelector('[data-precision-back]').disabled=phase===0;lab.querySelector('[data-precision-next]').disabled=phase===3;};
+  const playback=rangePlayback(article,lab,draw,10000,step);
+  for(const input of [format,margin])input.addEventListener('input',()=>{playback.stop();draw();});
+  for(const [selector,direction]of [['[data-precision-back]',-1],['[data-precision-next]',1]])lab.querySelector(selector).addEventListener('click',()=>{playback.stop();step.value=String(Math.max(0,Math.min(3,Number(step.value)+direction)));draw();});
+  registerReaderState(article,'softmax-precision',{read:()=>({format:format.value,margin:Number(margin.value),step:Number(step.value)}),validate:s=>Boolean(s&&precisionFormats[s.format]&&Number.isFinite(s.margin)&&s.margin>=0&&s.margin<=48&&Number.isInteger(s.step)&&s.step>=0&&s.step<=3),write:s=>{playback.stop();format.value=s.format;margin.value=String(s.margin);step.value=String(s.step);draw();}});
+  draw();
+}

@@ -6,6 +6,7 @@ import './test-parallelism-details.mjs';
 import './test-parallelism-preservation.mjs';
 import './test-pipeline-scenes.mjs';
 import './test-reference-notation.mjs';
+import './test-softmax-precision.mjs';
 import {readFile} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';

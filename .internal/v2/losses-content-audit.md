@@ -1,5 +1,15 @@
 # Losses and Objectives — draft audit
 
+## Post-launch update — 2026-10-25: softmax precision
+
+Added `training/objectives#softmax-precision` from Barron, Gnanapragasam and Tschannen, *A Fix for Softmax and Cross-Entropy*, arXiv:2610.31642v1. Read the primary HTML through the conclusion, including equations, reference code, Table 1, experimental conditions and figure captions. No paper images reused and no framework/GPU training replication claimed.
+
+The owning section distinguishes overflow from lost resolution near one, derives the hard-target residual/zero-sum identities, explains the objective-preserving softplus rewrite, and qualifies the existing fused-loss advice. The displayed [9,-9,-9] JAX result and five-seed modular-addition comparison are attributed reported values, not outputs of the browser model.
+
+`softmax-precision-model.js` emulates rounded scalar intermediates for BF16/FP32/FP64, not a compiler/kernel. `test-softmax-precision.mjs` covers all 2,316 selectable scene bodies, cliff/tie boundaries, three-row gradient identity markup and 15 near-match references computed independently with Python Decimal at 90-digit precision. Shared playback supplies opt-in motion, reduced-motion handling and suspend/dispose behavior. New research does not alter baseline legacy-source fingerprints or publication date.
+
+Validation: full v2 suite and publication packaging pass (552 display equations, 1,460 MathML roots); local HTTP route/privacy checks pass. Native desktop and 390px-wide checks exercised manual steps, format changes, keyboard range input, play/replay and the cross-note link; no page overflow or browser warnings/errors observed. Native visual review found and corrected a missing gradient-equation row break; the three-row structure now has a regression assertion. Reduced-motion and lifecycle behavior rely on the shared tested playback helper; no OS reduced-motion toggle or new framework execution was performed. These are pre-publication validation results; use Git and the Pages run for current publication status.
+
 ## Inline notation and readable comparisons — 2026-10-10
 
 Read the complete current reader and its three explanatory modules. Faithfully typeset40previously plain expressions:Euclidean magnitude and orthogonal invariance,normalization policy,regression expectations,residual definition,softmax/CE,proper-score/Brier sums,local-score assumptions,weighted optimum derivative/threshold,FY conjugacy/gradient,SVM distance,ridge normal equations and precision forms. Defined the normalization's nonzero-vector condition where it was implicit. No empirical result,objective family,original body,citation,display formula or numerical model removed. Current19display+40inline=59MathML. Not a new full original/primary reconciliation.

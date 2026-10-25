@@ -25,5 +25,5 @@ const html=lossesReader(s=>`/${s}`);
 for(const id of ['norm-geometry','ridge-geometry']){assert(lossSections.some(([s])=>s===id));assert.equal([...html.matchAll(new RegExp(`id="${id}"`,'g'))].length,1);}
 assert(html.indexOf('id="norm-geometry"')<html.indexOf('id="regression"'));
 assert(html.includes('Gram matrix'));assert(html.includes('zero stays zero'));assert(html.includes('not inverse operations'));
-assert.equal(lossesMeta.date,'2026-04-20');assert.equal(lossesMeta.updated,'2026-10-09');
+assert.equal(lossesMeta.date,'2026-04-20');assert.equal(lossesMeta.updated,'2026-10-25');
 console.log(`Loss preservation: ${cases} rotation, cosine and positive-definiteness cases; norm distinctions, epsilon policy, lineage and meaningful anchors pass.`);

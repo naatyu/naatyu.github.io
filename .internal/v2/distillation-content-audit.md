@@ -1,5 +1,11 @@
 # Distillation — migration audit
 
+## Post-launch update — 2026-10-25: softmax cancellation
+
+Added `post-training/distillation#softmax-cancellation` from arXiv:2610.31642v1. Primary HTML equations, reference backward, experiment/Table 1 and figure-caption conditions were read; no figure extraction or JAX/PyTorch/GPU execution is claimed. The new section preserves this note's q=teacher/p=student convention and distinguishes zero KL/gradient from nonzero cross-entropy at a match.
+
+Coverage: centered logit differences, expm1/log1p probability-difference recovery, drift correction, custom-backward/fixed-teacher limitations, and temperature weighting (τg for original logits under τ² weighting). The no-drift test explicitly controls stochastic layers, weight decay, auxiliary losses and optimizer memory. Reported modulo-53 results retain Adam, temperature, step-count and no-weight-decay conditions. The old FP32/log-softmax snippet remains a baseline, not a near-match accuracy guarantee. Independent Decimal/equality tests live in `test-softmax-precision.mjs`; this is not an empirical replication.
+
 ## Inline notation review — 2026-10-14
 
 Reviewed the surrounding logits, entropy/KL, temperature, conditional-gradient and surrogate explanations. Seventeen inline expressions now use the shared math renderer. Teacher/student logits, temperatures, reverse KL, sampled score gradients, detached feedback and behavior/current ratios are explicit. The surrogate now names the behavior policy and uses rho consistently for its likelihood ratio. The explanation connects the missing gradient to parameter-dependent sampling, without changing the conditional-versus-sequence distinction. No historical report result was changed or newly certified.
