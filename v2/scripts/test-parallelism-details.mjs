@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
-import {causalOwnership} from '../prototypes/readers/parallelism-model.js';
-import {parallelismReader} from '../prototypes/readers/parallelism.js';
-import {onlineAttention} from '../prototypes/readers/attention-model.js';
+import {causalOwnership} from '../site/readers/parallelism-model.js';
+import {parallelismReader} from '../site/readers/parallelism.js';
+import {onlineAttention} from '../site/readers/attention-model.js';
 
 // Independent full-row reference, then masked blocks in both arrival orders.
 let softmaxCases=0;

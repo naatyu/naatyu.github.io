@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import './test-optimization-core-closure.mjs';
 import {readFile} from 'node:fs/promises';
-import {ema,emaInterpretation,gradientSequence,adamStep,noiseModel,nsFrames,nsCoefficients,signRms,normClip,schedule,decayHistory} from '../prototypes/readers/optimization-model.js';
-import {optimizationReader,optimizationEmaBody,optimizationMeta,optimizationSections} from '../prototypes/readers/optimization.js';
-import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
-import {rank} from '../prototypes/search.js';
+import {ema,emaInterpretation,gradientSequence,adamStep,noiseModel,nsFrames,nsCoefficients,signRms,normClip,schedule,decayHistory} from '../site/readers/optimization-model.js';
+import {optimizationReader,optimizationEmaBody,optimizationMeta,optimizationSections} from '../site/readers/optimization.js';
+import {readerMetas,renderDenseReader} from '../site/readers/index.js';
+import {rank} from '../site/search.js';
 const near=(a,b,e=1e-10)=>assert(Math.abs(a-b)<e,`${a} != ${b}`);
 // Independent finite weighted sums verify the changing-gradient animation,
 // rather than only testing the recurrence against itself.
@@ -60,6 +60,6 @@ for(let t=0;t<=10;t++){const f=normClip([3,4],t);assert(Math.hypot(...f.values)<
 for(const warmup of [0,5,15])for(const start of [60,80,90])for(const kind of ['wsd','cosine'])for(let t=0;t<=100;t++){const f=schedule(t,{warmup,start,kind});assert(f>=0&&f<=1);if(t===100)near(f,.1);if(t===warmup)near(f,1);if(kind==='wsd'&&t>=warmup&&t<=start)near(f,1);}
 near(decayHistory([.1,.1,.1],.2),.98**3);near(decayHistory([0,.1,.2],0),1);
 for(const fn of [()=>ema([1],1),()=>adamStep(0,1,0,0,0),()=>noiseModel(0),()=>nsFrames([-1]),()=>signRms(1,2,3),()=>normClip([1],-1),()=>schedule(101),()=>decayHistory([1],1)])assert.throws(fn);
-const html=optimizationReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const [id]of optimizationSections)assert(ids.includes(id));assert.equal(optimizationMeta.date,'2026-04-10');assert(optimizationMeta.prototype);assert(!html.includes('undefined'));
-const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes];for(const [,s,anchor]of html.matchAll(/href="directions\.html\?slug=([^"#]+)(?:#([^"]+))?"/g)){assert(notes.some(n=>n.slug===s),s);if(anchor)assert(renderDenseReader(s,s=>'directions.html?slug='+s)?.includes(`id="${anchor}"`));}for(const q of ['AdamW','Muon','EMA','WSD','learning rate','Newton Schulz'])assert(rank(notes,q).some(r=>r.note===optimizationMeta),q);
+const html=optimizationReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const [id]of optimizationSections)assert(ids.includes(id));assert.equal(optimizationMeta.date,'2026-04-10');assert.equal(optimizationMeta.prototype,false);assert(!html.includes('undefined'));
+const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes];for(const [,s,anchor]of html.matchAll(/href="directions\.html\?slug=([^"#]+)(?:#([^"]+))?"/g)){assert(notes.some(n=>n.slug===s),s);if(anchor)assert(renderDenseReader(s,s=>'directions.html?slug='+s)?.includes(`id="${anchor}"`));}for(const q of ['AdamW','Muon','EMA','WSD','learning rate','Newton Schulz'])assert(rank(notes,q).some(r=>r.note===optimizationMeta),q);
 console.log(`Optimization: 52 rendered EMA states,300 EMA horizons,820 corrected Adam steps,fixed-data noise identities,10 polynomial traces,${extremeNormalizationCases} extreme normalization cases,32 incomplete-input rejections,400 matrix RMS cases,clipping direction,1,818 schedule points,decay,domains,routes and search pass.`);

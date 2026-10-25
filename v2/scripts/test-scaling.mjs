@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import './test-scaling-data-closure.mjs';
 import './test-scaling-core-closure.mjs';
 import {readFile} from 'node:fs/promises';
-import {loss,allocation,mixedDerivative,effectiveData,competing,batchBudget,efficiencyGain,gapFrames,demoLaw,memoryAllocation} from '../prototypes/readers/scaling-model.js';
-import {scalingMeta,scalingSections,scalingReader,scalingBudgetBody} from '../prototypes/readers/scaling.js';
-import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
-import {rank} from '../prototypes/search.js';
+import {loss,allocation,mixedDerivative,effectiveData,competing,batchBudget,efficiencyGain,gapFrames,demoLaw,memoryAllocation} from '../site/readers/scaling-model.js';
+import {scalingMeta,scalingSections,scalingReader,scalingBudgetBody} from '../site/readers/scaling.js';
+import {readerMetas,renderDenseReader} from '../site/readers/index.js';
+import {rank} from '../site/search.js';
 const near=(a,b,e=1e-9)=>assert(Math.abs(a-b)<=e*Math.max(1,Math.abs(a),Math.abs(b)),`${a} != ${b}`);
 for(const k of [.5,1,1.5])for(let step=0;step<=50;step++){
   const body=scalingBudgetBody(step,k);
@@ -182,6 +182,6 @@ for(const K of [100,1000,1e6])for(const B of [1,10,100])near(batchBudget(K,B).T*
 for(const cost of [1,10,100])for(const gain of [.5,1,1.3,3]){const A=2,alpha=.4,E=1,achieved=E+A*(cost*gain)**(-alpha);near(efficiencyGain(A,alpha,E,cost,achieved),gain);}
 for(const target of [1,1.7,2.5,3]){const f=gapFrames(target,2.2,1.8,1.4);near(f.reduce((s,x)=>s+x.value,0),target);}assert(gapFrames(1.7,2.2,1.8,1.4).at(-1).value<0);
 for(const fn of [()=>loss(0,1),()=>allocation(-1),()=>effectiveData(1,-1),()=>effectiveData(1,1,0),()=>competing(0,1,1,1),()=>batchBudget(0,1),()=>efficiencyGain(1,1,1,1,1),()=>gapFrames(1,1,2,0)])assert.throws(fn);
-const html=scalingReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const [id] of scalingSections)assert(ids.includes(id));assert(!html.includes('undefined'));assert.equal(scalingMeta.date,'2026-04-08');assert(scalingMeta.prototype);
-const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes];for(const [,s,anchor]of html.matchAll(/href="directions\.html\?slug=([^"#]+)(?:#([^"]+))?"/g)){assert(notes.some(n=>n.slug===s),s);if(anchor)assert(renderDenseReader(s,x=>'directions.html?slug='+x)?.includes(`id="${anchor}"`));}for(const q of ['Chinchilla','Skaling','Kaplan','K BT','overtraining','efficiency gain'])assert(rank(notes,q).some(r=>r.note===scalingMeta),q);
+const html=scalingReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const [id] of scalingSections)assert(ids.includes(id));assert(!html.includes('undefined'));assert.equal(scalingMeta.date,'2026-04-08');assert.equal(scalingMeta.prototype,false);
+const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes];for(const [,s,anchor]of html.matchAll(/href="directions\.html\?slug=([^"#]+)(?:#([^"]+))?"/g)){assert(notes.some(n=>n.slug===s),s);if(anchor)assert(renderDenseReader(s,x=>'directions.html?slug='+x)?.includes(`id="${anchor}"`));}for(const q of ['Chinchilla','Skaling','Kaplan','K BT','overtraining','efficiency gain'])assert(rank(notes,q).some(r=>r.note===scalingMeta),q);
 console.log(`Scaling: ${cases} independently checked allocation cases, monotonic coupling/finite differences, 1,200 repetition points, 81 competing-power optima, budgets, EG inversion, signed accounting, domains, routes and search pass.`);

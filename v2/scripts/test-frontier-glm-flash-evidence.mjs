@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {parse} from 'parse5';
-import {glmFlashEvidence} from '../prototypes/readers/glm-flash-evidence.js';
+import {glmFlashEvidence} from '../site/readers/glm-flash-evidence.js';
 const root=new URL('../../',import.meta.url),path='docs/ai/architectures/model-reports/glm-5-3-flash-hybrid-multimodal.md';
 const source=readFileSync(new URL(path,root),'utf8');
 assert.equal(source,execFileSync('git',['show','HEAD:'+path],{cwd:root,encoding:'utf8'}));

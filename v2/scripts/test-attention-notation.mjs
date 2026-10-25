@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {attentionReader} from '../prototypes/readers/attention.js';
+import {attentionReader} from '../site/readers/attention.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const html=assertGeneratedMarkup(attentionReader(s=>s),'Attention notation');
 const annotations=[],captions=[],tables=[],parts=[];

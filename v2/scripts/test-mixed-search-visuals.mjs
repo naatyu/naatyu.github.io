@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import {exactSearchTrace} from '../prototypes/readers/search-links-model.js';
-import {orderedTreeTrace} from '../prototypes/readers/ordered-tree-model.js';
+import {exactSearchTrace} from '../site/readers/search-links-model.js';
+import {orderedTreeTrace} from '../site/readers/ordered-tree-model.js';
 const sourceValues=[2,5,8,12,16,23,38,56,72,91];
 const sourceFrames=exactSearchTrace(sourceValues,23);
 assert.deepEqual(sourceFrames.slice(1).map(f=>[f.left,f.right,f.middle,f.nextLeft,f.nextRight,f.result]),[[0,9,4,5,9,null],[5,9,7,5,6,null],[5,6,5,5,6,5]]);

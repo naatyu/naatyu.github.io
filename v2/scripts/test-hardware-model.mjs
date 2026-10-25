@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
-import { heatTransport, powerPlacement, usefulCapacity } from '../prototypes/readers/hardware-model.js';
+import { heatTransport, powerPlacement, usefulCapacity } from '../site/readers/hardware-model.js';
 
 const close = (a, b) => assert.ok(Math.abs(a - b) <= 1e-9 * Math.max(1, Math.abs(a), Math.abs(b)), `${a} != ${b}`);
 let cases = 0;

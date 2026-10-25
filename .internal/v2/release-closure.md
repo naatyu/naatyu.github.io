@@ -1,5 +1,7 @@
 # V2 release closure — 2026-10-25
 
+> Closed historical checklist. V2 shipped in `6bf3368` on 2026-10-25. Its content freeze and pending publication gates no longer apply to ordinary note updates. See `../README.md`.
+
 ## Current working objective
 
 Finish the existing54-reader migration as a bounded release candidate:repair concrete preservation/rendering/navigation defects,finish the recorded visual/shared-shell checks,validate the final artifact,and hand off the exact deployment/recovery decisions. Do not expand the literature or add new scientific sections without a specific migration defect. Do not commit,push,deploy or remove originals without the corresponding authorization. The app's persisted goal currently reports `usageLimited`;its tools cannot edit the objective or resume that state. This file records the requested scope update without misrepresenting the app goal's status.

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {detectionReader} from '../prototypes/readers/detection.js';
-import {suppressionTrace,overlap} from '../prototypes/readers/detection-model.js';
+import {detectionReader} from '../site/readers/detection.js';
+import {suppressionTrace,overlap} from '../site/readers/detection-model.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const html=assertGeneratedMarkup(detectionReader(()=>'')),nodes=[];
 function visit(n){nodes.push(n);for(const c of n.childNodes||[])visit(c);}

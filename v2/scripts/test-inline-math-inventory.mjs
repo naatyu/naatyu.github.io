@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {rawMathCandidates,inlineMathInventory} from './audit-math.mjs';
-import {inlineMath} from '../prototypes/readers/math.js';
+import {inlineMath} from '../site/readers/math.js';
 const html=`<section id="outer"><p>x=1/2</p><div class="topic-scene" id="demo"><p>y=√2</p><figcaption>z=Σx²</figcaption></div><p>w=3/4</p><table><tr><td>q=1/3</td></tr></table><p>${inlineMath(String.raw`r=\frac12`)}</p><pre><code>s=1/5</code></pre><svg><text>t=√3</text></svg></section>`;
 assert.deepEqual(rawMathCandidates(html),[
   {section:'outer',context:'prose',text:'x=1/2'},

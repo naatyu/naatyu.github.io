@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {stabilityReader,stabilityClipBody} from '../prototypes/readers/stability.js';
-import {calculusReader} from '../prototypes/readers/calculus.js';
-import {firstAdam,clipGradient} from '../prototypes/readers/stability-model.js';
+import {stabilityReader,stabilityClipBody} from '../site/readers/stability.js';
+import {calculusReader} from '../site/readers/calculus.js';
+import {firstAdam,clipGradient} from '../site/readers/stability-model.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const text=n=>(n.value||'')+(n.childNodes||[]).map(text).join('');
 function parsed(html){const n=[];function visit(x){n.push(x);for(const c of x.childNodes||[])visit(c);}const root=parseFragment(assertGeneratedMarkup(html));visit(root);return {nodes:n,prose:text(root),annotations:n.filter(x=>x.tagName==='annotation').map(text)};}

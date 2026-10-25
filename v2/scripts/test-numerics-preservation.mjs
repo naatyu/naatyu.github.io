@@ -4,8 +4,8 @@ import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import GithubSlugger from 'github-slugger';
 import {parse} from 'parse5';
-import {numericsReader,numericsAliases} from '../prototypes/readers/numerics.js';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {numericsReader,numericsAliases} from '../site/readers/numerics.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
 const root=new URL('../../',import.meta.url),html=numericsReader(s=>s),ids=new Set([...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]));
 const files=[['fp8-training','e30ab61730a302d47a6ae879b06e0ec63091d60fb6dfb00b5b73a0fe9a68542f'],['low-precision-attention-rounding-bias','96f118101854d75daf8228d4794463af8c99d75fd39f63f6fcb0f2a5c725c3d3'],['quantization-aware-training','c15a487212b3986abf0357e8f4ce00ab7cc1a134de1f8a9152efad54c79721a2']];
 let headings=0;for(const[name,sha]of files){const slug='ai/training/precision/'+name,path='docs/'+slug+'.md',s=readFileSync(new URL(path,root),'utf8');assert.equal(s,execFileSync('git',['show','HEAD:'+path],{cwd:root,encoding:'utf8'}));assert.equal(createHash('sha256').update(s).digest('hex'),sha);assert(!/!\[|<PaperFigure|<img/.test(s));const g=new GithubSlugger(),hs=[...s.matchAll(/^#{1,6} (.+)$/gm)].map(m=>g.slug(m[1]));assert.deepEqual(Object.keys(reviewedFragments[slug]),hs);headings+=hs.length;assert(numericsAliases.includes(slug));assert(!html.includes('href="'+slug+'"'));for(const h of hs){const d=resolveReviewedNote(slug+'#'+h);assert.equal(d.slug,'training/numerics');assert(ids.has(d.anchor),h);}}

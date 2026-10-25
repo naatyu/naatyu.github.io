@@ -4,8 +4,8 @@ import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {createHash} from 'node:crypto';
 import {buildCandidate} from './build-candidate.mjs';
-import {readerMetas} from '../prototypes/readers/index.js';
-import {siteOrigin} from '../prototypes/page-metadata.js';
+import {readerMetas} from '../site/readers/index.js';
+import {siteOrigin} from '../site/page-metadata.js';
 
 export async function buildPublication(){
   const result=await buildCandidate();
@@ -36,7 +36,7 @@ export async function buildPublication(){
   await writeFile(path.join(result.output,'sitemap.xml'),sitemap);
   await writeFile(path.join(result.output,'robots.txt'),`User-agent: *\nAllow: /\nSitemap: ${siteOrigin}/sitemap.xml\n`);
   await writeFile(path.join(result.output,'.nojekyll'),'');
-  return {...result,format:'publication',indexedPages,deployed:false,contentApproval:'separate migration review required'};
+  return {...result,format:'publication',indexedPages,deployed:false};
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href){
   console.log(JSON.stringify(await buildPublication(),null,2));

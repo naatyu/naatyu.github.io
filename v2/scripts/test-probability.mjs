@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
-import {testFrame,jointFrame,bernoulliCdf,quantile,bernoulliCf,empiricalCf,gaussianCf} from '../prototypes/readers/probability-model.js';
-import {probabilityMeta,probabilityReader,probabilitySections} from '../prototypes/readers/probability.js';
-import {readerMetas,readerAliases,renderDenseReader} from '../prototypes/readers/index.js';
-import {reviewedNavigation} from '../prototypes/reviewed-navigation.js';
-import {rank} from '../prototypes/search.js';
+import {testFrame,jointFrame,bernoulliCdf,quantile,bernoulliCf,empiricalCf,gaussianCf} from '../site/readers/probability-model.js';
+import {probabilityMeta,probabilityReader,probabilitySections} from '../site/readers/probability.js';
+import {readerMetas,readerAliases,renderDenseReader} from '../site/readers/index.js';
+import {reviewedNavigation} from '../site/reviewed-navigation.js';
+import {rank} from '../site/search.js';
 const close=(a,b)=>assert(Math.abs(a-b)<1e-9,`${a} != ${b}`),cc=(a,b)=>{close(a.re,b.re);close(a.im,b.im);};
 const diagnostic=testFrame();close(diagnostic.positive,.0297);close(diagnostic.posterior,1/3);assert.equal(testFrame(0,0,0).posterior,null);assert.throws(()=>testFrame(1.01));
 for(let cents=-25;cents<=25;cents++){const f=jointFrame(cents/100);for(const row of f.cells){close(row.reduce((a,b)=>a+b),.5);assert(row.every(v=>v>=0&&v<=.5));}for(let j=0;j<2;j++)close(f.cells[0][j]+f.cells[1][j],.5);close(f.cells[1][1]-.25,f.cov);close(f.cells[1][1]/.5,f.conditional);close(f.correlation,4*f.cov);}
@@ -72,7 +72,7 @@ for(const slug of ['law-of-total-probability','covariance-from-joint-pmf','cumul
   assert.deepEqual(await readFile(new URL('../../'+path,import.meta.url)),execFileSync('git',['show','HEAD:'+path],{cwd:new URL('../../',import.meta.url)}));
 }
 console.log(`Probability example/guards: ${quantileCases} rational inverse-CDF cases, rounding/zero-mass endpoints, missing entries, nonlinear dependence and four Git-equal originals pass.`);
-const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes.filter(n=>!readerAliases.includes(n.slug)&&!reviewedNavigation[n.slug])],html=probabilityReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const [id]of probabilitySections)assert(ids.includes(id),id);for(const slug of [...html.matchAll(/slug=([^"#]+)/g)].map(m=>m[1]))assert(notes.some(n=>n.slug===slug),slug);assert(renderDenseReader(probabilityMeta.slug,s=>s));for(const query of ['Epps-Pulley','CDF','characteristic function','covariance','Bayes'])assert(rank(notes,query).some(r=>r.note===probabilityMeta),query);
+const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes.filter(n=>!readerAliases.includes(n.slug)&&!reviewedNavigation[n.slug])],html=probabilityReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const [id]of probabilitySections)assert(ids.includes(id),id);for(const slug of [...html.matchAll(/slug=([^"#]+)/g)].map(m=>m[1]))assert(notes.some(n=>n.slug===slug),slug);assert(renderDenseReader(probabilityMeta.slug,s=>s));for(const query of ['Epps-Pulley','CDF','characteristic function','covariance','Bayes'])assert(rank(notes,query).some(r=>r.note===probabilityMeta),query);
 for(const slug of ['law-of-total-probability','covariance-from-joint-pmf','cumulative-distribution-function','characteristic-function'])assert(!notes.some(n=>n.slug==='math/probability/'+slug));
 assert.equal((html.match(/class="inline-math"/g)||[]).length,18);
 assert.equal((html.match(/<math /g)||[]).length,32);

@@ -1,7 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <rect width="64" height="64" rx="16" fill="#121410"/>
-  <path
-    d="M17 47V17h6.2l17.6 24.2V17H47v30h-6.2L23.2 22.8V47H17Z"
-    fill="#f7f3ea"/>
-  <path d="M13 52h38" stroke="#c3d0b3" stroke-width="3" stroke-linecap="round"/>
+  <title>Atlas — gradient</title>
+  <rect width="64" height="64" rx="17" fill="#702b40"/>
+  <path d="m16 19 16 29 16-29Z" fill="none" stroke="#c5e2fa" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M16 19h32" stroke="#c5e2fa" stroke-width="6" stroke-linecap="round"/>
 </svg>

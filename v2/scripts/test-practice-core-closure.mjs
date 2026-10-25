@@ -3,8 +3,8 @@ import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import GithubSlugger from 'github-slugger';
-import {practiceReader,practiceAliases} from '../prototypes/readers/practice.js';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {practiceReader,practiceAliases} from '../site/readers/practice.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
 const root=new URL('../../',import.meta.url),ledger=JSON.parse(readFileSync(new URL('.internal/v2/practice-core-closure.json',root),'utf8'));
 const html=practiceReader(s=>s);let headings=0;
 for(const entry of ledger.sources){

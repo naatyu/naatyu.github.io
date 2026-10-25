@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync}from 'node:fs';
 import {createHash}from 'node:crypto';
-import {matmulAccounting,rooflineAccounting,layerAccounting,utilizationAccounting}from '../prototypes/readers/performance-model.js';
+import {matmulAccounting,rooflineAccounting,layerAccounting,utilizationAccounting}from '../site/readers/performance-model.js';
 const close=(a,b)=>assert.ok(Math.abs(a-b)<=1e-11*Math.max(1,Math.abs(a),Math.abs(b)),`${a} != ${b}`);
 let cases=0;
 // Independent scalar operation/traffic enumeration, rather than formula reuse.

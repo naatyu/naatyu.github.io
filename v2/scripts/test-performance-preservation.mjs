@@ -2,9 +2,9 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import GithubSlugger from 'github-slugger';
-import {performanceReader,performanceMeta} from '../prototypes/readers/performance.js';
-import {reviewedNavigation,reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
-import {rooflineAccounting,layerAccounting,matmulAccounting,perRowMatmulAccounting} from '../prototypes/readers/performance-model.js';
+import {performanceReader,performanceMeta} from '../site/readers/performance.js';
+import {reviewedNavigation,reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
+import {rooflineAccounting,layerAccounting,matmulAccounting,perRowMatmulAccounting} from '../site/readers/performance-model.js';
 const html=performanceReader(s=>'/atlas/'+s),ids=new Set([...html.matchAll(/ id="([^"]+)"/g)].map(x=>x[1]));
 let headings=0;
 for(const [slug,count]of [

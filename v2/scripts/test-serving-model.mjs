@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {kvFootprint,pagedPrefixes,decodeSchedule,decodeRoofline,poolBalance,ttsCapacity} from '../prototypes/readers/serving-model.js';
+import {kvFootprint,pagedPrefixes,decodeSchedule,decodeRoofline,poolBalance,ttsCapacity} from '../site/readers/serving-model.js';
 let cases=0;
 const close=(a,b)=>assert.ok(Math.abs(a-b)<=1e-11*Math.max(1,Math.abs(a),Math.abs(b)),`${a} != ${b}`);
 for(let batch=1;batch<=16;batch++)for(const tokens of [0,1,127,128,8192])for(const heads of [1,8,32])for(const bytes of [1,2]){

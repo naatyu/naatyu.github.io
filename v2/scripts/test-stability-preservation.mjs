@@ -3,8 +3,8 @@ import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import GithubSlugger from 'github-slugger';
-import {stabilityReader,stabilityAliases} from '../prototypes/readers/stability.js';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {stabilityReader,stabilityAliases} from '../site/readers/stability.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
 const root=new URL('../../',import.meta.url),html=stabilityReader(s=>s),ids=new Set([...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]));
 const sources=[['gradient-norm-and-training-dynamics','md','79f2d262a399dcaef1f3bce26936842fb2a56a3d6574f92ca2a7a0a7e8b1262a'],['gradient-clipping','md','a789ce6b07db16d837050c14748999defa8b3a1938db421b3e823f9c09d15414'],['training-loss-patterns','md','e96b40c6aafd8e05246d156f0bc468f990ef86080f20bb7edad7bc9583b332d9'],['generalization-dynamics-and-checkpoint-selection','mdx','93fdf0ee6959548d5f265d56e2df545cd176641f79a02659fa05ea08876f9885']];
 let headings=0;for(const[name,ext,sha]of sources){const slug='ai/training/optimization/'+name,path='docs/'+slug+'.'+ext,s=readFileSync(new URL(path,root),'utf8');assert.equal(s,execFileSync('git',['show','HEAD:'+path],{cwd:root,encoding:'utf8'}));assert.equal(createHash('sha256').update(s).digest('hex'),sha);const g=new GithubSlugger(),hs=[...s.matchAll(/^#{1,6} (.+)$/gm)].map(m=>g.slug(m[1]));headings+=hs.length;assert.deepEqual(Object.keys(reviewedFragments[slug]),hs);assert(stabilityAliases.includes(slug));assert(!html.includes(slug));for(const h of hs){const d=resolveReviewedNote(slug+'#'+h);assert.equal(d.slug,'training/stability');assert(ids.has(d.anchor),h);}}

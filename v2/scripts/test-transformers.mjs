@@ -2,10 +2,10 @@ import assert from 'node:assert/strict';
 import './test-transformers-core-closure.mjs';
 import './test-transformers-notation.mjs';
 import {readFile} from 'node:fs/promises';
-import {softmax,normalize,activation,activationNames,depthMix,outputMixture,logOdds,reversible,budget} from '../prototypes/readers/transformers-model.js';
-import {transformersReader,transformersMeta,transformersSections} from '../prototypes/readers/transformers.js';
-import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
-import {rank} from '../prototypes/search.js';
+import {softmax,normalize,activation,activationNames,depthMix,outputMixture,logOdds,reversible,budget} from '../site/readers/transformers-model.js';
+import {transformersReader,transformersMeta,transformersSections} from '../site/readers/transformers.js';
+import {readerMetas,renderDenseReader} from '../site/readers/index.js';
+import {rank} from '../site/search.js';
 const near=(a,b,e=1e-10)=>assert(Math.abs(a-b)<e,`${a} != ${b}`);
 let norms=0;for(let shift=-40;shift<=40;shift++)for(let scale=1;scale<=20;scale++){norms++;const x=[-3,-1,1,3].map(v=>v*scale+shift),a=normalize(x),b=normalize(x,'rms'),mu=x.reduce((s,v)=>s+v,0)/4;near(a.mean,mu);near(a.values.reduce((s,v)=>s+v,0),0);near(a.second,5*scale**2);near(b.second,5*scale**2+shift**2);for(let i=0;i<4;i++){near(a.values[i],(x[i]-mu)/Math.sqrt(5*scale**2+1e-5));near(b.values[i],x[i]/Math.sqrt(5*scale**2+shift**2+1e-5));}}
 near(normalize([2,2,2]).values[0],0);assert(normalize([2,2,2],'rms').values[0]>.999);
@@ -16,6 +16,6 @@ const D=logOdds([[.5,.25,.25],[.25,.5,.25]]);near(D[0][0],Math.log(2));near(D[1]
 for(let x=-50;x<=50;x++)for(let y=-50;y<=50;y++){const r=reversible(x,y);assert.equal(r.recovered1,x);assert.equal(r.recovered2,y);}const b=budget({d:4096,h:32,kv:8,m:14336,layers:32,vocab:50000,tokens:4096});assert.equal(b.head,128);assert.equal(b.attention,41943040);assert.equal(b.ffn,176160768);assert.equal(b.embedding,204800000);assert.equal(b.cache,536870912);assert.equal(b.total,7184121856);
 const tied=budget({d:2048,h:16,kv:4,m:5504,layers:24,vocab:50000}),untied=budget({d:2048,h:16,kv:4,m:5504,layers:24,vocab:50000,tied:false});assert.equal(untied.total-tied.total,102400000);
 for(const fn of [()=>softmax([]),()=>softmax([Infinity]),()=>normalize([]),()=>normalize([1],'bad'),()=>normalize([1],'rms',0),()=>activation('bad',0),()=>depthMix([1]),()=>outputMixture(-.1),()=>logOdds([[0,1]]),()=>budget({d:4096,h:30,kv:8,m:1,layers:1,vocab:1})])assert.throws(fn);
-const html=transformersReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const [id]of transformersSections)assert(ids.includes(id));assert.equal(transformersMeta.date,'2024-09-27');assert(transformersMeta.prototype);assert(!/>undefined<|(?:href|id)="undefined"/.test(html));
-const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes];for(const [,s,anchor]of html.matchAll(/href="directions\.html\?slug=([^"#]+)(?:#([^"]+))?"/g)){assert(notes.some(n=>n.slug===s),s);if(anchor)assert(renderDenseReader(s,s=>'directions.html?slug='+s)?.includes(`id="${anchor}"`));}for(const q of ['SwiGLU','softmax bottleneck','Attention Residuals','reversible','embedding tying'])assert(rank(notes,q).some(r=>r.note===transformersMeta),q);
+const html=transformersReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const [id]of transformersSections)assert(ids.includes(id));assert.equal(transformersMeta.date,'2024-09-27');assert.equal(transformersMeta.prototype,false);assert(!/>undefined<|(?:href|id)="undefined"/.test(html));
+const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes];for(const [,s,anchor]of html.matchAll(/href="directions\.html\?slug=([^"#]+)(?:#([^"]+))?"/g)){assert(notes.some(n=>n.slug===s),s);if(anchor)assert(renderDenseReader(s,s=>'directions.html?slug='+s)?.includes(`id="${anchor}"`));}for(const q of ['SwiGLU','softmax bottleneck','Attention Residuals','reversible','embedding tying'])assert(rank(notes,q).some(r=>r.note===transformersMeta),q);
 console.log(`Transformers: ${norms} normalization cases, ${activations} activation values, 81 depth queries, 21 output mixtures, rank counterexample, 10,201 reversible roundtrips, budget accounting, domains, routes and search pass.`);

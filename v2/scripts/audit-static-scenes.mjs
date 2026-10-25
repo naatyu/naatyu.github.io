@@ -1,6 +1,6 @@
 import {parseFragment} from 'parse5';
 import {pathToFileURL} from 'node:url';
-import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
+import {readerMetas,renderDenseReader} from '../site/readers/index.js';
 
 // Review queue only. Empty search results or an initial uncommitted row can be
 // intentional. Nonempty geometry does not prove a readable or correct diagram.

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import {norm,normalize,inner} from '../prototypes/readers/geometry-model.js';
-import {lossesReader,lossSections,lossesMeta} from '../prototypes/readers/losses.js';
+import {norm,normalize,inner} from '../site/readers/geometry-model.js';
+import {lossesReader,lossSections,lossesMeta} from '../site/readers/losses.js';
 const close=(a,b)=>assert(Math.abs(a-b)<1e-10,`${a} != ${b}`);
 assert.deepEqual(normalize([3,4]),[.6,.8]);close(norm([3,4]),5);
 assert.throws(()=>normalize([0,0]));

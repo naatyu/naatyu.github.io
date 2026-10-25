@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
-import {directionURL,readerDestination} from '../prototypes/reader-links.js';
-import {readerMetas} from '../prototypes/readers/index.js';
-import {reviewedNavigation,reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {directionURL,readerDestination} from '../site/reader-links.js';
+import {readerMetas} from '../site/readers/index.js';
+import {reviewedNavigation,reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
 const state={path:['algorithms'],collection:'neetcode',q:'stack'};
 function check(requested,expected){
   for(const design of ['gallery','canvas','desk']){

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {moeReader,routerPresentation,loadPresentation,demoBatch,tokenJourney} from '../prototypes/readers/moe.js';
-import {routingSvg,routingPoints,routingEquation,routingFrame} from '../prototypes/readers/moe-animation.js';
+import {moeReader,routerPresentation,loadPresentation,demoBatch,tokenJourney} from '../site/readers/moe.js';
+import {routingSvg,routingPoints,routingEquation,routingFrame} from '../site/readers/moe-animation.js';
 const walk=n=>[n,...(n.childNodes||[]).flatMap(walk)];
 const attr=(n,k)=>n.attrs?.find(a=>a.name===k)?.value;
 const text=n=>n.nodeName==='#text'?n.value:(n.childNodes||[]).map(text).join('');

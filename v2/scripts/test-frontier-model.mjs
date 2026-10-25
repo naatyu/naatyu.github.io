@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {frontierProfiles,recipeProfile,parameterBudget,recipeStep,hybridLayout,rlBatchAccounting,sparseConversionBudget,prefillBlockRatio} from '../prototypes/readers/frontier-model.js';
+import {frontierProfiles,recipeProfile,parameterBudget,recipeStep,hybridLayout,rlBatchAccounting,sparseConversionBudget,prefillBlockRatio} from '../site/readers/frontier-model.js';
 const near=(a,b)=>assert(Math.abs(a-b)<1e-10*Math.max(1,Math.abs(a),Math.abs(b)));
 assert.equal(frontierProfiles.length,9);assert.equal(new Set(frontierProfiles.map(p=>p.original)).size,8);
 for(const p of frontierProfiles){assert(p.active<=p.total);for(const phase of ['prefill','decode']){const b=parameterBudget(p.id,phase);near(b.stored,b.backbone+b.lookup);near(b.storedBF16Bytes,b.stored*2e9);assert(b.backboneFraction>0&&b.backboneFraction<=1);}for(let i=0;i<p.phases.length;i++){const t=recipeStep(p.id,i);assert.deepEqual(t.current,p.phases[i]);assert.equal(t.completed.length,i);assert.equal(t.remaining.length,p.phases.length-i-1);}assert.throws(()=>recipeStep(p.id,p.phases.length));}

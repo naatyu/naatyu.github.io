@@ -3,9 +3,9 @@ import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import GithubSlugger from 'github-slugger';
-import {decisionReader,decisionAliases} from '../prototypes/readers/decision.js';
-import {dataReader} from '../prototypes/readers/data.js';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {decisionReader,decisionAliases} from '../site/readers/decision.js';
+import {dataReader} from '../site/readers/data.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
 const root=new URL('../../',import.meta.url),html=decisionReader(s=>s),ids=new Set([...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]));
 const sources=[['ai/architectures/jev-tev-typed-decision-models','529e41b4674ad4e2b668fdb78c481f481fafa66b0f682d3cc42b405eec446b7d'],['ai/architectures/model-reports/shieldstral','3c1789df3703dc74fb03362c30d9f7a6b91d7099241f7a62631cb71e4937c492']];
 let headings=0;for(const[slug,sha]of sources){const path='docs/'+slug+'.md',s=readFileSync(new URL(path,root),'utf8');assert.equal(s,execFileSync('git',['show','HEAD:'+path],{cwd:root,encoding:'utf8'}));assert.equal(createHash('sha256').update(s).digest('hex'),sha);assert(!/!\[|<PaperFigure|<img/.test(s));const g=new GithubSlugger(),hs=[...s.matchAll(/^#{1,6} (.+)$/gm)].map(m=>g.slug(m[1]));headings+=hs.length;assert.deepEqual(Object.keys(reviewedFragments[slug]),hs);assert(decisionAliases.includes(slug));assert(!html.includes(slug));assert(!dataReader(x=>x).includes(slug));for(const h of hs){const d=resolveReviewedNote(slug+'#'+h);assert.equal(d.slug,'models/decision-models');assert(ids.has(d.anchor),h);}}

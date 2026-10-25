@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
 import {swallowedMarkup} from './audit-swallowed-markup.mjs';
-import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
+import {readerMetas,renderDenseReader} from '../site/readers/index.js';
 
 for(const relation of ['l<h','Lᵢ<Lⱼ','0<fᵢ≤1','s<t','a<b']){
   const html=`<figure><figcaption>Require ${relation}. Keep this condition.</figcaption></figure>`;

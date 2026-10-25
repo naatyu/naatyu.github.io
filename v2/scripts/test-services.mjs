@@ -4,10 +4,10 @@ import './test-services-preservation.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {servicesMeta,servicesAliases,servicesSections,servicesReader} from '../prototypes/readers/services.js';
-import {servicesPartitionBody,servicesQuorumBody,servicesWorkersBody} from '../prototypes/readers/services-scenes.js';
-import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
-import {rank} from '../prototypes/search.js';
+import {servicesMeta,servicesAliases,servicesSections,servicesReader} from '../site/readers/services.js';
+import {servicesPartitionBody,servicesQuorumBody,servicesWorkersBody} from '../site/readers/services-scenes.js';
+import {readerMetas,renderDenseReader} from '../site/readers/index.js';
+import {rank} from '../site/search.js';
 let states=0;
 for(const policy of ['cp','ap'])for(let stage=0;stage<=5;stage++){
  const h=servicesPartitionBody(policy,stage);assertGeneratedMarkup(h,"test-services.mjs");assert.ok(!/NaN|undefined|Infinity/.test(h));
@@ -23,11 +23,11 @@ for(const daily of [1,10,25,50,100])for(const seconds of [1,30,60,120])for(const
 }
 const html=servicesReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(x=>x[1]);
 assert.equal(ids.length,new Set(ids).size);assert.equal(servicesSections.length,28);for(const[id]of servicesSections)assert.ok(ids.includes(id));
-assert.equal(servicesMeta.date,'2026-04-08');assert.ok(servicesMeta.prototype);assert.equal(servicesMeta.visibility,'public');assert.equal(servicesAliases.length,10);
+assert.equal(servicesMeta.date,'2026-04-08');assert.equal(servicesMeta.prototype,false);assert.equal(servicesMeta.visibility,'public');assert.equal(servicesAliases.length,10);
 assert.equal(renderDenseReader(servicesMeta.slug,s=>s),servicesReader(s=>s));assert.equal((html.match(/data-services-lab=/g)||[]).length,3);
 for(const text of ['PACELC','34,723','49,604','578.704','98.9901%','25.92','fencing','Sloppy quorum','read-your-writes','Merkle','TTL','DNSSEC','QUIC','write-through','LSM','composite','virtual nodes','durability','idempotency','outbox','LRU','5%','100:1'])assert.ok(html.toLowerCase().includes(text.toLowerCase()),text);
 for(const[,slug]of html.matchAll(/href="directions\.html\?slug=([^"#]+)"/g))assert.ok(readerMetas.some(n=>n.slug===slug),slug);
-const catalog=JSON.parse(readFileSync(new URL('../prototypes/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes];
+const catalog=JSON.parse(readFileSync(new URL('../site/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes];
 for(const q of ['system design','CAP','quorum','DNS','sharding'])assert.ok(rank(notes,q).some(r=>r.note===servicesMeta),q);
 const fingerprints=[
 ['interview-prep/system-design/8-most-important-system-design-concepts-you-should-know','3f5aaf149611fce5a9e94a69a42bfac033e487fbc9f6a93095683296ef0bbe06'],

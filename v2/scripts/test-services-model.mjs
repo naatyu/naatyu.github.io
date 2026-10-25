@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {quorumSets,partitionStory,availabilityBudget,downtime,workerBudget,ringOwner} from '../prototypes/readers/services-model.js';
+import {quorumSets,partitionStory,availabilityBudget,downtime,workerBudget,ringOwner} from '../site/readers/services-model.js';
 let cases=0;const close=(a,b)=>assert.ok(Math.abs(a-b)<=1e-11*Math.max(1,Math.abs(a),Math.abs(b)));
 for(let n=1;n<=7;n++)for(let r=1;r<=n;r++)for(let w=1;w<=n;w++){
  const q=quorumSets(n,r,w);assert.equal(q.minOverlap,Math.max(0,r+w-n));assert.equal(q.maxOverlap,Math.min(r,w));

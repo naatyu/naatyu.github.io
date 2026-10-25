@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import GithubSlugger from 'github-slugger';
-import {hardwareReader} from '../prototypes/readers/hardware.js';
-import {servingReader} from '../prototypes/readers/serving.js';
-import {resolveReviewedNote,reviewedFragments} from '../prototypes/reviewed-navigation.js';
+import {hardwareReader} from '../site/readers/hardware.js';
+import {servingReader} from '../site/readers/serving.js';
+import {resolveReviewedNote,reviewedFragments} from '../site/reviewed-navigation.js';
 const slug='systems/infrastructure/high-density-gpu-infrastructure';
 const body=readFileSync(new URL('../../docs/'+slug+'.md',import.meta.url),'utf8');
 const g=new GithubSlugger(),headings=[...body.matchAll(/^## (.+)$/gm)].map(m=>g.slug(m[1]));

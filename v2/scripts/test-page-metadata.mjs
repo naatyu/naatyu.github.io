@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {parse} from 'parse5';
-import {pageMetadata,renderPageMetadata,updatePageMetadata,noteMetadata,siteOrigin} from '../prototypes/page-metadata.js';
-import {readerMetas} from '../prototypes/readers/index.js';
+import {pageMetadata,renderPageMetadata,updatePageMetadata,noteMetadata,siteOrigin} from '../site/page-metadata.js';
+import {readerMetas} from '../site/readers/index.js';
 const walk=node=>[node,...(node.childNodes||[]).flatMap(walk)];
 const attr=(node,name)=>node.attrs?.find(a=>a.name===name)?.value;
 const page={title:'Atlas',description:'Personal notes.',path:'/atlas/'};

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {crossingPartitionTrace} from '../prototypes/readers/sorting-model.js';
+import {crossingPartitionTrace} from '../site/readers/sorting-model.js';
 const sorted=a=>[...a].sort((a,b)=>a-b);
 let cases=0,states=0;
 // Independently execute the end-pivot procedure described in the reader.

@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import GithubSlugger from 'github-slugger';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
-import {positionReader} from '../prototypes/readers/position.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
+import {positionReader} from '../site/readers/position.js';
 const root=new URL('../../',import.meta.url),html=positionReader(s=>s);
 const ids=new Set([...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]));let headings=0;
 for(const name of ['positional-encoding-sinusoidal-to-rope','rope-scaling','no-positional-embeddings-nope','group-theoretic-positional-encodings']){

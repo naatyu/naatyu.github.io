@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {visionReader} from '../prototypes/readers/vision.js';
-import {visionProjectedLaw} from '../prototypes/readers/vision-model.js';
+import {visionReader} from '../site/readers/vision.js';
+import {visionProjectedLaw} from '../site/readers/vision-model.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const html=assertGeneratedMarkup(visionReader(s=>s),'Vision notation');
 const annotations=[],parts=[];const text=n=>(n.nodeName==='#text'?n.value:'')+(n.childNodes||[]).map(text).join('');

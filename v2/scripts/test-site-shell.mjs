@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import './test-page-metadata.mjs';
 import {parse} from 'parse5';
-import {renderHome,noteURL,explorerNoteURL} from '../prototypes/site-shell.js';
-import {readerMetas} from '../prototypes/readers/index.js';
-import {latestAtlasPublished} from '../prototypes/publication.js';
-import {rangePlayback} from '../prototypes/readers/topic-tools.js';
+import {renderHome,noteURL,explorerNoteURL} from '../site/site-shell.js';
+import {readerMetas} from '../site/readers/index.js';
+import {latestAtlasPublished} from '../site/publication.js';
+import {rangePlayback} from '../site/readers/topic-tools.js';
 
 const walk=node=>[node,...(node.childNodes||[]).flatMap(walk)];
 const attr=(node,name)=>node.attrs?.find(a=>a.name===name)?.value;

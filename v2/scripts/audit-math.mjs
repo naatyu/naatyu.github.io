@@ -1,6 +1,6 @@
 // Structural math inventory, not a proof of mathematical or source correctness.
 import {parseFragment} from 'parse5';
-import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
+import {readerMetas,renderDenseReader} from '../site/readers/index.js';
 export function mathInventory(){return readerMetas.map(meta=>{
   const row={slug:meta.slug,typeset:0,legacy:0,errors:0};
   const walk=node=>{const cls=node.attrs?.find(a=>a.name==='class')?.value.split(/\s+/)||[];

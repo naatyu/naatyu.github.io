@@ -1,5 +1,7 @@
 # Release handoff — 2026-10-25
 
+> Historical pre-launch handoff. Publication subsequently succeeded for `6bf3368` on 2026-10-25. This is not the current local/deployed status report. See `../README.md`.
+
 ## Local deliverables
 
 - `v2/`:54 dense readers,selected Gallery/skywine homepage,file explorer,shared math/navigation/interaction runtime,review and publication exporters,and tests.

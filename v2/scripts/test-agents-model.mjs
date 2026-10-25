@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import {executableTask,rubricRewards,redistributeGroup,localCredit,harnessMass,completionMixture,familyMixture,correctnessEfficiency,prefixCapture,recoveryState} from "../prototypes/readers/agents-model.js";
+import {executableTask,rubricRewards,redistributeGroup,localCredit,harnessMass,completionMixture,familyMixture,correctnessEfficiency,prefixCapture,recoveryState} from "../site/readers/agents-model.js";
 const sum=x=>x.reduce((a,b)=>a+b,0);
 const near=(a,b)=>assert.ok(Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a-b)<1e-9*Math.max(1,Math.abs(a),Math.abs(b)),String(a)+" != "+String(b));
 let cases=0;

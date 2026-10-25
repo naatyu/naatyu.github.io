@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {sftReader} from '../prototypes/readers/sft.js';
-import {newToken,invariantScale} from '../prototypes/readers/sft-model.js';
+import {sftReader} from '../site/readers/sft.js';
+import {newToken,invariantScale} from '../site/readers/sft-model.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const html=assertGeneratedMarkup(sftReader(s=>s),'SFT notation');
 const annotations=[],parts=[],tables=[];

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {dpoPair,marginPath,rewardOptimum,normalizedLogits,responseScore} from '../prototypes/readers/preferences-model.js';
+import {dpoPair,marginPath,rewardOptimum,normalizedLogits,responseScore} from '../site/readers/preferences-model.js';
 const close=(a,b)=>assert(Math.abs(a-b)<1e-8*Math.max(1,Math.abs(b)),a+' != '+b);
 let cases=0;
 for(const beta of [.01,.1,.5,1,2])for(const mode of ['split','down'])for(let i=-40;i<=40;i++){

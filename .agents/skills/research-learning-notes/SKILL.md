@@ -1,18 +1,18 @@
 ---
 name: research-learning-notes
-description: Create or enhance research and engineering notes in the user's Docusaurus Atlas, turning papers, technical reports, blogs, or supplied explanations into accurate, self-contained learning pages with purposeful figures, diagrams, and MDX interactions. Also use to assess whether a source merits a note, without editing until asked.
+description: Assess sources and create or enhance research notes in Nathan's interactive Atlas. Use for papers, reports, technical blogs, and supplied explanations; prefer updates to existing dense topics. Assessment alone does not authorize edits or publication.
 ---
 
 # Research learning notes
 
-Create pages the user can return to months later and learn from without the original conversation. The user prefers substantial technical explanations, useful paper figures, and richer MDX pages when these make concepts easier to understand. Visual polish supports understanding; it does not replace technical substance.
+Create pages Nathan can return to months later without the original conversation. Read `.internal/v2/authoring-contract.md` for his content and design preferences and `.internal/adding-content.md` for code integration. This skill covers research, evidence and teaching decisions; do not duplicate those guides here.
 
 This skill is versioned alongside the Atlas. Locate the repository from the current workspace or this skill's `.agents/skills/research-learning-notes` location; do not assume every task runs in the Atlas repository.
 
 ## Scope and placement
 
 - Distinguish assessment from implementation: “is this worth a note?” calls for reading and a recommendation; create or update after approval. An approved note does not authorize a push unless the user asks.
-- Search existing notes before writing. Extend an existing concept note when the contribution belongs there; use a standalone note for a distinct method, model report, or substantial learning topic. Add a few meaningful cross-links, not a link everywhere.
+- Search the live reader registry and topic bodies before writing. Papers normally extend existing topics; a distinct paper or model name alone does not justify another page. Add meaningful section-level cross-links.
 - Place material by topic, not by the user's current motivation. A useful coding trick or training concept is not interview preparation merely because it arose during a job search.
 - Preserve unrelated changes. If asked to push pending notes, inspect the diff and exact files. Never infer that all untracked files belong to the task.
 
@@ -51,7 +51,7 @@ Choose the smallest effective representation:
 | What should I notice in this paper graph? | The original figure with a reading guide |
 | What is the implementation sequence? | A small process diagram and supporting code |
 
-Avoid decorative dashboards, repeated stat cards, gratuitous animation, or adding an interaction merely because MDX allows it. A straightforward diagram often teaches better than a slider.
+Avoid decorative dashboards, repeated stat cards, gratuitous animation, or adding an interaction merely because the format allows it. Prefer step-controlled or opt-in animations for changing processes; use static diagrams when motion adds nothing.
 
 ### Paper figures
 
@@ -64,27 +64,23 @@ Avoid decorative dashboards, repeated stat cards, gratuitous animation, or addin
 
 ### Original and interactive visuals
 
-- Prefer SVG/HTML/CSS/React for exact scientific diagrams and plots. Use image generation only for genuinely illustrative raster material, not to fabricate empirical charts or mathematical evidence.
+- Prefer code-native SVG/HTML/CSS/canvas for exact scientific diagrams and plots. Use image generation only for genuinely illustrative raster material, not to fabricate empirical charts or mathematical evidence.
 - Plot reported values accurately. Label sparse observations and connecting guide lines; do not imply interpolation is measured. Give reconstructed charts their source, and mark synthetic examples as illustrations rather than experiments.
 - Let interactions expose a meaningful difference: checkpoint choice, method variant, temperature, position, tensor dimension, or inference budget. State what changes and what is held fixed.
 - Keep controls keyboard-accessible with native buttons/inputs, visible focus, appropriate labels and selection state. Use accessible chart descriptions and explanatory text; never rely on color alone.
 - Keep an intelligible static explanation/table alongside interactive evidence. Numerical claims must remain available without interacting. Avoid layout jumps, client-only blank content, or browser globals during server rendering.
-- Support narrow screens and both themes. Avoid motion by default; honor reduced-motion preferences if animation is useful.
+- Support narrow screens and the shared Gallery/skywine palette. Keep playback opt-in and honor reduced-motion preferences.
 
-## Docusaurus integration
+## Live Atlas integration
 
-- Use `.mdx` for substantial pages with custom layouts or interaction; plain `.md` remains appropriate for simple notes. Standalone HTML is not the default because it bypasses the Atlas's integrated docs features.
-- Read nearby notes and current configuration before editing. Preserve frontmatter conventions (`title`, `date`, `lastmod`, `tags`, `draft`), use the actual date, and retain the URL when converting `.md` to `.mdx`. Do not leave both source files at the same route.
-- This Atlas places notes in `docs/`, serves them under `/atlas/`, renders math with remark-math/KaTeX, and keeps static assets in `static/`. Confirm these remain true if the site changes.
-- Read existing components before reuse. `src/components/ResearchNote/` currently offers `PaperFigure` for source-linked figures with reading guides. Its `CheckpointExplorer` and `TransferComparison` are specific to the generalization paper; do not reuse their fixed data for unrelated research.
-- Prefer small reusable components with CSS modules and theme variables. Keep explanations in the MDX source where practical. Use framework base-URL helpers for component asset paths; avoid new chart libraries when a small SVG is sufficient.
-- React/JSX inside MDX requires React syntax (`className`, style objects) rather than arbitrary raw HTML. Keep math, braces, and angle brackets properly delimited. A page compiling successfully does not prove its math or interactions are correct.
-- For a visual rebuild, consult the frontend-design skill if available and applicable. Keep that effort scoped to the note and necessary reusable components.
+- Readers are ES modules in `v2/site/readers/`, registered in `index.js`. Render complete semantic HTML before mounting optional interactions. Do not author new content in legacy `docs/` or React/MDX components.
+- Reuse shared math, section, navigation, playback and reader-state helpers. Keep source calculations independently testable. Follow `.internal/adding-content.md` for metadata, lifecycle and verification steps.
+- Preserve stable slugs/anchors and original publication dates. Update `updated` for substantive edits. Do not mark new production content as a prototype or maintain a second public search catalog.
 
 ## Verify and hand off
 
 - Check facts and reproduced values against sources, figure provenance, internal links, and whether limitations survived the redesign.
-- Run `git diff --check`, the site's build, and TypeScript checks for component changes. Confirm the converted note retains its route, rendered math, navigation, and searchable text.
-- For interactions or layout changes, use a browser when available: exercise every state, inspect a desktop and narrow-screen screenshot, check dark mode, load lazy figures, verify focus and accessible labels, and check browser errors and horizontal overflow. Report unavailable checks accurately.
+- Run `git diff --check`, affected numerical/interaction tests, `npm --prefix v2 test` and `npm --prefix v2 run test:publication`. Confirm routes, rendered math, navigation and searchable text. Legacy Docusaurus/TypeScript commands are not the live validation path.
+- For interactions or layout changes, use a browser when available: exercise representative and boundary states, inspect desktop/narrow layouts, figures, focus, accessible labels, reduced motion, browser errors and horizontal overflow. Report unavailable checks accurately.
 - Before publishing, inspect the exact staged diff. Push only when asked. If the remote has new commits, fetch and inspect them; integrate without overwriting remote work or force-pushing. Stop on conflicts that require a substantive user decision.
 - Hand off briefly: link the note, identify the teaching improvements, state validation results, and distinguish local, committed, pushed, and deployed status. Do not claim deployment solely because a push succeeded.

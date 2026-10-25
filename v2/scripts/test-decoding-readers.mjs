@@ -1,15 +1,15 @@
 import assert from 'node:assert/strict';
 import './test-speculation-scenes.mjs';
 import {readFile} from 'node:fs/promises';
-import {speculativeMass,exactP,exactQ,expectedCommitted,cachePlan,ancestorMask,roundFrame} from '../prototypes/readers/speculation-model.js';
-import {samplingDistribution,guidedLogits} from '../prototypes/readers/decoding-model.js';
-import {speculationMeta,speculationReader,speculationSections} from '../prototypes/readers/speculation.js';
-import {decodingMeta,decodingReader,decodingSections,samplerPresentation} from '../prototypes/readers/decoding.js';
-import {entropy} from '../prototypes/readers/information-model.js';
+import {speculativeMass,exactP,exactQ,expectedCommitted,cachePlan,ancestorMask,roundFrame} from '../site/readers/speculation-model.js';
+import {samplingDistribution,guidedLogits} from '../site/readers/decoding-model.js';
+import {speculationMeta,speculationReader,speculationSections} from '../site/readers/speculation.js';
+import {decodingMeta,decodingReader,decodingSections,samplerPresentation} from '../site/readers/decoding.js';
+import {entropy} from '../site/readers/information-model.js';
 import {parseFragment} from 'parse5';
-import {readerMetas,readerAliases,renderDenseReader} from '../prototypes/readers/index.js';
-import {reviewedNavigation} from '../prototypes/reviewed-navigation.js';
-import {rank} from '../prototypes/search.js';
+import {readerMetas,readerAliases,renderDenseReader} from '../site/readers/index.js';
+import {reviewedNavigation} from '../site/reviewed-navigation.js';
+import {rank} from '../site/search.js';
 const close=(a,b)=>assert(Math.abs(a-b)<1e-10,`${a} != ${b}`);
 const f=speculativeMass(exactP,exactQ);close(f.alpha,.8);close(f.rejection,.2);f.output.forEach((v,i)=>close(v,exactP[i]));f.residual.forEach((v,i)=>close(v,[0,.5,.5,0][i]));
 for(const [p,q] of [[[1,0],[0,1]],[[0,1],[0,1]],[[.5,.5],[1,0]],[[.01,.99],[.9,.1]]]){const m=speculativeMass(p,q);m.output.forEach((v,i)=>close(v,p[i]));close(m.alpha+m.rejection,1);if(m.residual)close(m.residual.reduce((s,v)=>s+v,0),1);}
@@ -45,7 +45,7 @@ assert.deepEqual(samplingDistribution([2,2,1],{temperature:0}),[1,0,0]);assert.d
 // Nucleus crossing token retained. At log-probability logits this is exact.
 assert.deepEqual(samplingDistribution([Math.log(.6),Math.log(.3),Math.log(.1)],{topP:.7}).map(v=>Math.round(v*3)/3),[2/3,1/3,0]);
 assert.deepEqual(guidedLogits([2.1,2],[2,1],0),[2.1,2]);close(guidedLogits([2.1,2],[2,1],.5)[0],2.15);close(guidedLogits([2.1,2],[2,1],.5)[1],2.5);assert.throws(()=>guidedLogits([1],[1,2],.5));
-const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8'));const notes=[...readerMetas,...catalog.notes.filter(n=>!readerAliases.includes(n.slug)&&!reviewedNavigation[n.slug])];
+const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8'));const notes=[...readerMetas,...catalog.notes.filter(n=>!readerAliases.includes(n.slug)&&!reviewedNavigation[n.slug])];
 for(const [meta,reader,sections] of [[speculationMeta,speculationReader,speculationSections],[decodingMeta,decodingReader,decodingSections]]){const html=reader(s=>'directions.html?slug='+s);const ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const [id] of sections)assert(ids.includes(id),id);for(const [,s] of html.matchAll(/slug=([^"#]+)/g))assert(notes.some(n=>n.slug===s),s);assert(renderDenseReader(meta.slug,s=>s));}
 for(const [q,meta] of [['DSpark',speculationMeta],['residual distribution',speculationMeta],['KVShare',speculationMeta],['SynthID',decodingMeta],['LoopCD',decodingMeta],['nucleus',decodingMeta]])assert(rank(notes,q).some(r=>r.note===meta),q);
 assert(!notes.some(n=>n.slug==='ai/inference-serving/decoding/speculative-decoding'));

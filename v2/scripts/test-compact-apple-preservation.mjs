@@ -3,9 +3,9 @@ import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import GithubSlugger from 'github-slugger';
 import {parse} from 'parse5';
-import {compactReader,compactAliases} from '../prototypes/readers/compact.js';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
-import {moeEvidence} from '../prototypes/readers/moe-evidence.js';
+import {compactReader,compactAliases} from '../site/readers/compact.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
+import {moeEvidence} from '../site/readers/moe-evidence.js';
 const root=new URL('../../',import.meta.url),path='docs/ai/architectures/model-reports/third-generation-apple-foundation-models.md';
 const source=readFileSync(new URL(path,root),'utf8');
 assert.equal(source,execFileSync('git',['show','HEAD:'+path],{cwd:root,encoding:'utf8'}));
@@ -25,6 +25,6 @@ const caption=n=>n.childNodes?.find(c=>c.tagName==='caption')?.childNodes?.map(c
 const appleTables=all.filter(n=>n.tagName==='table'&&['Apple June','WWDC26','Apple overview'].some(prefix=>caption(n)?.startsWith(prefix)));
 assert.equal(appleTables.length,3);
 for(const t of appleTables){const parent=t.parentNode;assert.equal(a(parent,'tabindex'),'0');assert.equal(a(parent,'role'),'region');}
-const css=readFileSync(new URL('../prototypes/dense-reader.css',import.meta.url),'utf8');
+const css=readFileSync(new URL('../site/dense-reader.css',import.meta.url),'utf8');
 assert.ok(css.includes('[data-dense-topic="models/compact-recipes"] table{min-width:640px;overflow-wrap:normal;word-break:normal}'));
 console.log('Apple preservation: Git-equal original,22 exact headings,five tiers,IFP sequence,developer/evaluation tables,source caveats and canonical MoE link pass. Security/primary-figure/production gates remain separate.');

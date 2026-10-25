@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import {kvCacheAccounting} from '../prototypes/readers/performance-model.js';
-import {performanceReader} from '../prototypes/readers/performance.js';
+import {kvCacheAccounting} from '../site/readers/performance-model.js';
+import {performanceReader} from '../site/readers/performance.js';
 let cases=0;
 for(const layers of [1,2,32])for(const kvHeads of [1,2,8,32])for(const headWidth of [1,4,128])for(const elementBytes of [1,2,4])for(const sequence of [0,1,8192])for(const sequences of [0,1,4]){
  const r=kvCacheAccounting({layers,kvHeads,headWidth,elementBytes,sequence,sequences});

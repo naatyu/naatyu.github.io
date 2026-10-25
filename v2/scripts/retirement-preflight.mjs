@@ -5,9 +5,9 @@ import {readFile,realpath,readdir} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {parseFragment} from 'parse5';
-import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
-import {reviewedNavigation} from '../prototypes/reviewed-navigation.js';
-import {retiredNavigation} from '../prototypes/retired-navigation.js';
+import {readerMetas,renderDenseReader} from '../site/readers/index.js';
+import {reviewedNavigation} from '../site/reviewed-navigation.js';
+import {retiredNavigation} from '../site/retired-navigation.js';
 
 const sha=bytes=>createHash('sha256').update(bytes).digest('hex');
 const sourcePattern=/^docs\/[a-z0-9-]+(?:\/[a-z0-9-]+)*\.mdx?$/;

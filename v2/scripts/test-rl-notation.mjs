@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {rlReader} from '../prototypes/readers/rl.js';
+import {rlReader} from '../site/readers/rl.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const html=assertGeneratedMarkup(rlReader(s=>s),'RL revised notation');
 const annotations=[],text=[];

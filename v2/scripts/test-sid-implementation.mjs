@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {runInNewContext} from 'node:vm';
 import {parseFragment} from 'parse5';
-import {diffusionReader,diffusionSections} from '../prototypes/readers/diffusion.js';
-import {sidCoordinateLoss} from '../prototypes/readers/diffusion-model.js';
+import {diffusionReader,diffusionSections} from '../site/readers/diffusion.js';
+import {sidCoordinateLoss} from '../site/readers/diffusion-model.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const nodes=[];
 function walk(n){nodes.push(n);for(const c of n.childNodes||[])walk(c);}

@@ -3,16 +3,16 @@ import "./test-agents-model.mjs";
 import "./test-agents-harness-closure.mjs";
 import assert from "node:assert/strict";
 import {readFile} from "node:fs/promises";
-import {agentsMeta,agentsReader,agentsSections,agentsAliases} from "../prototypes/readers/agents.js";
-import {readerMetas,renderDenseReader} from "../prototypes/readers/index.js";
-import {rank} from "../prototypes/search.js";
-import {reviewedNavigation} from "../prototypes/reviewed-navigation.js";
-import {recoveryBody,mixtureBody,gradingBody,completionBody,captureBody} from "../prototypes/readers/agents-scenes.js";
+import {agentsMeta,agentsReader,agentsSections,agentsAliases} from "../site/readers/agents.js";
+import {readerMetas,renderDenseReader} from "../site/readers/index.js";
+import {rank} from "../site/search.js";
+import {reviewedNavigation} from "../site/reviewed-navigation.js";
+import {recoveryBody,mixtureBody,gradingBody,completionBody,captureBody} from "../site/readers/agents-scenes.js";
 const html=agentsReader(s=>"directions.html?slug="+s);
 const ids=[...html.matchAll(/ id="([^"]+)"/g)].map(x=>x[1]);
 assert.equal(agentsSections.length,45);assert.equal(ids.length,new Set(ids).size);
 for(const[id]of agentsSections)assert.ok(ids.includes(id),id);
-assert.equal(agentsMeta.date,"2026-07-25");assert.ok(agentsMeta.prototype);assert.equal(agentsMeta.visibility,"public");assert.deepEqual(agentsAliases,["ai/training/optimization/multi-harness-agentic-rl"]);
+assert.equal(agentsMeta.date,"2026-07-25");assert.equal(agentsMeta.prototype,false);assert.equal(agentsMeta.visibility,"public");assert.deepEqual(agentsAliases,["ai/training/optimization/multi-harness-agentic-rl"]);
 assert.equal(renderDenseReader(agentsMeta.slug,s=>s),agentsReader(s=>s));
 for(const phrase of ["202,752","1,000","10,000","90%","55.3","62.0","75.9","82.7%","29.5%","68.9%","pass@8","66.0","71.0","68%","13%","16","50%","66%","2%","90×","66×","2,500","SCHED_IDLE","AppArmor","eBPF","42.2%","54.2%","52.3%","1.9 percentage-point","31%","same task and harness","not generally restore","all-pass","not vector gradient","target-token","No LFM ablation","one seed","public diagnostics","hidden final","All four evaluation harnesses"])assert.ok(html.includes(phrase),phrase);
 assert.ok(!/undefined|NaN/.test(html.replace("undefined: no positive binary credit","")));
@@ -25,7 +25,7 @@ for(let n=5;n<=100;n+=5)for(const cap of [1,2,Infinity])for(const hack of [false
 for(let n=0;n<=32;n++)for(const balanced of [false,true])check(completionBody(n,balanced));
 check(captureBody());
 assert.equal(states,208);
-const catalog=JSON.parse(await readFile(new URL("../prototypes/catalog.json",import.meta.url),"utf8")),notes=[...readerMetas,...catalog.notes.filter(n=>!reviewedNavigation[n.slug])];
+const catalog=JSON.parse(await readFile(new URL("../site/catalog.json",import.meta.url),"utf8")),notes=[...readerMetas,...catalog.notes.filter(n=>!reviewedNavigation[n.slug])];
 assert.ok(!html.includes("Original notes and report context"));
 for(const slug of ["ai/training/data/agentic-training-data-and-environment-synthesis","ai/training/optimization/groupwise-agentic-grading"]){assert.equal(reviewedNavigation[slug].slug,agentsMeta.slug);assert.ok(!notes.some(n=>n.slug===slug));}
 for(const phrase of ["Task-synthesis loop","Proxy integration boundary","Σuⱼ>0","cluster by topic and structure","no automatic correctness veto","not a measured system throughput"]){assert.ok(html.includes(phrase),phrase);}

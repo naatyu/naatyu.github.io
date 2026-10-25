@@ -4,13 +4,13 @@ import './test-attention-notation.mjs';
 import './test-attention-flash.mjs';
 import './test-attention-core-closure.mjs';
 import {readFile} from 'node:fs/promises';
-import {softmaxRow,attentionExample,cacheElements,onlineAttention,exampleValues} from '../prototypes/readers/attention-model.js';
-import {attentionFrame,attentionSvg,attentionAnimation,mountAttentionAnimation} from '../prototypes/readers/attention-animation.js';
+import {softmaxRow,attentionExample,cacheElements,onlineAttention,exampleValues} from '../site/readers/attention-model.js';
+import {attentionFrame,attentionSvg,attentionAnimation,mountAttentionAnimation} from '../site/readers/attention-animation.js';
 import {parseFragment} from 'parse5';
-import {attentionMeta,attentionReader,attentionSections} from '../prototypes/readers/attention.js';
-import {readerMetas,readerAliases,canonicalReaderSlug,renderDenseReader} from '../prototypes/readers/index.js';
-import {makeTree,findNode} from '../prototypes/navigation.js';
-import {rank} from '../prototypes/search.js';
+import {attentionMeta,attentionReader,attentionSections} from '../site/readers/attention.js';
+import {readerMetas,readerAliases,canonicalReaderSlug,renderDenseReader} from '../site/readers/index.js';
+import {makeTree,findNode} from '../site/navigation.js';
+import {rank} from '../site/search.js';
 const close=(a,b)=>assert(Math.abs(a-b)<1e-12,`${a} != ${b}`);
 const ex=attentionExample();
 close(ex.weights.reduce((a,b)=>a+b),1);assert.equal(ex.weights[3],0);
@@ -44,7 +44,7 @@ for(const width of [260,320,720])for(let i=0;i<=100;i++)for(const reduced of [fa
   if(i===100)assert(labels.includes('Σ pᵢvᵢ = [0.829, 0.234]'));
 }
 for(let i=0;i<=100;i++){const f=attentionFrame(i/100);assert.equal(f.weights[3],0);close(f.weights.reduce((a,b)=>a+b),1);assert(f.mixProgress>=0&&f.mixProgress<=1);}
-const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8'));
+const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8'));
 const sources=catalog.notes.filter(n=>n.tracked&&!n.navigationPage&&!n.draft&&!n.unlisted);
 const notes=[...readerMetas,...sources.filter(n=>!readerAliases.includes(n.slug))];
 assert(findNode(makeTree(notes),['models','architectures']).notes.some(n=>n.slug==='models/attention'));
@@ -63,7 +63,7 @@ for(const target of [...html.matchAll(/slug=([^"#]+)/g)].map(m=>m[1]))assert(not
 for(const q of ['grouped query attention','online softmax','IndexPool','bounded decay'])assert(rank(notes,q).some(r=>r.note===attentionMeta),q);
 assert(html.indexOf('id="head-sharing"')<html.indexOf('id="mla"'));
 for(const text of ['−∞','all-masked','2019','2020','2023','2024','192 unrotated','16,384','2,051','890 MB','arbitrarily long product','not mathematically equal','512','37.5%'])assert(html.includes(text),text);
-const css=await readFile(new URL('../prototypes/readers/attention.css',import.meta.url),'utf8');assert(css.includes('@media(max-width:600px)'));
+const css=await readFile(new URL('../site/readers/attention.css',import.meta.url),'utf8');assert(css.includes('@media(max-width:600px)'));
 // Headless state harness: reduced motion never starts a timed animation.
 // This verifies the component branch, not a real OS/browser media preference.
 const globalNames=['matchMedia','ResizeObserver','IntersectionObserver','requestAnimationFrame','cancelAnimationFrame'];

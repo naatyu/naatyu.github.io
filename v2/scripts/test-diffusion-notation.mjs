@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {diffusionReader} from '../prototypes/readers/diffusion.js';
+import {diffusionReader} from '../site/readers/diffusion.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const html=assertGeneratedMarkup(diffusionReader(()=>'')),nodes=[];
 function visit(n){nodes.push(n);for(const c of n.childNodes||[])visit(c);}

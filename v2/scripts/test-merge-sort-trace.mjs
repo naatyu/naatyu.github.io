@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {mergeSortTrace} from '../prototypes/readers/sorting-model.js';
+import {mergeSortTrace} from '../site/readers/sorting-model.js';
 let arrays=0,states=0;
 for(let n=0;n<=7;n++)for(let code=0;code<3**n;code++){
   let k=code;const values=Array.from({length:n},()=>{const v=k%3-1;k=Math.floor(k/3);return v;}),before=[...values],frames=mergeSortTrace(values);

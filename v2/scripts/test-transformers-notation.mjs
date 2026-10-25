@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {transformersReader} from '../prototypes/readers/transformers.js';
+import {transformersReader} from '../site/readers/transformers.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const html=assertGeneratedMarkup(transformersReader(s=>s),'Transformer notation');
 const annotations=[],text=[],tables=[];

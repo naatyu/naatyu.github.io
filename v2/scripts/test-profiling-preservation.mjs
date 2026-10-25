@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {readFileSync} from 'node:fs';
 import GithubSlugger from 'github-slugger';
-import {profilingReader,profilingMeta} from '../prototypes/readers/profiling.js';
-import {reviewedNavigation,reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {profilingReader,profilingMeta} from '../site/readers/profiling.js';
+import {reviewedNavigation,reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
 
 const html=profilingReader(s=>s);
 const ids=new Set([...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]));

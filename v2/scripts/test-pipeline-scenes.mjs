@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {pipelinePresentation,parallelismReader} from '../prototypes/readers/parallelism.js';
+import {pipelinePresentation,parallelismReader} from '../site/readers/parallelism.js';
 const walk=node=>[node,...(node.childNodes||[]).flatMap(walk)];
 const attr=(node,key)=>node.attrs?.find(a=>a.name===key)?.value;
 const text=node=>node.nodeName==='#text'?node.value:(node.childNodes||[]).map(text).join('');

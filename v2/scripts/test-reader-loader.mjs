@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {createReaderLoader} from '../prototypes/reader-loader.js';
+import {createReaderLoader} from '../site/reader-loader.js';
 
 const deferred=()=>{let resolve,reject;const promise=new Promise((yes,no)=>{resolve=yes;reject=no;});return {promise,resolve,reject};};
 let checks=0;

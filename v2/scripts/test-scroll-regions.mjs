@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
+import {readerMetas,renderDenseReader} from '../site/readers/index.js';
 import {prepareStaticScrollRegions} from './scroll-regions-html.mjs';
-import {mountScrollRegions,scrollRegionAttributes} from '../prototypes/readers/scroll-regions.js';
+import {mountScrollRegions,scrollRegionAttributes} from '../site/readers/scroll-regions.js';
 const attr=(node,name)=>node.attrs?.find(a=>a.name===name)?.value;
 const walk=node=>[node,...(node.childNodes||[]).flatMap(walk)];
 const text=node=>node.nodeName==='#text'?node.value:(node.childNodes||[]).map(text).join('');

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {parse} from 'parse5';
 import {auditReviewedDestinationLedger} from './reviewed-destination-ledger.mjs';
-import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
+import {readerMetas,renderDenseReader} from '../site/readers/index.js';
 
 const plan=JSON.parse(await readFile(new URL('../../.internal/v2/dense-preservation.json',import.meta.url),'utf8'));
 const reviewed=JSON.parse(await readFile(new URL('../../.internal/v2/reviewed-route-destinations.json',import.meta.url),'utf8'));

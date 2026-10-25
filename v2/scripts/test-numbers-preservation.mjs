@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
-import {numbersReader} from '../prototypes/readers/numbers.js';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {numbersReader} from '../site/readers/numbers.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
 
 const html=numbersReader(slug=>'/atlas/'+slug);
 const decode=value=>value.replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&amp;','&');

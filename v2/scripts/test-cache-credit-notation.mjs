@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {compactReader,compactMeta} from '../prototypes/readers/compact.js';
-import {servingReader,servingMeta} from '../prototypes/readers/serving.js';
-import {agentsReader,agentsMeta} from '../prototypes/readers/agents.js';
-import {globalCacheRatio} from '../prototypes/readers/compact-model.js';
-import {redistributeGroup,localCredit} from '../prototypes/readers/agents-model.js';
+import {compactReader,compactMeta} from '../site/readers/compact.js';
+import {servingReader,servingMeta} from '../site/readers/serving.js';
+import {agentsReader,agentsMeta} from '../site/readers/agents.js';
+import {globalCacheRatio} from '../site/readers/compact-model.js';
+import {redistributeGroup,localCredit} from '../site/readers/agents-model.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const text=n=>(n.value||'')+(n.childNodes||[]).map(text).join('');
 function parsed(f){

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
-import {backtrackingReader} from '../prototypes/readers/backtracking.js';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {backtrackingReader} from '../site/readers/backtracking.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
 const html=backtrackingReader(s=>'/atlas/'+s);
 const decode=s=>s.replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&amp;','&');
 const snippets=[...html.matchAll(/<pre(?: [^>]*)?><code>([\s\S]*?)<\/code><\/pre>/g)].map(m=>decode(m[1])).filter(s=>s.startsWith('def subsets(')||s.startsWith('def combinations('));

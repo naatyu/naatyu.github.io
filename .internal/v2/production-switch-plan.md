@@ -1,5 +1,7 @@
 # V2 production switch and source retirement
 
+> Historical plan. The live switch shipped in `6bf3368` on 2026-10-25; `.github/workflows/deploy.yml` now builds v2. Legacy sources still serve recovery/tests. This document does not direct a new switch or deletion. See `../README.md`.
+
 Prepared 2026-10-14. This is a private, unexecuted plan. It does not authorize publication, deletion, or promotion of drafts. The existing Docusaurus workflow remains unchanged.
 
 ## Exact removal scope and recovery

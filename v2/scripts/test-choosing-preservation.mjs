@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {readFileSync} from 'node:fs';
-import {choosingReader} from '../prototypes/readers/choosing.js';
+import {choosingReader} from '../site/readers/choosing.js';
 const html=choosingReader(s=>'/atlas/'+s);
 const snippets=[...html.matchAll(/<pre[^>]*><code>([\s\S]*?)<\/code><\/pre>/g)].map(m=>m[1].replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&amp;','&').trim());
 assert.equal(snippets.length,2);

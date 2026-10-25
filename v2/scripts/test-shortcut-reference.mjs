@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {shortcutTarget} from '../prototypes/readers/diffusion-model.js';
-import {diffusionReader,diffusionSections} from '../prototypes/readers/diffusion.js';
+import {shortcutTarget} from '../site/readers/diffusion-model.js';
+import {diffusionReader,diffusionSections} from '../site/readers/diffusion.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const near=(a,b)=>assert(Math.abs(a-b)<1e-12*Math.max(1,Math.abs(a),Math.abs(b)),`${a} != ${b}`);
 let cases=0;

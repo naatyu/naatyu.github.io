@@ -24,7 +24,7 @@ Open `http://localhost:4323/`. The preview server sends noindex headers; the pub
 
 ## Authoring
 
-Read `AGENTS.md` and `.internal/v2/authoring-contract.md` before changing notes. Readers live in `v2/prototypes/readers/`; the directory name is historical. New research normally updates its owning topic. Preserve original publication dates.
+Read `AGENTS.md` and `.internal/v2/authoring-contract.md` before changing notes. Readers live in `v2/site/readers/`. New research normally updates its owning topic. Preserve original publication dates. Follow [the implementation walkthrough](.internal/adding-content.md); see [the internal index](.internal/README.md) for editorial guides and historical evidence.
 
 ## Publication and recovery
 

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {parseFragment} from 'parse5';
-import {diffusionReader,diffusionMeta,diffusionSections} from '../prototypes/readers/diffusion.js';
+import {diffusionReader,diffusionMeta,diffusionSections} from '../site/readers/diffusion.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 
 const html=assertGeneratedMarkup(diffusionReader(s=>'/atlas/'+s+'/'),'consistency reference');

@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import './test-greedy-preservation.mjs';
 import {readFile} from 'node:fs/promises';
-import {combinationTrace,mergeTrace,schedulingTrace,overlapTrace,reachableTrace} from '../prototypes/readers/search-choice-model.js';
-import {backtrackingMeta,backtrackingSections,backtrackingReader} from '../prototypes/readers/backtracking.js';
-import {greedyMeta,greedySections,greedyReader} from '../prototypes/readers/greedy.js';
-import {readerMetas,readerAliases,renderDenseReader} from '../prototypes/readers/index.js';
-import {rank} from '../prototypes/search.js';
+import {combinationTrace,mergeTrace,schedulingTrace,overlapTrace,reachableTrace} from '../site/readers/search-choice-model.js';
+import {backtrackingMeta,backtrackingSections,backtrackingReader} from '../site/readers/backtracking.js';
+import {greedyMeta,greedySections,greedyReader} from '../site/readers/greedy.js';
+import {readerMetas,readerAliases,renderDenseReader} from '../site/readers/index.js';
+import {rank} from '../site/search.js';
 await import('./test-backtracking-preservation.mjs');
 let combinationCases=0;
 for(let n=0;n<=6;n++)for(let encoded=0;encoded<3**n;encoded++){
@@ -49,7 +49,7 @@ let reachCases=0;for(let n=0;n<=7;n++)for(let encoded=0;encoded<4**n;encoded++){
   const fs=reachableTrace(jumps);assert.equal(fs.at(-1).reachable,n===0||reachable.has(n-1));
   assert(fs.every((f,i)=>i===0||f.farthest>=fs[i-1].farthest));
 }
-const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes.filter(n=>!readerAliases.includes(n.slug))],link=s=>'directions.html?slug='+s;
+const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes.filter(n=>!readerAliases.includes(n.slug))],link=s=>'directions.html?slug='+s;
 for(const [meta,reader,sections,queries]of [[backtrackingMeta,backtrackingReader,backtrackingSections,['backtracking','pruning','combinations']],[greedyMeta,greedyReader,greedySections,['greedy','intervals','sweep line']]]){
   const html=reader(link),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const [id]of sections)assert(ids.includes(id));assert(renderDenseReader(meta.slug,link));assert(meta.learningGoals.length>=3);
   for(const [,slug,anchor]of html.matchAll(/href="directions\.html\?slug=([^"#]+)(?:#([^"]+))?"/g)){assert(notes.some(n=>n.slug===slug),slug);if(anchor)assert(renderDenseReader(slug,link)?.includes(`id="${anchor}"`),slug+'#'+anchor);}

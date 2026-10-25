@@ -1,12 +1,12 @@
-# Atlas v2 — canonical note-authoring guide
+# Atlas — current note-authoring guide
 
-This is the single source of truth for Nathan's agreed note-writing preferences. Updated 2026-10-25. Read it before every note creation, revision or migration. It must never appear in public navigation or search. The research-learning-notes skill supplies the detailed source-verification and figure-review workflow. This guide supersedes its legacy Docusaurus format rules. Nathan approved the v2 live migration on 2026-10-25; the production workflow now builds the standalone v2 exporter. Historical Docusaurus sources are preservation/rollback inputs, not the live build. A configured workflow is not proof that deployment succeeded; verify the hosted artifact after the push.
+This is the single source of truth for Nathan's note-writing preferences. Updated 2026-10-25. Read it before note creation or revision. The research-learning-notes skill supplies source-verification and figure-review rules; `.internal/adding-content.md` explains implementation. The site is live: production uses the standalone v2 exporter and `v2/site/`. Historical Docusaurus sources are recovery/test fixtures, not authoring targets. Migration audits are evidence, not a current task queue. Keep this guide out of public navigation and search.
 
 ## Reader and author
 
 This is Nathan's personal working atlas first: capture useful knowledge, find it quickly, revisit precise details, and support his own research and implementation. Other people may read it, but creating a course or optimizing visitor onboarding is not the main goal. Do not dilute precious technical content or impose prerequisite sequences for a hypothetical beginner audience.
 
-The assistant authors and maintains source code. Public notes are written in English. There is no CMS requirement. Choose the source format that best supports Nathan's understanding and recall; custom Astro/HTML and interactive components are first-class content. Keep metadata consistent across all formats. Substantial topic notes with concise sections and useful visuals are personal reference aids, not mandatory lessons.
+The assistant authors and maintains source code. Public notes are written in English. There is no CMS requirement. Current notes are ES modules that produce semantic HTML and mount optional interactions; do not assume Astro, React or MDX is installed. Substantial topic notes with concise sections and useful visuals are personal reference aids, not mandatory lessons.
 
 The homepage carousel contains the last three published notes, with title, publication date, preview and a direct note link. It is not a subject/course carousel. Publication ordering ignores reference-only updates.
 
@@ -55,7 +55,7 @@ Use the approved MoE routing animation as a visual reference, not a template to 
 
 Every animation needs a testable mathematical/state model. Test endpoint and intermediate values, masks, ties and conservation properties where applicable. Separate playback time from model/training time. Provide enough context to understand the static stopped scene. Avoid caption changes on every frame and do not let animation restart when a section link is clicked.
 
-For parameter experiments, update the interpretation when the parameter changes: a caption valid for a confident error may be false near a correct prediction. Do not shrink a dense desktop diagram until its labels become unreadable on mobile; reorient the layout or provide a local scroll surface. Shared reader tools live in `v2/prototypes/readers/topic-tools.js`, with exact calculations in separate pure model modules. Reuse these behaviors, not an identical scene for every concept.
+For parameter experiments, update the interpretation when the parameter changes: a caption valid for a confident error may be false near a correct prediction. Do not shrink a dense desktop diagram until its labels become unreadable on mobile; reorient the layout or provide a local scroll surface. Shared reader tools live in `v2/site/readers/topic-tools.js`, with exact calculations in separate pure model modules. Reuse these behaviors, not an identical scene for every concept.
 
 Organize methods by historical progression when this explains the design: predecessor, bottleneck, proposed improvement, remaining tradeoffs. Verify first-publication dates rather than assuming the newest report invented a technique. Parallel research branches stay parallel; do not imply that linear attention succeeded MLA chronologically or replaces all softmax attention. For example, [MQA (2019)](https://arxiv.org/abs/1911.02150), [early linear-attention work (2020)](https://arxiv.org/abs/2006.16236), [GQA (2023)](https://arxiv.org/abs/2305.13245), and [MLA (2024)](https://arxiv.org/abs/2405.04434) need a chronology that also separates KV-cache compression from alternative attention operators. New findings update the owning topic with dated, source-specific sections.
 
@@ -75,7 +75,7 @@ For simple references, a compact annotated example or visual comparison can sati
 
 Separate subject taxonomy, content type, and optional reading collection. Interview motivation does not define a subject; the NeetCode collection points to canonical pattern sections without duplicating them. Prefer fewer dense topic notes: MoE owns routing/balancing/stability; Speculative Decoding owns drafter families and implementation; Parallelism owns its dimensions/layouts/schedules. Advanced sections are not automatically separate pages. New papers normally update their topic, including motivation, mechanism, visuals, evidence and limitations. Create a separate note only for a genuinely independent subject.
 
-Completely reorganize inherited folders where subjects are connected: AI-model parallelism belongs to Training; GPU communication/profiling belongs to Execution and is directly connected to models. Use one canonical explanation with section-level links and secondary discoverability. Individual LeetCode solutions and cybersecurity challenge write-ups are retired from the public atlas during migration; do not recreate an exercise inventory under another label. Nathan explicitly rejected visible original-note archives and original-note blocks on 2026-10-06. Recovery uses verified Git history, not copies in the public atlas. Check that current source content is committed before retiring it; preserve uncommitted unique content first. Production source removal waits for the v2 production switch so the current site is not broken mid-migration.
+Place connected subjects together: AI-model parallelism belongs to Training; GPU communication/profiling belongs to Execution and connects to models. Use one canonical explanation with section-level links. Individual LeetCode solutions and cybersecurity challenge write-ups are retired from the public atlas; do not recreate an exercise inventory under another label. Recovery uses verified Git history, not visible original-note archives. Before retiring source material, verify that its unique content and old routes have real destinations and its current body is recoverable from Git.
 
 The editorial pass must assign every source an explicit keep/merge/split/expand/move proposal, target subject, reader question, preserved unique material, source provenance, and old-URL destination. Review these as a coherent corpus-wide proposal instead of accumulating unrelated one-off redesigns. Prototype category heuristics must not be presented as that review.
 
@@ -83,7 +83,7 @@ Propose merges based on duplicated explanation and reader needs, not title simil
 
 ## Corpus proposal and lossless migration
 
-The authoritative revised 2026-10-03 proposal lives in `dense-notes-blueprint.md`, `dense-notes-catalog.md`, `dense-source-map.md`, and `dense-preservation.json`. Its 54-topic outline supersedes the earlier 149-reader plan in the `notes-v2-*` files. It resolves all 232 baseline entries but is not a full-body/factual audit or completed migration. Refresh its fingerprints whenever originals change.
+The completed migration's evidence lives in `dense-notes-blueprint.md`, `dense-notes-catalog.md`, `dense-source-map.md`, and `dense-preservation.json`. These record the 54-topic consolidation of 232 baseline entries; they are not the live content registry or a permanent limit on topic count. Read them when changing legacy routes, recovery fixtures or preservation decisions, not for every new paper. The live registry is `v2/site/readers/index.js`.
 
 In `dense-preservation.json`, `primaryDestination` retains the original proposal. Each retained source also has `reviewedPrimaryDestination`, synchronized with `reviewed-route-destinations.json` and the rendered section. Update that reviewed field when a source's actual destination changes; do not erase the historical proposal. Retired sources must not gain a content-preserving reviewed destination. The corpus diagnostic and static regression enforce this distinction. A synchronized destination proves route integrity, not preservation of every substantive detail or production readiness.
 
@@ -95,9 +95,9 @@ Small snippets should explain one operation, usually in 5–15 lines. Split long
 
 No reader is migrated solely because its Markdown renders inside a new shell. Each retained page must satisfy the existing learning-conversion, source/route, accessibility and visual-QA checks. Planned redirects/anchors in the proposal are not implemented routes.
 
-## Reusable primitive candidates
+## Reusable reader tools
 
-Candidate primitives: NoteHeader, FigureWithReadingGuide, Comparison, EquationWithSymbols, StepExplorer, ParameterExplorer, CodeWalkthrough, SourceReference, RelatedConcepts. The chosen prototype determines styling; primitives keep conceptual responsibility separate from visual tokens.
+Use the implemented helpers in `v2/site/readers/topic-tools.js`, `math.js`, `reader-state.js` and the owning topic's model/scene modules. Read their real APIs before reuse; design-phase component names are not an implementation contract.
 
 ### Mathematical rendering
 
@@ -121,30 +121,24 @@ The workspace uses the available window, split between file explorer and reader.
 
 Controls must not cover reading text on narrow screens. Use the shared compact utility margin for Home, explorer visibility and section lookup. Keep accessible names and visible keyboard focus when labels are visually compact. Section lookup supports Escape to close and return focus; no note remount is needed for a section jump.
 
-## Required migration workflow
+## Content-update workflow
 
-1. Read the topic's source list and all relevant original bodies, components and assets. Check for useful content elsewhere in the corpus. Refresh source fingerprints; record what is and is not reviewed.
+1. Read the requested source, owning topic and relevant components/assets. Check for useful content elsewhere in the corpus. Record what is and is not reviewed; old source fingerprints need attention only when those fixtures change.
 2. Map unique mechanisms, proofs, code variants, evidence, conditions, figures and sources to explicit sections. Identify corrections, uncertainty and connected-topic ownership. Do not treat duplicated text as permission to discard unique evidence.
 3. Write a coherent explanatory spine: problem, mechanism, worked example, evidence and limitations. Historical progression supports understanding; it is not a mandatory opening timeline. Keep deep details navigable rather than fragmenting them into extra notes.
 4. Add purposeful visuals, preferentially explanatory animations where time or state matters. Keep complete static explanations and concise code. Use STE-informed English without claiming certified compliance.
 5. Integrate the reader through shared metadata, search, categories and lifecycle code. Add aliases/redirects only for content actually covered. Never hide unmigrated material behind a short new summary.
 6. Verify formulas, source-conditioned claims, math rendering, assets, section/internal/legacy links, fuzzy search, dates and visibility. Test animations and other interactions, desktop/narrow layouts, keyboard access and reduced motion. Record unavailable checks accurately.
-7. Update the topic audit and corpus worklist. Distinguish source-read, draft reader, content-reviewed, rendering-tested, production-ready and deployed states. Retire originals after the preservation and route gates pass, using verified Git history for recovery rather than a visible archive.
+7. Record substantive changes and verification in the relevant topic audit when useful. Distinguish local, tested, committed, pushed and deployed states. Retire superseded material only with verified recovery and real destination coverage.
 
-The implementation queue is `corpus-worklist.md`. Its states and topic audits—not the public index or historical prototype README—determine what is actually migrated.
+Normal content work does not reopen the migration or require reconciling every historical audit. The registry and current source determine what exists; Git and deployment results determine what shipped.
 
 A source map, section outline, animation prototype or new shell is not a finished migration. A good finished note is substantial enough for Nathan's research and implementation, coherent enough to read, and indexed enough to consult without rereading everything.
 
 ## Delivery boundaries
 
-### Finish discipline — 2026-10-25
+The migration shipped in `6bf3368` on 2026-10-25. New research is welcome when requested; the release-only scientific-content freeze has ended. Do not reopen broad paper/code reviews merely because an old audit says “pending.” Resolve identified defects and verify new claims without pretending unreviewed sources were read.
 
-Nathan explicitly requested a faster completion after excessive source-audit expansion. Freeze new scientific content during release closure. Use the existing original-body reconciliations and regression evidence; do not restart paper/code reviews merely because a historical audit says “full primary review pending.” Investigate a source when an identified migrated claim, formula, attribution or retained detail needs resolution. Do not claim deferred sources were read or that structural checks prove semantic coverage.
+Use the approved Gallery/skywine system. Label synthetic demonstrations and measured data distinctly. Verify content, formulas, links, search, interactions, desktop/narrow layouts, keyboard access and reduced motion. Structural tests do not certify scientific completeness.
 
-The release checklist must name concrete failures or unverified required behaviors, with a bounded next action. Keep optional external implementation replication, broader literature expansion and certification beyond this personal atlas in a separate follow-up backlog. Do not add new examples or methods unless needed to repair a migration defect. Existing knowledge preservation, coherent explanations, readable math, usable visuals, navigation, privacy and safe recovery remain required. Publishing still requires authorization.
-
-- Design direction is approved; continue the Gallery/skywine system while migrating content. New design exploration is not a prerequisite for each note.
-- Prototype data must be marked as conceptual or actual. Prototype notes are not counted as completed migrations.
-- Do not deploy prototypes or replace the current Pages workflow before the selected design and migration are ready.
-- Content audit completion means each entry was substantively reviewed. Generating a file inventory does not complete the editorial audit.
-- V2 is finished only when every retained note satisfies the learning conversion checks and preserved URLs, search, assets, and mobile layouts have been verified.
+Commit, push and deploy only when requested. Inspect the exact diff and preserve unrelated work. Verify the actual Pages run and hosted artifact before claiming deployment; a local build or successful push alone is not that proof.

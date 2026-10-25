@@ -1,6 +1,6 @@
 import {assertGeneratedMarkup,assertGeneratedMarkupCount} from './check-generated-markup.mjs';
 import assert from 'node:assert/strict';
-import {communicationRingBody,communicationDirectBody,communicationCreditBody,communicationVolumeBody,communicationScenes}from '../prototypes/readers/communication-scenes.js';
+import {communicationRingBody,communicationDirectBody,communicationCreditBody,communicationVolumeBody,communicationScenes}from '../site/readers/communication-scenes.js';
 let cases=0;
 function check(html){assertGeneratedMarkup(html,"test-communication-scenes.mjs");assert.ok(!/NaN|undefined|Infinity/.test(html));assert.ok(html.includes('data-communication-result'));cases++;}
 for(let s=0;s<=6;s++)check(communicationRingBody(s));

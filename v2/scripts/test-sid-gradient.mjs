@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {diffusionReader,diffusionSections} from '../prototypes/readers/diffusion.js';
+import {diffusionReader,diffusionSections} from '../site/readers/diffusion.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 
 const nodes=[];

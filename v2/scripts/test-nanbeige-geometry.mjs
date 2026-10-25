@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parseFragment} from 'parse5';
-import {recurrenceReader} from '../prototypes/readers/recurrence.js';
-import {compactReader} from '../prototypes/readers/compact.js';
+import {recurrenceReader} from '../site/readers/recurrence.js';
+import {compactReader} from '../site/readers/compact.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const evidence=JSON.parse(readFileSync(new URL('../../.internal/v2/nanbeige-geometry-verification.json',import.meta.url),'utf8'));
 assert.equal(evidence.revision,'b82e54bd609793562a75cbf9337970a93369eab5');

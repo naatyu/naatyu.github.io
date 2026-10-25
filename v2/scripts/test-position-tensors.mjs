@@ -1,7 +1,7 @@
 // Optional CPU check of the actual rendered examples. Supply an isolated torch Python.
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
-import {positionReader} from '../prototypes/readers/position.js';
+import {positionReader} from '../site/readers/position.js';
 const python=process.env.ATLAS_TORCH_PYTHON;
 assert.ok(python,'Set ATLAS_TORCH_PYTHON to a Python interpreter with torch and numpy.');
 const snippets=[...positionReader(s=>s).matchAll(/<pre[^>]*><code>([\s\S]*?)<\/code><\/pre>/g)].map(m=>m[1].replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&amp;','&'));

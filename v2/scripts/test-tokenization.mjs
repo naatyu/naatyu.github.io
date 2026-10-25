@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {bpeTraining,segmentationLattice,selectSegmentation,toyPieces} from '../prototypes/readers/tokenization-model.js';
-import {tokenizationMeta,tokenizationReader,tokenizationSections} from '../prototypes/readers/tokenization.js';
-import {readerMetas,readerAliases,renderDenseReader} from '../prototypes/readers/index.js';
-import {reviewedNavigation} from '../prototypes/reviewed-navigation.js';
-import {rank} from '../prototypes/search.js';
+import {bpeTraining,segmentationLattice,selectSegmentation,toyPieces} from '../site/readers/tokenization-model.js';
+import {tokenizationMeta,tokenizationReader,tokenizationSections} from '../site/readers/tokenization.js';
+import {readerMetas,readerAliases,renderDenseReader} from '../site/readers/index.js';
+import {reviewedNavigation} from '../site/reviewed-navigation.js';
+import {rank} from '../site/search.js';
 import {parseFragment} from 'parse5';
 const close=(a,b)=>assert(Math.abs(a-b)<1e-10,`${a} != ${b}`);
 const words=['low','lower','lowest'],frames=bpeTraining(words,5);assert.equal(frames.length,6);
@@ -17,7 +17,7 @@ close(lattice.alternatives[0].probability,.048/.168);assert.deepEqual(selectSegm
 assert.throws(()=>segmentationLattice('c',toyPieces));assert.throws(()=>segmentationLattice('x',{x:0}));assert.throws(()=>selectSegmentation(lattice.alternatives,-.1));
 // Compare DP with exhaustive paths across varied tiny strings, not just one example.
 for(const text of ['a','b','ab','ba','aab','baba','abababa']){const f=segmentationLattice(text,toyPieces);close(f.z.at(-1),f.alternatives.reduce((s,a)=>s+a.weight,0));const bestWeight=f.best.reduce((p,s)=>p*toyPieces[s],1);close(bestWeight,Math.max(...f.alternatives.map(a=>a.weight)));}
-const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes.filter(n=>!readerAliases.includes(n.slug)&&!reviewedNavigation[n.slug])];
+const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes.filter(n=>!readerAliases.includes(n.slug)&&!reviewedNavigation[n.slug])];
 const html=tokenizationReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const [id]of tokenizationSections)assert(ids.includes(id),id);for(const slug of [...html.matchAll(/slug=([^"#]+)/g)].map(m=>m[1]))assert(notes.some(n=>n.slug===slug),slug);
 assert(html.includes('\\p{N}{1,3}'));assert(renderDenseReader(tokenizationMeta.slug,s=>s));for(const query of ['BytePiece','Viterbi sampling','SONAR','special tokens','bits per byte'])assert(rank(notes,query).some(r=>r.note===tokenizationMeta),query);
 for(const slug of ['ai/modalities/nlp/byte-pair-encoding','ai/architectures/transformers/byte-latent-transformer'])assert(!notes.some(n=>n.slug===slug));

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import {kdaStep,kdaDemoStep,poolKey,poolPositions} from '../prototypes/readers/glm-flash-model.js';
-import {glmFlashMechanisms,kdaSceneBody,glmFlashPooling,poolSceneBody} from '../prototypes/readers/glm-flash-mechanisms.js';
+import {kdaStep,kdaDemoStep,poolKey,poolPositions} from '../site/readers/glm-flash-model.js';
+import {glmFlashMechanisms,kdaSceneBody,glmFlashPooling,poolSceneBody} from '../site/readers/glm-flash-mechanisms.js';
 const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-10,`${a} != ${b}`);
 let cases=0;
 for(const a of [-2,0,3])for(const b of [-1,0,2])for(const dx of [0,.25,1])for(const dy of [0,.5,1])for(const beta of [0,.5,1]){

@@ -12,9 +12,9 @@ import {parse} from 'parse5';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {buildCandidate} from './build-candidate.mjs';
-import {readerMetas} from '../prototypes/readers/index.js';
-import {reviewedNavigation, reviewedFragments, resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
-import {retiredNavigation, isRetiredNote, retirementNotice} from '../prototypes/retired-navigation.js';
+import {readerMetas} from '../site/readers/index.js';
+import {reviewedNavigation, reviewedFragments, resolveReviewedNote} from '../site/reviewed-navigation.js';
+import {retiredNavigation, isRetiredNote, retirementNotice} from '../site/retired-navigation.js';
 
 const result = await buildCandidate();
 assert.equal(result.readers,54);

@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {numbersReader,numbersMeta} from '../prototypes/readers/numbers.js';
-import {choosingReader,choosingMeta} from '../prototypes/readers/choosing.js';
-import {binarySearchReader,binarySearchMeta} from '../prototypes/readers/binary-search.js';
-import {orderingReader,orderingMeta} from '../prototypes/readers/ordering.js';
+import {numbersReader,numbersMeta} from '../site/readers/numbers.js';
+import {choosingReader,choosingMeta} from '../site/readers/choosing.js';
+import {binarySearchReader,binarySearchMeta} from '../site/readers/binary-search.js';
+import {orderingReader,orderingMeta} from '../site/readers/ordering.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const text=n=>(n.value||'')+(n.childNodes||[]).map(text).join('');
 function inspect(f){

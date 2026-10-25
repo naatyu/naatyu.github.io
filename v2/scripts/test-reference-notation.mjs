@@ -1,10 +1,10 @@
 // Scoped notation preservation, not a complete source or mathematical audit.
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {parallelismReader,parallelismMeta} from '../prototypes/readers/parallelism.js';
-import {dataReader,dataMeta} from '../prototypes/readers/data.js';
-import {decisionReader,decisionMeta} from '../prototypes/readers/decision.js';
-import {decisionScenes} from '../prototypes/readers/decision-scenes.js';
+import {parallelismReader,parallelismMeta} from '../site/readers/parallelism.js';
+import {dataReader,dataMeta} from '../site/readers/data.js';
+import {decisionReader,decisionMeta} from '../site/readers/decision.js';
+import {decisionScenes} from '../site/readers/decision-scenes.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 import {rawMathCandidates} from './audit-math.mjs';
 

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {recurrenceReader} from '../prototypes/readers/recurrence.js';
+import {recurrenceReader} from '../site/readers/recurrence.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const html=assertGeneratedMarkup(recurrenceReader(s=>s),'Recurrence notation');
 const annotations=[],parts=[],captions=[];

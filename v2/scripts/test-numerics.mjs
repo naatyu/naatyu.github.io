@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import './test-numerics-preservation.mjs';
 import {readFile} from 'node:fs/promises';
-import {formats,positiveCodebook,roundFloat,roundEven,fakeQuant,blockQuantize,scaleTrace,attentionRounding} from '../prototypes/readers/numerics-model.js';
-import {numericsMeta,numericsReader,numericsSections} from '../prototypes/readers/numerics.js';
-import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
-import {rank} from '../prototypes/search.js';
+import {formats,positiveCodebook,roundFloat,roundEven,fakeQuant,blockQuantize,scaleTrace,attentionRounding} from '../site/readers/numerics-model.js';
+import {numericsMeta,numericsReader,numericsSections} from '../site/readers/numerics.js';
+import {readerMetas,renderDenseReader} from '../site/readers/index.js';
+import {rank} from '../site/search.js';
 const near=(a,b)=>assert(Math.abs(a-b)<=1e-11*Math.max(1,Math.abs(a),Math.abs(b)),`${a} != ${b}`);
 assert.deepEqual(positiveCodebook('E2M1'),[0,.5,1,1.5,2,3,4,6]);assert.equal(positiveCodebook('E4M3FN').at(-1),448);assert.equal(positiveCodebook('E5M2').at(-1),57344);assert.equal(positiveCodebook('BF16').at(-1),(2-2**-7)*2**127);
 let casts=0;
@@ -21,7 +21,7 @@ let attention=0;
 for(let peak=0;peak<=100;peak++)for(const mode of ['nearest','floor','stochastic'])for(const delta of [.125,.25,.5]){const a=attentionRounding(peak/100,mode,delta);near(a.p.reduce((s,x)=>s+x,0),1);near(a.distribution.reduce((s,d)=>s+d.prob,0),1);near(a.mse,a.distribution.reduce((s,d)=>s+d.prob*(d.output-a.reference)**2,0));for(const d of a.distribution){near(d.output,d.p.reduce((s,x,i)=>s+x*a.v[i],0));near(d.mass,d.p.reduce((s,x)=>s+x,0));}if(mode==='stochastic'){near(a.mean,a.reference);near(a.mass,1);const variance=a.p.reduce((s,p,i)=>{const lo=Math.floor(p/delta)*delta,hi=lo+delta;return s+a.v[i]**2*(p-lo)*(hi-p);},0);near(a.variance,variance);}else assert.equal(a.variance,0);attention++;}
 near(attentionRounding().reference,1.6);near(attentionRounding().mean,.5);near(attentionRounding().bias,-1.1);assert(attentionRounding(.6,'stochastic').distribution.some(d=>d.mass!==1));
 for(const f of [()=>roundFloat(NaN),()=>roundFloat(1,'E3'),()=>roundFloat(1,'E2M1',0),()=>roundEven(Infinity),()=>fakeQuant(1,0),()=>fakeQuant(1,1,0,7,8),()=>blockQuantize(-1),()=>scaleTrace('delayed',0),()=>attentionRounding(2),()=>attentionRounding(.5,'ceil')])assert.throws(f);
-const html=numericsReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const[id]of numericsSections)assert(ids.includes(id));assert.equal(numericsSections.length,32);assert.equal(numericsMeta.date,'2026-05-20');assert(numericsMeta.prototype);assert.equal(numericsMeta.visibility,'public');assert(html.includes('52.0 → 16.2'));assert(html.includes('round(x / s) + z'));assert(!html.includes('>undefined<'));
-const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes];for(const[,s,anchor]of html.matchAll(/href="directions\.html\?slug=([^"#]+)(?:#([^"]+))?"/g)){assert(notes.some(n=>n.slug===s),s);if(anchor)assert(renderDenseReader(s,x=>'directions.html?slug='+x)?.includes(`id="${anchor}"`),`${s}#${anchor}`);}
+const html=numericsReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const[id]of numericsSections)assert(ids.includes(id));assert.equal(numericsSections.length,32);assert.equal(numericsMeta.date,'2026-05-20');assert.equal(numericsMeta.prototype,false);assert.equal(numericsMeta.visibility,'public');assert(html.includes('52.0 → 16.2'));assert(html.includes('round(x / s) + z'));assert(!html.includes('>undefined<'));
+const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes];for(const[,s,anchor]of html.matchAll(/href="directions\.html\?slug=([^"#]+)(?:#([^"]+))?"/g)){assert(notes.some(n=>n.slug===s),s);if(anchor)assert(renderDenseReader(s,x=>'directions.html?slug='+x)?.includes(`id="${anchor}"`),`${s}#${anchor}`);}
 for(const q of ['quantization','FP8','QAT','rounding bias','MXFP8'])assert(rank(notes,q).some(r=>r.note===numericsMeta),q);
 console.log(`Numerics: ${casts} finite-bin/tie casts, ${groups} scale-group settings, 54 scaling events, ${attention} exact attention distributions; affine zero points, sections, links, lineage and search pass.`);

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync}from 'node:fs';
 import {createHash}from 'node:crypto';
-import {directAllReduceTrace,ringAllReduceTrace,communicationVolume,creditQueue,queueAction,exchangeState,exchangeAction,ungatedDoubleBufferTrace}from '../prototypes/readers/communication-model.js';
+import {directAllReduceTrace,ringAllReduceTrace,communicationVolume,creditQueue,queueAction,exchangeState,exchangeAction,ungatedDoubleBufferTrace}from '../site/readers/communication-model.js';
 let cases=0;
 const close=(a,b)=>assert.ok(Math.abs(a-b)<=1e-11*Math.max(1,Math.abs(a),Math.abs(b)),`${a} != ${b}`);
 for(let ranks=2;ranks<=8;ranks++)for(let size=1;size<=5;size++)for(const sign of [-1,0,1]){

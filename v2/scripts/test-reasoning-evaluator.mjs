@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {parseFragment} from 'parse5';
-import {reasoningReader} from '../prototypes/readers/reasoning.js';
+import {reasoningReader} from '../site/readers/reasoning.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const html=assertGeneratedMarkup(reasoningReader(s=>s),'Reasoning evaluator');
 const sections=new Map();const text=n=>(n.nodeName==='#text'?n.value:'')+(n.childNodes||[]).map(text).join('');

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
-import {arraysReader} from '../prototypes/readers/arrays.js';
-import {findDecision} from '../prototypes/readers/choosing-model.js';
+import {arraysReader} from '../site/readers/arrays.js';
+import {findDecision} from '../site/readers/choosing-model.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const html=assertGeneratedMarkup(arraysReader(s=>'/atlas/'+s));
 const code=html.match(/aria-label="Fenwick sum Python"><code>([\s\S]*?)<\/code>/)?.[1].replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&amp;','&');

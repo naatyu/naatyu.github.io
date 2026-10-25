@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
-import {linkedListsReader} from '../prototypes/readers/linked-lists.js';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {linkedListsReader} from '../site/readers/linked-lists.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
 const html=linkedListsReader(slug=>'/atlas/'+slug);
 const decode=value=>value.replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&amp;','&');
 const snippets=[...html.matchAll(/<pre(?: [^>]*)?><code>([\s\S]*?)<\/code><\/pre>/g)].map(match=>decode(match[1])).filter(code=>code.startsWith('class ListNode:')||code.startsWith('def '));

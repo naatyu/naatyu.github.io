@@ -2,11 +2,11 @@ import {assertGeneratedMarkup,assertGeneratedMarkupCount} from './check-generate
 import assert from "node:assert/strict";
 import './test-decision-preservation.mjs';
 import {readFile} from "node:fs/promises";
-import {distributionStats,decisionDistributions,probabilityObjective,selectiveGate,policyDecision,sharedState} from "../prototypes/readers/decision-model.js";
-import {distributionBody,objectiveBody,cascadeBody,policyBody} from "../prototypes/readers/decision-scenes.js";
-import {decisionMeta,decisionSections,decisionReader,decisionAliases} from "../prototypes/readers/decision.js";
-import {readerMetas,renderDenseReader} from "../prototypes/readers/index.js";
-import {rank} from "../prototypes/search.js";
+import {distributionStats,decisionDistributions,probabilityObjective,selectiveGate,policyDecision,sharedState} from "../site/readers/decision-model.js";
+import {distributionBody,objectiveBody,cascadeBody,policyBody} from "../site/readers/decision-scenes.js";
+import {decisionMeta,decisionSections,decisionReader,decisionAliases} from "../site/readers/decision.js";
+import {readerMetas,renderDenseReader} from "../site/readers/index.js";
+import {rank} from "../site/search.js";
 const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-9,[a,b]);let cases=0;
 for(let n=2;n<=24;n++){
  const uniform=distributionStats(Array(n).fill(1/n));near(uniform.choice,0);near(uniform.score,0);near(uniform.mean,(n-1)/2);cases++;
@@ -36,10 +36,10 @@ let states=0;const check=s=>{assertGeneratedMarkup(s,"test-decision.mjs");assert
 for(let i=0;i<6;i++)check(distributionBody(i));for(let i=1;i<100;i++)check(objectiveBody(i));for(let i=0;i<=100;i++)check(cascadeBody(i));for(let q=0;q<4;q++)for(let s=0;s<4;s++)check(policyBody(s,q));assert.equal(states,222);
 const html=decisionReader(s=>"directions.html?slug="+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(x=>x[1]);
 assert.equal(decisionSections.length,34);assert.equal(ids.length,new Set(ids).size);for(const[id]of decisionSections)assert.ok(ids.includes(id));
-assert.equal(decisionMeta.date,"2026-08-05");assert.ok(decisionMeta.prototype);assert.equal(decisionMeta.visibility,"public");assert.equal(decisionAliases.length,2);assert.equal(renderDenseReader(decisionMeta.slug,s=>s),decisionReader(s=>s));
+assert.equal(decisionMeta.date,"2026-08-05");assert.equal(decisionMeta.prototype,false);assert.equal(decisionMeta.visibility,"public");assert.equal(decisionAliases.length,2);assert.equal(renderDenseReader(decisionMeta.slug,s=>s),decisionReader(s=>s));
 for(const text of ["37,840","4,568","16,929,529","1,526","6,000","880/1,000","300/300","2,048","5e−5","54.1M","45.2M","4.4M","4.5M","73 leaf","90 fixed","30%","91.3","94.1","84.9","83.8","88.7","61.1","75.9","95.0","70–500","not a reproduction","must not be read as a plain weighted","no longer current","not the yes probability","full vocabulary","confident errors"])assert.ok(html.includes(text),text);
 assert.equal((html.match(/data-decision-lab=/g)||[]).length,4);
-const catalog=JSON.parse(await readFile(new URL("../prototypes/catalog.json",import.meta.url),"utf8")),notes=[...readerMetas,...catalog.notes];for(const[,slug]of html.matchAll(/href='directions\.html\?slug=([^'#]+)'/g))assert.ok(notes.some(n=>n.slug===slug),slug);
+const catalog=JSON.parse(await readFile(new URL("../site/catalog.json",import.meta.url),"utf8")),notes=[...readerMetas,...catalog.notes];for(const[,slug]of html.matchAll(/href='directions\.html\?slug=([^'#]+)'/g))assert.ok(notes.some(n=>n.slug===slug),slug);
 for(const q of ["Jev","Tev","Shieldstral","RLCD","iso-content","typed decisions"])assert.ok(rank(notes,q).some(r=>r.note===decisionMeta),q);
 const words=html.replace(/<[^>]*>/g," ").split(/\s+/).length;assert.ok(words>4500,words);
 assertGeneratedMarkupCount("test-decision.mjs",states);

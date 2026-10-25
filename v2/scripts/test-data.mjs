@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
-import {normalize,tokenShares,exposure,twoSourceInterval,toyMetrics,objective,kl,corpus,parsedText,jaccard,lshProbability,dedupFrames,maskedMean} from '../prototypes/readers/data-model.js';
-import {dataMeta,dataReader,dataSections} from '../prototypes/readers/data.js';
-import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
-import {reviewedNavigation,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
-import {rank} from '../prototypes/search.js';
+import {normalize,tokenShares,exposure,twoSourceInterval,toyMetrics,objective,kl,corpus,parsedText,jaccard,lshProbability,dedupFrames,maskedMean} from '../site/readers/data-model.js';
+import {dataMeta,dataReader,dataSections} from '../site/readers/data.js';
+import {readerMetas,renderDenseReader} from '../site/readers/index.js';
+import {reviewedNavigation,resolveReviewedNote} from '../site/reviewed-navigation.js';
+import {rank} from '../site/search.js';
 const near=(a,b,e=1e-10)=>assert(Math.abs(a-b)<=e*Math.max(1,Math.abs(a),Math.abs(b)),`${a} != ${b}`);
 let massCases=0;
 for(let a=0;a<=5;a++)for(let b=0;b<=5;b++)for(let c=0;c<=5;c++)if(a+b+c)for(const lengths of [[1,1,1],[100,400,2000],[0,1,2],[1e6,1,1]]){if(a*lengths[0]+b*lengths[1]+c*lengths[2]===0)continue;const shares=tokenShares([a,b,c],lengths),total=a*lengths[0]+b*lengths[1]+c*lengths[2];shares.forEach((v,i)=>near(v,[a,b,c][i]*lengths[i]/total));near(shares.reduce((a,b)=>a+b),1);massCases++;}
@@ -28,7 +28,7 @@ let minhashCases=0;for(let a=1;a<16;a++)for(let b=1;b<16;b++){const A=new Set([0
 for(let p=0;p<=100;p++)for(const b of [1,5,20])for(const r of [1,2,5])near(lshProbability(p/100,b,r),1-(1-(p/100)**r)**b);
 near(maskedMean([1,2,3],[1,0,1]),2);near(maskedMean([1,2,3],[1,1,1]),2);assert.equal(maskedMean([1],[0]),null);
 for(const fn of [()=>normalize([]),()=>normalize([0,0]),()=>normalize([-1,1]),()=>tokenShares([1],[1,2]),()=>exposure(0,[1],[1],[1]),()=>twoSourceInterval(1,[1,2,3],[1,1,1]),()=>toyMetrics(-1),()=>objective(.5,2),()=>kl([1],[1,1]),()=>dedupFrames('random'),()=>lshProbability(1,0,1),()=>maskedMean([1],[.5])])assert.throws(fn);
-const html=dataReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const[id]of dataSections)assert(ids.includes(id));assert.equal(dataMeta.date,'2026-04-08');assert(dataMeta.prototype);assert(!html.includes('undefined'));
+const html=dataReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const[id]of dataSections)assert(ids.includes(id));assert.equal(dataMeta.date,'2026-04-08');assert.equal(dataMeta.prototype,false);assert(!html.includes('undefined'));
 const snippet=html.match(/<pre><code>(def masked_token_mean[\s\S]*?)<\/code><\/pre>/)[1];
 execFileSync('python3',['-c',snippet+'\nfor bits in range(256):\n    mask=[(bits >> i) & 1 for i in range(8)]\n    selected=[i+1 for i in range(8) if mask[i]]\n    expected=sum(selected)/len(selected) if selected else None\n    assert masked_token_mean(list(range(1,9)),mask)==expected\nprint("Reader Python reduction: 256 masks pass")'],{encoding:'utf8'});
 const minhashSnippet=html.match(/<pre[^>]*><code>(def minhash_item[\s\S]*?)<\/code><\/pre>/)[1];
@@ -56,7 +56,7 @@ near(lshProbability(.8,5,10),exactLsh);
 for(const formula of ['s^r','(1-s^r)^b','1-(1-s^r)^b'])assert(html.includes(`<annotation encoding="application/x-tex">${formula}</annotation>`));
 assert.equal((html.match(/class="inline-math"/g)||[]).length,4);
 for(const path of ['docs/ai/training/data/data-mixture-optimization.md','docs/ai/training/data/deduplication-and-memorization-control.md'])assert.equal(await readFile(new URL('../../'+path,import.meta.url),'utf8'),execFileSync('git',['show','HEAD:'+path],{cwd:new URL('../../',import.meta.url),encoding:'utf8'}));
-const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes.filter(n=>!reviewedNavigation[n.slug])];for(const [,s,anchor]of html.matchAll(/href="directions\.html\?slug=([^"#]+)(?:#([^"]+))?"/g)){assert(notes.some(n=>n.slug===s),s);if(anchor)assert(renderDenseReader(s,x=>'directions.html?slug='+x)?.includes(`id="${anchor}"`));}for(const q of ['data mixture','MinHash','deduplication','epoch cap','token share','Pareto'])assert(rank(notes,q).some(r=>r.note===dataMeta),q);
+const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes.filter(n=>!reviewedNavigation[n.slug])];for(const [,s,anchor]of html.matchAll(/href="directions\.html\?slug=([^"#]+)(?:#([^"]+))?"/g)){assert(notes.some(n=>n.slug===s),s);if(anchor)assert(renderDenseReader(s,x=>'directions.html?slug='+x)?.includes(`id="${anchor}"`));}for(const q of ['data mixture','MinHash','deduplication','epoch cap','token share','Pareto'])assert(rank(notes,q).some(r=>r.note===dataMeta),q);
 for(const old of ['ai/training/data/data-mixture-optimization','ai/training/data/deduplication-and-memorization-control']){assert(!notes.some(n=>n.slug===old));assert(!html.includes('slug='+old));assert.equal(resolveReviewedNote(old).slug,dataMeta.slug);}
 assert(html.includes('R_D'));assert(!html.includes('The old claim'));
 console.log(`Training data: ${massCases} token-mass cases, ${capsCases} horizon/cap cases, 10,201 priority comparisons, 225 exhaustive MinHash set pairs, 909 LSH probabilities, duplicate ownership, contradiction retention, masks, KL support, domains, routes and search pass.`);

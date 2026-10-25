@@ -1,13 +1,13 @@
 import assert from 'node:assert/strict';
 import './test-moe-core-closure.mjs';
 import './test-moe-static-scenes.mjs';
-import {moeMeta,moeAliases,moeSections,moeReader,selectExperts,countLoads,biasStep,demoBatch,tokenJourney} from '../prototypes/readers/moe.js';
-import {makeTree,findNode} from '../prototypes/navigation.js';
-import {rank} from '../prototypes/search.js';
-import {readerMetas} from '../prototypes/readers/index.js';
-import {reviewedNavigation,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {moeMeta,moeAliases,moeSections,moeReader,selectExperts,countLoads,biasStep,demoBatch,tokenJourney} from '../site/readers/moe.js';
+import {makeTree,findNode} from '../site/navigation.js';
+import {rank} from '../site/search.js';
+import {readerMetas} from '../site/readers/index.js';
+import {reviewedNavigation,resolveReviewedNote} from '../site/reviewed-navigation.js';
 import {readFile} from 'node:fs/promises';
-import {routingFrame,routingPoints} from '../prototypes/readers/moe-animation.js';
+import {routingFrame,routingPoints} from '../site/readers/moe-animation.js';
 assert.deepEqual(routingFrame(0).counts,[6,2]);
 assert.deepEqual(routingFrame(1).counts,[2,6]);
 assert.equal(routingFrame(0).experts[4],0);
@@ -28,7 +28,7 @@ assert.throws(()=>selectExperts([NaN],[0],1),RangeError);
 assert.deepEqual(countLoads(demoBatch,[0,0,0,0],1),[6,2,0,0]);
 assert.deepEqual(biasStep([0,0,0,0],[6,2,0,0],2,.05),[-.05,0,.05,.05]);
 for(const k of [1,2,4])assert.equal(countLoads(demoBatch,[0,0,0,0],k).reduce((a,b)=>a+b),demoBatch.length*k);
-const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8'));
+const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8'));
 const sources=catalog.notes.filter(n=>n.tracked&&!n.navigationPage&&!n.draft&&!n.unlisted);
 const notes=[...readerMetas,...sources.filter(n=>!moeAliases.includes(n.slug)&&!reviewedNavigation[n.slug])];
 const root=makeTree(notes);
@@ -65,7 +65,7 @@ for(const text of ['V3’s small-model ablations','marginal loss reduction','sel
   assert(html.includes(text),`Missing preserved MoE detail: ${text}`);
 }
 for(const selector of ['data-journey-prev','data-journey-next','data-journey-play','data-section-filter'])assert(html.includes(selector),selector);
-const visuals=await readFile(new URL('../prototypes/readers/moe-visuals.css',import.meta.url),'utf8');
+const visuals=await readFile(new URL('../site/readers/moe-visuals.css',import.meta.url),'utf8');
 assert(visuals.includes('prefers-reduced-motion:reduce'));
 assert(visuals.includes('overflow-x:auto'));
 for(const target of [...html.matchAll(/slug=([^"#]+)/g)].map(m=>m[1]))assert(notes.some(n=>n.slug===target),`Missing related note ${target}`);

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
-import {orderingReader} from '../prototypes/readers/ordering.js';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {orderingReader} from '../site/readers/ordering.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
 const html=orderingReader(s=>'/atlas/'+s);
 const snippets=[...html.matchAll(/<pre[^>]*aria-label="([^"]+)"[^>]*><code>([\s\S]*?)<\/code><\/pre>/g)].map(m=>({label:m[1],code:m[2].replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&amp;','&')}));
 assert.equal(snippets.length,8);

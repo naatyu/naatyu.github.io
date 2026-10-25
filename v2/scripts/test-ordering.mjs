@@ -4,11 +4,11 @@ import './test-insertion-trace.mjs';
 import './test-merge-sort-trace.mjs';
 import './test-crossing-partition.mjs';
 import {readFile} from 'node:fs/promises';
-import {BinaryHeap,topKTrace,threeWaySelectTrace,mergeStreamsTrace,medianTrace} from '../prototypes/readers/ordering-model.js';
-import {orderingMeta,orderingReader,orderingSections} from '../prototypes/readers/ordering.js';
-import {readerMetas,readerAliases,renderDenseReader} from '../prototypes/readers/index.js';
-import {rank} from '../prototypes/search.js';
-import {reviewedNavigation,reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {BinaryHeap,topKTrace,threeWaySelectTrace,mergeStreamsTrace,medianTrace} from '../site/readers/ordering-model.js';
+import {orderingMeta,orderingReader,orderingSections} from '../site/readers/ordering.js';
+import {readerMetas,readerAliases,renderDenseReader} from '../site/readers/index.js';
+import {rank} from '../site/search.js';
+import {reviewedNavigation,reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
 const preservedOrdering=orderingReader(s=>s);for(const[source,anchor,count]of [['algorithms/data-structures/heap','heap',12],['algorithms/data-structures/priority-queues','priority',11]]){assert.deepEqual(reviewedNavigation[source],{slug:'algorithms/ordering',anchor});assert.equal(Object.keys(reviewedFragments[source]).length,count);for(const[heading,destination]of Object.entries(reviewedFragments[source])){assert.ok(preservedOrdering.includes('id="'+destination+'"'));assert.deepEqual(resolveReviewedNote(source+'#'+heading),{slug:'algorithms/ordering',anchor:destination});}assert.ok(!preservedOrdering.includes(source));}for(const term of ['max_heap = [-x for x in values]','task-b','urgent','arrival counter'])assert.ok(preservedOrdering.includes(term),term);
 const sorted=a=>[...a].sort((a,b)=>a-b),isHeap=(a,compare=(a,b)=>a-b)=>a.every((v,i)=>i===0||compare(a[Math.floor((i-1)/2)],v)<=0);
 let arrayCases=0,selectionCases=0,topCases=0,medianPrefixes=0;
@@ -30,7 +30,7 @@ for(const a of sources)for(const b of sources)for(const c of sources){mergeCases
 }
 assert.throws(()=>topKTrace([1],2));assert.throws(()=>threeWaySelectTrace([],0));assert.throws(()=>threeWaySelectTrace([NaN],0));assert.throws(()=>mergeStreamsTrace([[2,1]]));
 const link=s=>'directions.html?slug='+s,html=orderingReader(link),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const [id]of orderingSections)assert(ids.includes(id));assert(renderDenseReader(orderingMeta.slug,link));
-const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes.filter(n=>!readerAliases.includes(n.slug))];
+const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes.filter(n=>!readerAliases.includes(n.slug))];
 for(const [,slug,anchor]of html.matchAll(/href="directions\.html\?slug=([^"#]+)(?:#([^"]+))?"/g)){assert(notes.some(n=>n.slug===slug),slug);if(anchor)assert(renderDenseReader(slug,link)?.includes(`id="${anchor}"`),slug+'#'+anchor);}
 for(const q of ['quickselect','priority queue','top k','median','k-way merge'])assert(rank(notes,q).some(r=>r.note===orderingMeta),q);
 console.log(`Ordering: ${arrayCases} min/max heap inputs; ${topCases} top-k capacities; ${selectionCases} ranks with every partition and shrink invariant; ${medianPrefixes} balanced median prefixes; ${mergeCases} frontiers with exact source coverage; anchors, links and search pass.`);

@@ -1,5 +1,5 @@
-# Prepared replacement for .github/workflows/deploy.yml; NOT active.
-# Apply only after migration review and explicit publication approval.
+# HISTORICAL pre-launch workflow snapshot; do not apply or edit as production.
+# The live workflow is .github/workflows/deploy.yml and already builds v2.
 name: Build and deploy
 
 on:

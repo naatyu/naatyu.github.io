@@ -1,7 +1,7 @@
 import {assertGeneratedMarkup,assertGeneratedMarkupCount} from './check-generated-markup.mjs';
 import assert from "node:assert/strict";
-import {passAtLeastOne,samplingOutcomes,voteState,voteSequence,refinement,budgetTrace,effortRewards,bookInference,bookRefinement,bookRL,bookDistillation} from "../prototypes/readers/reasoning-model.js";
-import {samplingBody,votingBody,refinementBody,budgetBody,effortBody} from "../prototypes/readers/reasoning-scenes.js";
+import {passAtLeastOne,samplingOutcomes,voteState,voteSequence,refinement,budgetTrace,effortRewards,bookInference,bookRefinement,bookRL,bookDistillation} from "../site/readers/reasoning-model.js";
+import {samplingBody,votingBody,refinementBody,budgetBody,effortBody} from "../site/readers/reasoning-scenes.js";
 let cases=0;
 const near=(a,b,t=1e-10)=>assert.ok(Math.abs(a-b)<t, a+" != "+b);
 function bruteSampling(prob,n){

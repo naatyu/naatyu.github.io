@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import {mountBalanceLab,mountTokenJourney} from '../prototypes/readers/moe.js';
-import {captureReaderModels,restoreReaderModels,validReaderModels,registerReaderState} from '../prototypes/readers/reader-state.js';
+import {mountBalanceLab,mountTokenJourney} from '../site/readers/moe.js';
+import {captureReaderModels,restoreReaderModels,validReaderModels,registerReaderState} from '../site/readers/reader-state.js';
 function element(){const events=new Map();return {events,dataset:{},hidden:false,innerHTML:'',textContent:'',value:'0.05',classList:{toggle(){}},setAttribute(){},addEventListener:(name,fn)=>events.set(name,fn),click(){events.get('click')?.();}};}
 function fixture(){const nodes=new Map(),events=new Map();const article={isConnected:true,querySelector:s=>{if(!nodes.has(s))nodes.set(s,element());return nodes.get(s);},addEventListener:(name,fn)=>{if(!events.has(name))events.set(name,[]);events.get(name).push(fn);},emit:name=>events.get(name)?.forEach(fn=>fn())};return {article,nodes};}
 const {article,nodes}=fixture();mountBalanceLab(article);

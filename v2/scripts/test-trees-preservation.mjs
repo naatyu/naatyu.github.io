@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
-import {treesReader} from '../prototypes/readers/trees.js';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {treesReader} from '../site/readers/trees.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
 const html=treesReader(s=>'/atlas/'+s);
 const snippets=[...html.matchAll(/<pre[^>]*><code>([\s\S]*?)<\/code><\/pre>/g)].map(m=>m[1].replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&amp;','&'));
 assert.equal(snippets.length,7);

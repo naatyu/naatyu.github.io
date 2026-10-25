@@ -4,11 +4,11 @@ import './test-serving-preservation.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {createHash} from 'node:crypto';
-import {reviewedNavigation,reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
-import {servingMeta,servingAliases,servingSections,servingReader} from '../prototypes/readers/serving.js';
-import {servingKVBody,servingPagesBody,servingScheduleBody} from '../prototypes/readers/serving-scenes.js';
-import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
-import {rank} from '../prototypes/search.js';
+import {reviewedNavigation,reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
+import {servingMeta,servingAliases,servingSections,servingReader} from '../site/readers/serving.js';
+import {servingKVBody,servingPagesBody,servingScheduleBody} from '../site/readers/serving-scenes.js';
+import {readerMetas,renderDenseReader} from '../site/readers/index.js';
+import {rank} from '../site/search.js';
 let cases=0;
 for(let exponent=10;exponent<=20;exponent++)for(const batch of [1,4,16,64])for(const heads of [1,8,32])for(const bytes of [1,2]){
  const html=servingKVBody(exponent,batch,heads,bytes);assertGeneratedMarkup(html,"test-serving.mjs");
@@ -26,10 +26,10 @@ for(const policy of ['static','continuous'])for(const capacity of [1,2,3])for(le
 const html=servingReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(x=>x[1]);
 assert.equal(ids.length,new Set(ids).size);assert.equal(servingSections.length,33);for(const[id]of servingSections)assert.ok(ids.includes(id));
 const ttsSource='ai/inference-serving/performance/tts-stream-capacity';assert.deepEqual(reviewedNavigation[ttsSource],{slug:'execution/serving',anchor:'tts'});assert.equal(Object.keys(reviewedFragments[ttsSource]).length,9);for(const[heading,anchor]of Object.entries(reviewedFragments[ttsSource])){assert.ok(ids.includes(anchor));assert.deepEqual(resolveReviewedNote(ttsSource+'#'+heading),{slug:'execution/serving',anchor});}for(const term of ['Bark','TensorRT','FP16/INT8','FlashAttention','EnCodec','24 kHz','16 kHz'])assert.ok(html.includes(term),term);
-assert.equal(servingMeta.date,'2026-04-08');assert.equal(servingMeta.visibility,'public');assert.ok(servingMeta.prototype);assert.deepEqual(servingAliases,[]);
+assert.equal(servingMeta.date,'2026-04-08');assert.equal(servingMeta.visibility,'public');assert.equal(servingMeta.prototype,false);assert.deepEqual(servingAliases,[]);
 assert.equal(renderDenseReader(servingMeta.slug,s=>s),servingReader(s=>s));assert.equal((html.match(/data-serving-lab=/g)||[]).length,3);
 assert.ok(!/undefined/.test(html));for(const s of ['1,073,741,824','128 KiB','99.9%','token bucket','37.5%','890','5.47','ReplaySSM','Layer Split','75%','781','copy-on-write','first-token work','policy-version','capacity','2PW','200 output tokens','MXFP4'])assert.ok(html.toLowerCase().includes(s.toLowerCase()),s);
-const catalog=JSON.parse(readFileSync(new URL('../prototypes/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes];
+const catalog=JSON.parse(readFileSync(new URL('../site/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes];
 for(const[,slug]of html.matchAll(/href="directions\.html\?slug=([^"#]+)"/g))assert.ok(notes.some(n=>n.slug===slug),slug);
 for(const q of ['KV cache','continuous batching','prefix caching','TTFT','Serving models'])assert.ok(rank(notes,q).some(r=>r.note===servingMeta),q);
 const fingerprints=[

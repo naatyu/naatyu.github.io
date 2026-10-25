@@ -6,18 +6,19 @@ import {parse} from 'acorn';
 import {parseFragment} from 'parse5';
 import {prepareStaticScrollRegions} from './scroll-regions-html.mjs';
 import {createHash} from 'node:crypto';
-import {readerMetas, renderDenseReader} from '../prototypes/readers/index.js';
-import {resolveReviewedNote, reviewedNavigation} from '../prototypes/reviewed-navigation.js';
-import {retiredNavigation, retirementNotice} from '../prototypes/retired-navigation.js';
-import {renderHome} from '../prototypes/site-shell.js';
-import {renderPageMetadata,noteMetadata} from '../prototypes/page-metadata.js';
+import {readerMetas, renderDenseReader} from '../site/readers/index.js';
+import {resolveReviewedNote, reviewedNavigation} from '../site/reviewed-navigation.js';
+import {retiredNavigation, retirementNotice} from '../site/retired-navigation.js';
+import {renderHome} from '../site/site-shell.js';
+import {renderPageMetadata,noteMetadata} from '../site/page-metadata.js';
 
 const repo = fileURLToPath(new URL('../../', import.meta.url));
-const prototype = path.join(repo, 'v2/prototypes');
+const prototype = path.join(repo, 'v2/site');
 const imageRoot = path.join(repo, 'static/img');
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const styles = ['directions.css','gallery-lab.css','gallery-refinement.css','gallery-soft.css','atlas-workspace.css','atlas-terminal.css','file-explorer.css','dense-reader.css','readers/moe-visuals.css','readers/attention.css','readers/topic-labs.css','vendor/katex/katex.min.css','readers/math.css','reader-utilities.css'];
 const route = slug => `/atlas/${slug}/`;
+const faviconLinks = '<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/svg+xml" href="/img/favicon.svg"><link rel="apple-touch-icon" href="/img/apple-touch-icon.png">';
 function moduleReferences(text) {
   const ast = parse(text, {ecmaVersion:'latest',sourceType:'module'});
   const references = [];
@@ -81,7 +82,7 @@ export async function buildCandidate() {
 
   const head = (title, description, mode='', slug='') => {
     const meta=slug?noteMetadata(metas.find(meta=>meta.slug===slug)):{title,description,path:mode==='home'?'/':mode==='atlas'?'/atlas/':null};
-    return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow">${renderPageMetadata(meta)}${styles.map(style => `<link rel="stylesheet" href="/assets/${style}">`).join('')}<link rel="stylesheet" href="/candidate.css"><script type="module" src="/runtime.js"></script></head><body data-design="gallery" data-palette="skywine" data-site-page="${mode}" data-note-slug="${escape(slug)}"><a class="skip-link" href="#main">Skip to content</a>`;
+    return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow">${faviconLinks}${renderPageMetadata(meta)}${styles.map(style => `<link rel="stylesheet" href="/assets/${style}">`).join('')}<link rel="stylesheet" href="/candidate.css"><script type="module" src="/runtime.js"></script></head><body data-design="gallery" data-palette="skywine" data-site-page="${mode}" data-note-slug="${escape(slug)}"><a class="skip-link" href="#main">Skip to content</a>`;
   };
   const tail = '</body></html>';
   async function page(relative, html) {
@@ -127,6 +128,10 @@ export async function buildCandidate() {
   await asset(path.join(prototype, 'readers/index.js'), 'assets/readers/index.js');
   await asset(path.join(prototype, 'site-shell.js'), 'assets/site-shell.js');
   await asset(path.join(prototype, 'reviewed-navigation.js'), 'assets/reviewed-navigation.js');
+  await asset(path.join(imageRoot, 'favicon.svg'), 'img/favicon.svg');
+  await asset(path.join(imageRoot, 'apple-touch-icon.png'), 'img/apple-touch-icon.png');
+  // The root ICO is also requested automatically by older browsers.
+  await copyFile(path.join(imageRoot, 'favicon.ico'), path.join(output, 'favicon.ico'));
   // Saved model state must not cross a change in content, code, styles or media.
   // Conservatively invalidate all readers when any packaged dependency changes.
   const runtimeHash=createHash('sha256');
@@ -145,7 +150,7 @@ export async function buildCandidate() {
     if (!/^[a-z0-9-]+(?:\/[a-z0-9-]+)+$/.test(legacy) || slugs.has(legacy)) throw new Error(`Unsafe legacy route: ${legacy}`);
     if (!slugs.has(destination.slug)) throw new Error(`Missing reviewed destination: ${legacy}`);
     const href = route(destination.slug) + (destination.anchor ? '#' + destination.anchor : '');
-    await page(`atlas/${legacy}/index.html`, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>Note moved · Nathan Laoué</title><script type="module" src="/legacy-route.js"></script></head><body data-legacy-slug="${escape(legacy)}"><main><h1>This note has moved</h1><p>Its content is now part of a consolidated topic.</p><a href="${escape(href)}">Read the updated note</a></main></body></html>`);
+    await page(`atlas/${legacy}/index.html`, `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex,nofollow">${faviconLinks}<title>Note moved · Nathan Laoué</title><script type="module" src="/legacy-route.js"></script></head><body data-legacy-slug="${escape(legacy)}"><main><h1>This note has moved</h1><p>Its content is now part of a consolidated topic.</p><a href="${escape(href)}">Read the updated note</a></main></body></html>`);
   }
   await page('legacy-route.js', `import {resolveReviewedNote} from '/assets/reviewed-navigation.js';\nconst target=resolveReviewedNote(document.body.dataset.legacySlug,location.hash);\nif(target)location.replace('/atlas/'+target.slug+'/'+(target.anchor?'#'+encodeURIComponent(target.anchor):''));\n`);
   // Intentional retirements must not pretend to be content-preserving redirects.

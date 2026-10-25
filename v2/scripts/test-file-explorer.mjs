@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import './test-reader-loader.mjs';
-import {makeTree} from '../prototypes/navigation.js';
-import {folderEntries,readingBlocks,readingBookmark,restoreReadingBookmark,preserveReadingPosition,watchReadingReflow} from '../prototypes/file-explorer.js';
+import {makeTree} from '../site/navigation.js';
+import {folderEntries,readingBlocks,readingBookmark,restoreReadingBookmark,preserveReadingPosition,watchReadingReflow} from '../site/file-explorer.js';
 const notes=[
   {slug:'models/a',title:'Zebra',topicPath:['models'],tags:[]},
   {slug:'models/b',title:'Attention',topicPath:['models'],tags:[]},

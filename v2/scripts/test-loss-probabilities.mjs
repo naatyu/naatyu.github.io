@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
-import {binaryCalibrationFrame,weightedBinaryRisk} from '../prototypes/readers/loss-probabilities.js';
-import {crossEntropy,entropy,kl} from '../prototypes/readers/information-model.js';
-import {lossesReader,lossSections} from '../prototypes/readers/losses.js';
-import {stableBce} from '../prototypes/readers/loss-model.js';
+import {binaryCalibrationFrame,weightedBinaryRisk} from '../site/readers/loss-probabilities.js';
+import {crossEntropy,entropy,kl} from '../site/readers/information-model.js';
+import {lossesReader,lossSections} from '../site/readers/losses.js';
+import {stableBce} from '../site/readers/loss-model.js';
 const close=(a,b,tol=1e-9)=>assert(Math.abs(a-b)<tol,`${a} != ${b}`);
 const logit=q=>Math.log(q/(1-q));
 let cases=0;

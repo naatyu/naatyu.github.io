@@ -1,7 +1,7 @@
 // Execute the actual short reader references with an isolated CPU Torch runtime.
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
-import {recurrenceReader} from '../prototypes/readers/recurrence.js';
+import {recurrenceReader} from '../site/readers/recurrence.js';
 const python=process.env.ATLAS_TORCH_PYTHON;
 assert.ok(python,'Set ATLAS_TORCH_PYTHON to an interpreter with torch and numpy.');
 const html=recurrenceReader(s=>s);

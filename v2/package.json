@@ -17,7 +17,8 @@
     "test:reasoning-model": "node scripts/test-reasoning-model.mjs",
     "test:transformers": "node scripts/test-transformers.mjs",
     "test:recurrence": "node scripts/test-recurrence.mjs",
-    "preview": "node scripts/serve.mjs"
+    "preview": "node scripts/serve-candidate.mjs",
+    "preview:design-history": "node scripts/serve.mjs"
   },
   "devDependencies": {
     "acorn": "8.16.0",

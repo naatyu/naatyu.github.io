@@ -3,8 +3,8 @@ import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import GithubSlugger from 'github-slugger';
 import {parse} from 'parse5';
-import {compactReader,compactAliases} from '../prototypes/readers/compact.js';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {compactReader,compactAliases} from '../site/readers/compact.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
 const root=new URL('../../',import.meta.url);
 const path='docs/ai/architectures/model-reports/nanbeige4-3b-technical-report.md';
 const source=readFileSync(new URL(path,root),'utf8');
@@ -33,5 +33,5 @@ assert.ok(!html.includes('katex-error'));
 const visibleText=all.filter(n=>n.nodeName==='#text').map(n=>n.value).join(' ');
 assert.ok(visibleText.includes('student support must cover teacher mass. A mean needs its own denominator.'));
 assert.ok(!all.some(n=>n.tagName==='t'));
-for(const f of ['data.js','scaling.js','rl-recipes.js']){const body=readFileSync(new URL('../prototypes/readers/'+f,import.meta.url),'utf8');assert.ok(!body.includes(slug),f);assert.ok(body.includes('models/compact-recipes#nan4'),f);}
+for(const f of ['data.js','scaling.js','rl-recipes.js']){const body=readFileSync(new URL('../site/readers/'+f,import.meta.url),'utf8');assert.ok(!body.includes(slug),f);assert.ok(body.includes('models/compact-recipes#nan4'),f);}
 console.log('Nanbeige4 preservation: Git-equal original,24 exact headings,all8 final benchmark and2 ablation rows,forward-KL scope,RL-init evidence and canonical cross-owner links pass. Full external figure/production gates remain separate.');

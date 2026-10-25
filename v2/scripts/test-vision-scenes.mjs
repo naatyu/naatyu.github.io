@@ -1,6 +1,6 @@
 import {assertGeneratedMarkup,assertGeneratedMarkupCount} from './check-generated-markup.mjs';
 import assert from 'node:assert/strict';
-import {visionMaskBody,visionAgreementBody,visionProjectionBody,visionScenes} from '../prototypes/readers/vision-scenes.js';
+import {visionMaskBody,visionAgreementBody,visionProjectionBody,visionScenes} from '../site/readers/vision-scenes.js';
 let states=0;
 const check=html=>{assertGeneratedMarkup(html,"test-vision-scenes.mjs");assert.ok(!/NaN|undefined|Infinity/.test(html));assert.ok(html.includes('role="img"'));assert.ok(html.includes('tabindex="0"'));states++;};
 for(const scope of ['masked','all'])for(let logit=0;logit<=30;logit++)for(let step=0;step<=4;step++){const html=visionMaskBody(scope,logit,step);check(html);assert.ok(html.includes('Selected='+(scope==='masked'?2:4)));if(scope==='masked')assert.ok(html.includes('first-logit gradient=0.'));}

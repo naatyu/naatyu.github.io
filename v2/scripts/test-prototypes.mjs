@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {rank,distance} from '../prototypes/search.js';
-import {makeTree,findNode,immediateNotes} from '../prototypes/navigation.js';
-import {latestPublished,latestAtlasPublished} from '../prototypes/publication.js';
-import {readerMetas,readerAliases} from '../prototypes/readers/index.js';
-import {reviewedNavigation} from '../prototypes/reviewed-navigation.js';
-import {isRetiredNote} from '../prototypes/retired-navigation.js';
+import {rank,distance} from '../site/search.js';
+import {makeTree,findNode,immediateNotes} from '../site/navigation.js';
+import {latestPublished,latestAtlasPublished} from '../site/publication.js';
+import {readerMetas,readerAliases} from '../site/readers/index.js';
+import {reviewedNavigation} from '../site/reviewed-navigation.js';
+import {isRetiredNote} from '../site/retired-navigation.js';
 import './test-file-explorer.mjs';
 import './test-reader-links.mjs';
 import './test-math.mjs';
@@ -13,7 +13,7 @@ import './test-navigation-integrity.mjs';
 import './test-site-shell.mjs';
 import './test-reader-history.mjs';
 
-const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8'));
+const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8'));
 const sources=catalog.notes.filter(n=>n.tracked&&!n.navigationPage&&!n.draft&&!n.unlisted&&!isRetiredNote(n.slug));
 const canonical=[...readerMetas,...sources.filter(n=>!readerAliases.includes(n.slug)&&!reviewedNavigation[n.slug])];
 assert.equal(canonical.length,54,'The browsable atlas must contain only canonical readers');

@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {decisionLeaves,matchDecisions} from '../prototypes/readers/choosing-model.js';
+import {decisionLeaves,matchDecisions} from '../site/readers/choosing-model.js';
 const ids=q=>matchDecisions(q).map(x=>x.id);
 for(const q of ['', '   ','the and of in','!!!','completelyunrelatedxyz'])assert.deepEqual(ids(q),[]);
 for(const [query,first]of [['range queries','range-queries'],['range qureies','range-queries'],['RANGE QUERY','range-queries'],['Fenwíck','range-queries'],['segment trees','range-queries'],['negative weights','negative'],['nonnegative weights','nonnegative'],['running medain','running-median'],['sliding windwo','variable-window'],['0-1 BFS','zero-one'],['0–1 BFS','zero-one'],['largest-first','safe-local'],['signed sum','signed-sum']])assert.equal(ids(query)[0],first,query);

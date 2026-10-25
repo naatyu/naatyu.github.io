@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {problemSolvingReader} from '../prototypes/readers/problem-solving.js';
+import {problemSolvingReader} from '../site/readers/problem-solving.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const html=assertGeneratedMarkup(problemSolvingReader(()=>''));
 const nodes=[];

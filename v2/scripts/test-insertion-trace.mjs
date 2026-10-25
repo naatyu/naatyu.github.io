@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {insertionTrace} from '../prototypes/readers/sorting-model.js';
+import {insertionTrace} from '../site/readers/sorting-model.js';
 let cases=0,states=0;
 for(let n=0;n<=7;n++)for(let code=0;code<3**n;code++){
   let x=code;const input=Array.from({length:n},()=>{const v=x%3-1;x=Math.floor(x/3);return v;}),before=[...input],frames=insertionTrace(input);

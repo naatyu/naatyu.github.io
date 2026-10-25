@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
-import {recurrenceReader} from '../prototypes/readers/recurrence.js';
+import {recurrenceReader} from '../site/readers/recurrence.js';
 const html=recurrenceReader(s=>s),blocks=[...html.matchAll(/<pre[^>]*aria-label="Feedback [^\"]*"[^>]*><code>([\s\S]*?)<\/code><\/pre>/g)].map(m=>m[1].replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&amp;','&'));
 assert.equal(blocks.length,2);
 assert.ok(!html.includes('</details>p>'), 'Feedback prose must use a real opening paragraph tag.');

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {frontierReader,frontierMeta} from '../prototypes/readers/frontier.js';
+import {frontierReader,frontierMeta} from '../site/readers/frontier.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const html=assertGeneratedMarkup(frontierReader(()=>'')),nodes=[];
 function visit(n){nodes.push(n);for(const c of n.childNodes||[])visit(c);}

@@ -3,10 +3,10 @@ import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import GithubSlugger from 'github-slugger';
-import {rlReader,rlAliases} from '../prototypes/readers/rl.js';
-import {preferencesReader} from '../prototypes/readers/preferences.js';
-import {distillationReader} from '../prototypes/readers/distillation.js';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {rlReader,rlAliases} from '../site/readers/rl.js';
+import {preferencesReader} from '../site/readers/preferences.js';
+import {distillationReader} from '../site/readers/distillation.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
 const root=new URL('../../',import.meta.url),ledger=JSON.parse(readFileSync(new URL('.internal/v2/rl-core-closure.json',root),'utf8'));
 const html=rlReader(s=>s);let headings=0;
 for(const entry of ledger.sources){

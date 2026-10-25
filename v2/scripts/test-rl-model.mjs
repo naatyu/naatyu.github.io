@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import {groupAdvantages,clippedSurrogate,reductionWeights,binarySampling,finiteSampleMetric,samplingArea,datasetSamplingArea,ptgsTemperature,ptgsPosterior,updateEvidence,entropyControl,bellmanSweep,bellmanTrace,sequenceRatios,conditionalKL} from "../prototypes/readers/rl-model.js";
+import {groupAdvantages,clippedSurrogate,reductionWeights,binarySampling,finiteSampleMetric,samplingArea,datasetSamplingArea,ptgsTemperature,ptgsPosterior,updateEvidence,entropyControl,bellmanSweep,bellmanTrace,sequenceRatios,conditionalKL} from "../site/readers/rl-model.js";
 let cases=0;
 const near=(a,b,tolerance=1e-9)=>{assert.ok(Math.abs(a-b)<=tolerance*Math.max(1,Math.abs(a),Math.abs(b)),String(a)+" != "+String(b));};
 for(let g=2;g<=16;g++)for(let successes=0;successes<=g;successes++){

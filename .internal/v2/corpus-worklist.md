@@ -1,5 +1,7 @@
 # Atlas v2 corpus worklist
 
+> Historical migration record. V2 shipped in `6bf3368` on 2026-10-25. The recorded states below describe earlier checks, not a current task queue. For new work, read `../README.md` and `../adding-content.md`.
+
 ## Multi-harness recovery choice settled — 2026-10-25
 
 Nathan delegated handling. V2 Agents remains canonical;verified byte-equal private snapshot .internal/v2/recovery/multi-harness-agentic-rl.md is prepared for the migration commit,not public export. Retirement preflight now checks that exact pinned Git object before accepting recovery;it still correctly blocks until committed. No history rewrite,separate public legacy note,source removal or push. Owning13-heading/citation/content checks,publication packaging andprivate-path/missing-object/drift guards pass. The handling decision is no longer a user-choice blocker;normal release commit authorization remains separate.

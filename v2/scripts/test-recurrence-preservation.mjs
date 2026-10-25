@@ -2,9 +2,9 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import GithubSlugger from 'github-slugger';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
-import {recurrenceReader,recurrenceAliases} from '../prototypes/readers/recurrence.js';
-import {inlineMath} from '../prototypes/readers/math.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
+import {recurrenceReader,recurrenceAliases} from '../site/readers/recurrence.js';
+import {inlineMath} from '../site/readers/math.js';
 const root=new URL('../../',import.meta.url),html=recurrenceReader(s=>s);
 const ids=new Set([...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]));let count=0;
 for(const slug of recurrenceAliases){

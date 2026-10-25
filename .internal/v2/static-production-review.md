@@ -1,5 +1,7 @@
 # Static production preparation — 2026-10-07
 
+> Historical preparation evidence. Production switched to v2 in `6bf3368` on 2026-10-25. Do not infer current deployment status from pending steps below. See `../README.md`.
+
 ## Pinned source-retirement preflight — 2026-10-14
 
 Added `v2/scripts/retirement-preflight.mjs`:read-only exact-path/baseline/current/pinned-Git-byte/actual-primary-route checks for all232original Markdown/MDX bodies. The full report provides every exact path and pinned `git show` argument array;there is no deletion,write,staging,commit,network or publication API. Recovery revision83b894857e3e622a62ccbec8b5b5d219c0f2e8a0 has231byte-equal bodies. The sole exception remains the untracked multi-harness source;CLI24132 correctly exits1 rather than declaring recovery complete.206reviewed moved destinations,25intentional notices,one navigation replacement and no unexpected Markdown/MDX sources verified.

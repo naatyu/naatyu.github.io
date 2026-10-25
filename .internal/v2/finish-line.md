@@ -1,5 +1,7 @@
 # Migration completion audit — current checkpoint, 2026-10-12
 
+> Historical checkpoint, not current status. V2 shipped in `6bf3368` on 2026-10-25. Pending authority and release steps below have been superseded. See `../README.md`.
+
 ## Native release gate and history repair — 2026-10-25
 
 Working objective updated in release-closure.md;persisted app goal remains usageLimited and was not falsely resumed/completed. Browser access recovered. Native canonical note selection had a URL/reader mismatch on Back;fixed by reusing native document navigation with preserved folder/query and existing validated reader-state restoration. Final desktop/narrow checks pass to release-navigation-check.md scope:Shortcut math/code/tables, fuzzy finder,7root folders,Back/Forward exact reading restoration,Escape focus andinteraction-preserving reflow. Full47-script80955 and HTTP70568 terminal0. No science/source edit;prepared deployment workflow remains inactive. Remaining:exact commit/publication authority andlocal harness recovery decision. No retirement,commit,push/deploy.

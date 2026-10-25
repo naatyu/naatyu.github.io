@@ -3,9 +3,9 @@ import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import GithubSlugger from 'github-slugger';
-import {lossesReader,lossesAliases} from '../prototypes/readers/losses.js';
-import {table} from '../prototypes/readers/loss-table.js';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {lossesReader,lossesAliases} from '../site/readers/losses.js';
+import {table} from '../site/readers/loss-table.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
 const root=new URL('../../',import.meta.url),html=lossesReader(s=>s),ids=new Set([...html.matchAll(/ id="([^"]+)"/g)].map(x=>x[1]));
 const sources=[['ai/training/losses/l2-norm-and-loss','7aeb1de11b82337c38bd641890aef580539e319d7af1bf8d6b570203aa3fa8ea'],['ai/training/losses/cross-entropy-loss','bcafe97112aa633c15a8926e63de7c93729276f73a2668ab38016bc950276ce8'],['ai/training/losses/binary-cross-entropy-loss','7856f084e2f551571e89261409860af479a62509e1b0a9fbb4a258c9ff66deaa'],['ai/training/losses/proper-scoring-rules-and-fenchel-young-losses','c6a41498f1e0848466906aaf5d91b71cb7c5b3d7d4aec38ca9a462cf2344e830'],['ai/modalities/classical-ml/support-vector-machines-and-the-margin','8ddd869e12c4bdcefd1b4e4280e38dcbf71a59dbd56bf9a37dec6beedc02f391']];
 let headings=0;for(const[slug,sha]of sources){const p='docs/'+slug+'.md',s=readFileSync(new URL(p,root),'utf8');assert.equal(s,execFileSync('git',['show','HEAD:'+p],{cwd:root,encoding:'utf8'}));assert.equal(createHash('sha256').update(s).digest('hex'),sha);assert(!/!\[|<PaperFigure|<img/.test(s));const g=new GithubSlugger(),hs=[...s.matchAll(/^#{1,6} (.+)$/gm)].map(x=>g.slug(x[1]));assert.deepEqual(Object.keys(reviewedFragments[slug]),hs);headings+=hs.length;assert(lossesAliases.includes(slug));assert(!html.includes('href="'+slug+'"'));for(const h of hs){const d=resolveReviewedNote(slug+'#'+h);assert(['training/objectives','math/information'].includes(d.slug));if(d.slug==='training/objectives')assert(ids.has(d.anchor),h);}}

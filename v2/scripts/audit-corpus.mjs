@@ -5,9 +5,9 @@ import {spawnSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 import GithubSlugger from 'github-slugger';
-import {readerMetas,readerAliases,renderDenseReader} from '../prototypes/readers/index.js';
-import {reviewedNavigation,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
-import {retiredNavigation} from '../prototypes/retired-navigation.js';
+import {readerMetas,readerAliases,renderDenseReader} from '../site/readers/index.js';
+import {reviewedNavigation,resolveReviewedNote} from '../site/reviewed-navigation.js';
+import {retiredNavigation} from '../site/retired-navigation.js';
 import {auditReviewedDestinationLedger} from './reviewed-destination-ledger.mjs';
 
 const root=fileURLToPath(new URL('../../',import.meta.url));

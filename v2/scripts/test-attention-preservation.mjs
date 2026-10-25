@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import {attentionReader,attentionSections,attentionMeta} from '../prototypes/readers/attention.js';
-import {softmaxRow,featureStateRead} from '../prototypes/readers/attention-model.js';
+import {attentionReader,attentionSections,attentionMeta} from '../site/readers/attention.js';
+import {softmaxRow,featureStateRead} from '../site/readers/attention-model.js';
 let cases=0;
 // Exhaustive independent zero-mean unit-variance +/-1 query/key components.
 for(let d=1;d<=6;d++){

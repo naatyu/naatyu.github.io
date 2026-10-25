@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
-import {compactReader} from '../prototypes/readers/compact.js';
+import {compactReader} from '../site/readers/compact.js';
 import GithubSlugger from 'github-slugger';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
-import {recurrenceReader} from '../prototypes/readers/recurrence.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
+import {recurrenceReader} from '../site/readers/recurrence.js';
 const root=new URL('../../',import.meta.url);
 const path='docs/ai/architectures/model-reports/nanbeige4-2-3b-unlocking-agentic-capabilities.md';
 const source=readFileSync(new URL(path,root),'utf8');

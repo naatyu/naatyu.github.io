@@ -4,9 +4,9 @@ import os from 'node:os';
 import {mkdtemp,writeFile,symlink,rename,unlink} from 'node:fs/promises';
 import {buildCandidate} from './build-candidate.mjs';
 import {createCandidateServer} from './serve-candidate.mjs';
-import {readerMetas} from '../prototypes/readers/index.js';
-import {reviewedNavigation} from '../prototypes/reviewed-navigation.js';
-import {retiredNavigation} from '../prototypes/retired-navigation.js';
+import {readerMetas} from '../site/readers/index.js';
+import {reviewedNavigation} from '../site/reviewed-navigation.js';
+import {retiredNavigation} from '../site/retired-navigation.js';
 
 // Separate from the offline default suite: requires local loopback binding.
 const result=await buildCandidate(),server=await createCandidateServer(result.output);

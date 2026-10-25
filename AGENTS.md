@@ -1,9 +1,9 @@
 # Atlas authoring instructions
 
-Before creating, revising or migrating notes, read `.internal/v2/authoring-contract.md` completely. It is the canonical guide for the agreed v2 content, language, visuals, navigation, preservation and publication rules. Read the repository's `.agents/skills/research-learning-notes/SKILL.md` for source-verification and figure-review requirements.
+Before creating or revising notes, read `.internal/v2/authoring-contract.md` completely, then `.agents/skills/research-learning-notes/SKILL.md` for research and figure verification. Follow `.internal/adding-content.md` for the current implementation steps.
 
-The canonical guide supersedes the skill's legacy Docusaurus-specific format rules. The approved production build is now the standalone v2 exporter. Legacy Docusaurus files are preservation/rollback inputs, not the live publication path. Do not deploy historical design experiments.
+The live site is the standalone static exporter in `v2/`. Current readers and shared UI live in `v2/site/`. Use `v2/package.json`, not the legacy root package, for builds and tests. `.github/workflows/deploy.yml` is the only active deployment workflow. Legacy Docusaurus sources are recovery/test fixtures, not authoring targets.
 
-The approved corpus plan is `.internal/v2/dense-notes-blueprint.md`, with exact topic identities in `dense-notes-catalog.md` and preservation decisions in `dense-preservation.json`. A plan or generated inventory is not a completed note migration. Read `corpus-worklist.md`, current migration progress and the topic audit before continuing previous work.
+The v2 migration shipped in commit `6bf3368` on 2026-10-25. Normal note work does not reopen that migration or require reading the whole corpus history. The live reader registry is `v2/site/readers/index.js`. New research normally extends its owning topic; create a new page only for an independent subject. `.internal/README.md` distinguishes maintained guidance from historical evidence.
 
-Keep `.internal/`, this file, and `.agents/` out of public content and search. Preserve unrelated work and all source notes until their unique material and old routes have verified destinations. Commit, push and deploy only when requested.
+Keep `.internal/`, this file, and `.agents/` out of public content and search. Internal means non-published, not confidential. Preserve unrelated work, useful knowledge, stable links and publication dates. Read preservation ledgers only when changing legacy sources/routes or reconciling old material. Commit, push and deploy only when requested.

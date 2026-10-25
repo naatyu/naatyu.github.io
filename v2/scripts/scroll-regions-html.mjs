@@ -1,5 +1,5 @@
 import {parseFragment,serialize} from 'parse5';
-import {scrollRegionAttributes} from '../prototypes/readers/scroll-regions.js';
+import {scrollRegionAttributes} from '../site/readers/scroll-regions.js';
 const attr=(node,name)=>node.attrs?.find(a=>a.name===name)?.value;
 const text=node=>node.nodeName==='#text'?node.value:(node.childNodes||[]).map(text).join('');
 const walk=node=>[node,...(node.childNodes||[]).flatMap(walk)];

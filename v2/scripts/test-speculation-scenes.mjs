@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {roundPresentation,speculativeMassRows,speculationReader} from '../prototypes/readers/speculation.js';
+import {roundPresentation,speculativeMassRows,speculationReader} from '../site/readers/speculation.js';
 const walk=n=>[n,...(n.childNodes||[]).flatMap(walk)];
 const attr=(n,k)=>n.attrs?.find(a=>a.name===k)?.value;
 const text=n=>n.nodeName==='#text'?n.value:(n.childNodes||[]).map(text).join('');

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import {readerMetas,renderDenseReader} from '../prototypes/readers/index.js';
-import {math} from '../prototypes/readers/math.js';
+import {readerMetas,renderDenseReader} from '../site/readers/index.js';
+import {math} from '../site/readers/math.js';
 import {foreignMathNodes} from './audit-mathml-namespace.mjs';
 
 for(const malformed of ['<math><mi><munder><mo>min</mo><mi>x</mi></munder></mi></math>','<math><mo><mrow><mi>m</mi><mi>o</mi><mi>d</mi></mrow></mo></math>'])assert(foreignMathNodes(malformed).length>0);

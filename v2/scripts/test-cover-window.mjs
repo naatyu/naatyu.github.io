@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {coverTrace} from '../prototypes/readers/cover-window-model.js';
+import {coverTrace} from '../site/readers/cover-window-model.js';
 function sequences(alphabet, max) {
   const result = ['']; let level = [''];
   for (let n = 1; n <= max; n++) { level = level.flatMap(s => alphabet.map(c => s + c)); result.push(...level); }

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {scalingReader,scalingMeta} from '../prototypes/readers/scaling.js';
-import {practiceReader,practiceMeta} from '../prototypes/readers/practice.js';
-import {efficiency} from '../prototypes/readers/practice-model.js';
+import {scalingReader,scalingMeta} from '../site/readers/scaling.js';
+import {practiceReader,practiceMeta} from '../site/readers/practice.js';
+import {efficiency} from '../site/readers/practice-model.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const text=n=>(n.value||'')+(n.childNodes||[]).map(text).join('');
 function parsed(reader){

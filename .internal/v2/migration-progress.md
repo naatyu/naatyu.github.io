@@ -1,5 +1,7 @@
 # Dense-topic migration progress
 
+> Historical pre-launch record, superseded by the 2026-10-25 deployment of `6bf3368`. The pending decisions and app-goal status below are not current. See `../README.md` for current guidance.
+
 ## Native release gate and history repair — 2026-10-25
 
 Working objective updated in release-closure.md;persisted app goal remains usageLimited and was not falsely resumed/completed. Browser access recovered. Native canonical note selection had a URL/reader mismatch on Back;fixed by reusing native document navigation with preserved folder/query and existing validated reader-state restoration. Final desktop/narrow checks pass to release-navigation-check.md scope:Shortcut math/code/tables, fuzzy finder,7root folders,Back/Forward exact reading restoration,Escape focus andinteraction-preserving reflow. Full47-script80955 and HTTP70568 terminal0. No science/source edit;prepared deployment workflow remains inactive. Remaining:exact commit/publication authority andlocal harness recovery decision. No retirement,commit,push/deploy.

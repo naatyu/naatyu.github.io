@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {dialog,targetStream,lowRank,adapterBudget,invariantScale,newToken} from '../prototypes/readers/sft-model.js';
+import {dialog,targetStream,lowRank,adapterBudget,invariantScale,newToken} from '../site/readers/sft-model.js';
 let cases=0;
 for(const p of ['assistant','final','all'])for(const b of ['none','end','both'])for(let i=0;i<dialog.length;i++){const s=targetStream(p,b,i);assert.equal(s.current.i,i);assert(s.targets.every(t=>t.i>0&&t.role!=='pad'));for(const t of s.targets){assert.equal(t.predictor+1,t.i);if(p!=='all')assert.equal(t.role,'assistant');if(p==='final')assert(t.i>=12);if(b==='none')assert.equal(t.kind,'body');}assert.equal(s.count,s.targets.length);assert(Math.abs(s.sum-s.targets.reduce((v,t)=>v+Math.log(1/t.p),0))<1e-12);cases++;}
 assert.deepEqual(targetStream('assistant','end').targets.map(t=>t.i),[7,8,13,14,15]);assert.deepEqual(targetStream('final','none').targets.map(t=>t.i),[13,14]);

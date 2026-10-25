@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
-import {graphsReader} from '../prototypes/readers/graphs.js';
-import {findDecision} from '../prototypes/readers/choosing-model.js';
+import {graphsReader} from '../site/readers/graphs.js';
+import {findDecision} from '../site/readers/choosing-model.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const html=assertGeneratedMarkup(graphsReader(s=>'/atlas/'+s));
 const code=html.match(/aria-label="Zero-one BFS Python"><code>([\s\S]*?)<\/code>/)?.[1].replaceAll('&gt;','>').replaceAll('&lt;','<').replaceAll('&amp;','&');

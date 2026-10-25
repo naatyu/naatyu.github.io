@@ -9,15 +9,15 @@ import './test-reference-notation.mjs';
 import {readFile} from 'node:fs/promises';
 import {execFileSync} from 'node:child_process';
 import {fileURLToPath} from 'node:url';
-import {entropy,crossEntropy,kl,jsd,codingFrame} from '../prototypes/readers/information-model.js';
-import {regressionFrame,binaryScores,brierRisk,stableBce} from '../prototypes/readers/loss-model.js';
-import {matmul,matrixA,matrixB,contractExample,pipelineFrame,adamStateBytes} from '../prototypes/readers/parallelism-model.js';
-import {informationReader,informationSections,informationMeta} from '../prototypes/readers/information.js';
-import {lossesReader,lossSections,lossesMeta} from '../prototypes/readers/losses.js';
-import {parallelismReader,parallelSections,parallelismMeta} from '../prototypes/readers/parallelism.js';
-import {readerMetas,readerAliases,renderDenseReader} from '../prototypes/readers/index.js';
-import {rangePlayback} from '../prototypes/readers/topic-tools.js';
-import {rank} from '../prototypes/search.js';
+import {entropy,crossEntropy,kl,jsd,codingFrame} from '../site/readers/information-model.js';
+import {regressionFrame,binaryScores,brierRisk,stableBce} from '../site/readers/loss-model.js';
+import {matmul,matrixA,matrixB,contractExample,pipelineFrame,adamStateBytes} from '../site/readers/parallelism-model.js';
+import {informationReader,informationSections,informationMeta} from '../site/readers/information.js';
+import {lossesReader,lossSections,lossesMeta} from '../site/readers/losses.js';
+import {parallelismReader,parallelSections,parallelismMeta} from '../site/readers/parallelism.js';
+import {readerMetas,readerAliases,renderDenseReader} from '../site/readers/index.js';
+import {rangePlayback} from '../site/readers/topic-tools.js';
+import {rank} from '../site/search.js';
 import {parseFragment} from 'parse5';
 const close=(a,b,tol=1e-10)=>assert(Math.abs(a-b)<tol,`${a} != ${b}`);
 close(entropy([.5,.5]),1);close(entropy([1,0]),0);
@@ -111,12 +111,12 @@ assert.deepEqual(matmul(matrixA,matrixB),[[12,1],[9,-2]]);assert.deepEqual(contr
 for(let p=1;p<=8;p++)for(let m=1;m<=8;m++){const f=pipelineFrame(p,m,0);close(f.utilization+f.idleFraction,1);assert.equal(f.cells.flat().filter(c=>c.batch!==null).length,p*m);for(let t=0;t<f.clocks;t++){const a=pipelineFrame(p,m,t).cells.flat().filter(c=>c.active);assert(a.length<=Math.min(p,m));assert(new Set(a.map(c=>c.batch)).size===a.length);}}
 close(pipelineFrame(4,6,8).utilization,2/3);assert.throws(()=>pipelineFrame(0,1,0));
 close(adamStateBytes(1000,4,0).total,16000);close(adamStateBytes(1000,4,1).total,7000);close(adamStateBytes(1000,4,2).total,5500);close(adamStateBytes(1000,4,3).total,4000);
-const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8'));
+const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8'));
 const notes=[...readerMetas,...catalog.notes.filter(n=>!readerAliases.includes(n.slug))];
 for(const [meta,render,sections] of [[informationMeta,informationReader,informationSections],[lossesMeta,lossesReader,lossSections],[parallelismMeta,parallelismReader,parallelSections]]){
   const html=render(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const [id] of sections)assert(ids.includes(id),id);
   for(const slug of [...html.matchAll(/slug=([^"#]+)/g)].map(m=>m[1]))assert(notes.some(n=>n.slug===slug),slug);
-  assert(renderDenseReader(meta.slug,s=>s));assert(meta.prototype&&meta.visibility==='public');assert(meta.learningGoals.length>=3);
+  assert(renderDenseReader(meta.slug,s=>s));assert(meta.prototype===false&&meta.visibility==='public');assert(meta.learningGoals.length>=3);
 }
 for(const [query,meta] of [['Kraft inequality',informationMeta],['Fenchel Young',lossesMeta],['ZeRO',parallelismMeta],['context parallelism',parallelismMeta]])assert(rank(notes,query).some(r=>r.note===meta),query);
 // Only unresolved originals stay in the local inventory; reconciled Losses sources are excluded.

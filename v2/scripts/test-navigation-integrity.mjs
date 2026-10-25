@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {parse} from 'acorn';
-const path=new URL('../prototypes/reviewed-navigation.js',import.meta.url);
+const path=new URL('../site/reviewed-navigation.js',import.meta.url);
 const tree=parse(readFileSync(path,'utf8'),{ecmaVersion:'latest',sourceType:'module'});
 let checked=0;
 function uniqueKeys(object,owner){

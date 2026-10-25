@@ -1,7 +1,7 @@
 import {assertGeneratedMarkup,assertGeneratedMarkupCount} from './check-generated-markup.mjs';
 import assert from "node:assert/strict";
-import {logSoftmax,softDistillation,reverseDistillation,topKTeacher,twoTokenDistillation,selfSampleBatch} from "../prototypes/readers/distillation-model.js";
-import {temperatureBody,gradientBody,visitationBody,tailBody,selfBatchBody,distillationScenes} from "../prototypes/readers/distillation-scenes.js";
+import {logSoftmax,softDistillation,reverseDistillation,topKTeacher,twoTokenDistillation,selfSampleBatch} from "../site/readers/distillation-model.js";
+import {temperatureBody,gradientBody,visitationBody,tailBody,selfBatchBody,distillationScenes} from "../site/readers/distillation-scenes.js";
 let cases=0;
 const near=(a,b,t=2e-8)=>assert.ok(Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a-b)<=t*Math.max(1,Math.abs(a),Math.abs(b)),String(a)+" != "+String(b));
 const sum=x=>x.reduce((a,b)=>a+b,0);

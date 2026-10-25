@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {embeddingBudget,loopInventory,competencePenalty,wsdStages,agentCurriculum,behaviorResults,globalCacheRatio} from '../prototypes/readers/compact-model.js';
+import {embeddingBudget,loopInventory,competencePenalty,wsdStages,agentCurriculum,behaviorResults,globalCacheRatio} from '../site/readers/compact-model.js';
 let cases=0;
 for(const v of [32000,64000,166144,262144])for(const w of [1024,2048,3072])for(const tied of [false,true]){const a=embeddingBudget(v,w,tied);assert.equal(a.total,3e9+v*w*(tied?1:2));assert.equal(a.input,v*w);assert.equal(a.output,tied?0:v*w);assert(Math.abs(a.fraction+a.body/a.total-1)<1e-12);cases++;}
 assert.equal(embeddingBudget().total,4020788736);

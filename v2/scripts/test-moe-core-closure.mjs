@@ -3,8 +3,8 @@ import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import GithubSlugger from 'github-slugger';
-import {moeReader,moeAliases} from '../prototypes/readers/moe.js';
-import {reviewedFragments,resolveReviewedNote} from '../prototypes/reviewed-navigation.js';
+import {moeReader,moeAliases} from '../site/readers/moe.js';
+import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation.js';
 const root=new URL('../../',import.meta.url),ledger=JSON.parse(readFileSync(new URL('.internal/v2/moe-core-closure.json',root),'utf8'));
 const html=moeReader(s=>s);let headings=0;
 for(const entry of ledger.sources){

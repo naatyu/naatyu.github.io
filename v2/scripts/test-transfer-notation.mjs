@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {preferencesReader} from '../prototypes/readers/preferences.js';
-import {distillationReader} from '../prototypes/readers/distillation.js';
+import {preferencesReader} from '../site/readers/preferences.js';
+import {distillationReader} from '../site/readers/distillation.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const expectations=[
   ['Preferences',preferencesReader,17,[String.raw`\pi_\theta=\pi_{\mathrm{ref}}`,String.raw`\Delta=0`,String.raw`\frac12`,String.raw`\log 2`,String.raw`-\log\frac53`,'t=4',String.raw`\mathbb E[r]-\beta D_{\mathrm{KL}}(\pi\Vert\pi_{\mathrm{ref}})`,'r',String.raw`\pi_{\mathrm{ref}}\exp\left(\frac r\beta\right)`,String.raw`-\frac{\beta}{2}`],['need not have equal absolute probability','not a prediction of every DPO run','score-coordinate partial derivatives','fixed reward','local gradient magnitude','not a universal default']],

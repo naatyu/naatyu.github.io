@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import crypto from 'node:crypto';
-import {profilerPhase,intervalAccounting,nestedSelfTime,launchTimeline} from '../prototypes/readers/profiling-model.js';
+import {profilerPhase,intervalAccounting,nestedSelfTime,launchTimeline} from '../site/readers/profiling-model.js';
 const close=(a,b)=>assert.ok(Math.abs(a-b)<1e-9*Math.max(1,Math.abs(a),Math.abs(b)),`${a} != ${b}`);
 let cases=0;
 for(let wait=0;wait<=3;wait++)for(let warmup=0;warmup<=3;warmup++)for(let active=1;active<=4;active++)for(let repeat=1;repeat<=2;repeat++)for(let skipFirst=0;skipFirst<=2;skipFirst++){

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {positionReader} from '../prototypes/readers/position.js';
+import {positionReader} from '../site/readers/position.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const html=assertGeneratedMarkup(positionReader(s=>s),'Position notation');
 const annotations=[],tables=[],parts=[];

@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
-import {flashSteps,flashState,flashInputs,flashValues,flashSections} from '../prototypes/readers/attention-flash.js';
-import {attentionReader,attentionSections} from '../prototypes/readers/attention.js';
+import {flashSteps,flashState,flashInputs,flashValues,flashSections} from '../site/readers/attention-flash.js';
+import {attentionReader,attentionSections} from '../site/readers/attention.js';
 let cases=0;
 for(const a of [-3,0,4])for(const b of [-3,0,4])for(const c of [-3,0,4])for(const d of [-3,0,4]){
   const scores=[a,b,c,d],steps=flashSteps(scores);

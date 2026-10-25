@@ -1,6 +1,6 @@
 import {assertGeneratedMarkup,assertGeneratedMarkupCount} from './check-generated-markup.mjs';
 import assert from 'node:assert/strict';
-import {profilingScheduleBody,profilingOverlapBody,profilingLaunchBody} from '../prototypes/readers/profiling-scenes.js';
+import {profilingScheduleBody,profilingOverlapBody,profilingLaunchBody} from '../site/readers/profiling-scenes.js';
 let cases=0;
 for(let w=0;w<=3;w++)for(let u=0;u<=3;u++)for(let a=1;a<=4;a++)for(let r=1;r<=2;r++){
  const html=profilingScheduleBody(w,u,a,r);assertGeneratedMarkup(html,"test-profiling-scenes.mjs");assert.ok(!/NaN|undefined|Infinity/.test(html));assert.equal((html.match(/Step[0-9]+/g)||[]).length,21);cases++;

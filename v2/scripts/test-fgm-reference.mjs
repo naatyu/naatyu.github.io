@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
-import {fgmMeanCase} from '../prototypes/readers/diffusion-model.js';
-import {diffusionReader,diffusionSections} from '../prototypes/readers/diffusion.js';
+import {fgmMeanCase} from '../site/readers/diffusion-model.js';
+import {diffusionReader,diffusionSections} from '../site/readers/diffusion.js';
 import {assertGeneratedMarkup} from './check-generated-markup.mjs';
 const nodes=[];
 function walk(n){nodes.push(n);for(const c of n.childNodes||[])walk(c);}

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import './test-reader-model-state.mjs';
-import {captureReaderState,restoreReaderState} from '../prototypes/reader-history.js';
-import {readingBlocks} from '../prototypes/file-explorer.js';
-import {registerReaderState} from '../prototypes/readers/reader-state.js';
+import {captureReaderState,restoreReaderState} from '../site/reader-history.js';
+import {readingBlocks} from '../site/file-explorer.js';
+import {registerReaderState} from '../site/readers/reader-state.js';
 
 let checks=0;
 for(const offset of [-30,0,75])for(const shift of [-400,0,850])for(const value of ['0','1','500','1000']){

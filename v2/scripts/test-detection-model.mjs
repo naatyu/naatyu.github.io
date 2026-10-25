@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {overlap,detectionBoxes,suppressionTrace,fuseAssignedCluster} from '../prototypes/readers/detection-model.js';
+import {overlap,detectionBoxes,suppressionTrace,fuseAssignedCluster} from '../site/readers/detection-model.js';
 const near=(a,b)=>assert.ok(Math.abs(a-b)<1e-10,[a,b]);let cases=0;
 // Analytic scale checks use dimensionless expected ratios, not an absolute area tolerance.
 for(let exponent=-150;exponent<=150;exponent+=5){

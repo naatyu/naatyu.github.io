@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-import {onlineMean,meanDistribution,foldSplits,proportionComparison} from '../prototypes/readers/statistics-model.js';
-import {statisticsMeta,statisticsReader,statisticsSections} from '../prototypes/readers/statistics.js';
-import {readerMetas,readerAliases,renderDenseReader} from '../prototypes/readers/index.js';
-import {reviewedNavigation} from '../prototypes/reviewed-navigation.js';
-import {rank} from '../prototypes/search.js';
+import {onlineMean,meanDistribution,foldSplits,proportionComparison} from '../site/readers/statistics-model.js';
+import {statisticsMeta,statisticsReader,statisticsSections} from '../site/readers/statistics.js';
+import {readerMetas,readerAliases,renderDenseReader} from '../site/readers/index.js';
+import {reviewedNavigation} from '../site/reviewed-navigation.js';
+import {rank} from '../site/search.js';
 const close=(a,b)=>assert(Math.abs(a-b)<1e-9,`${a} != ${b}`);
 // Independently compare the displayed Welford recurrence with centered sums.
 let varianceCases=0,ewmaCases=0,covarianceCases=0;
@@ -61,7 +61,7 @@ for(const s of [0,10]){const f=proportionComparison(s,10,s,10);assert.equal(f.z,
 const nist=proportionComparison(11,30,8,40);
 close(nist.delta,-1/6);assert(Math.abs(nist.interval[0]-(-.37904))<1e-5);assert(Math.abs(nist.interval[1]-.04570)<1e-5);
 console.log(`Statistics proportions: ${proportionCases} finite count pairs, both degenerate boundaries and the published NIST Wald example pass.`);
-const catalog=JSON.parse(await readFile(new URL('../prototypes/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes.filter(n=>!readerAliases.includes(n.slug)&&!reviewedNavigation[n.slug])],html=statisticsReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const [id]of statisticsSections)assert(ids.includes(id),id);for(const slug of [...html.matchAll(/slug=([^"#]+)/g)].map(m=>m[1]))assert(notes.some(n=>n.slug===slug),slug);assert(renderDenseReader(statisticsMeta.slug,s=>s));for(const query of ['cross-validation','standard error','EWMA','power'])assert(rank(notes,query).some(r=>r.note===statisticsMeta),query);
+const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes.filter(n=>!readerAliases.includes(n.slug)&&!reviewedNavigation[n.slug])],html=statisticsReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const [id]of statisticsSections)assert(ids.includes(id),id);for(const slug of [...html.matchAll(/slug=([^"#]+)/g)].map(m=>m[1]))assert(notes.some(n=>n.slug===slug),slug);assert(renderDenseReader(statisticsMeta.slug,s=>s));for(const query of ['cross-validation','standard error','EWMA','power'])assert(rank(notes,query).some(r=>r.note===statisticsMeta),query);
 for(const term of ['Wald interval becomes [0,0]','pooled-test statistic is undefined','Neither result establishes equal population rates','do not repair a failed approximation by clipping','NIST compares Wald and adjusted intervals'])assert(html.includes(term),term);
 assert(!html.includes('Complete originals'));assert(!/slug=(ai|systems)\//.test(html));
 assert.equal((html.match(/class="inline-math"/g)||[]).length,12);

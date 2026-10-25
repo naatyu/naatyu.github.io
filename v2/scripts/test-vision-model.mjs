@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
-import {visionSoftmax,visionPatchLoss,visionAgreement,visionECF,visionSIGReg,visionQuadrature,visionProjectedLaw,visionExpectedECFError} from '../prototypes/readers/vision-model.js';
+import {visionSoftmax,visionPatchLoss,visionAgreement,visionECF,visionSIGReg,visionQuadrature,visionProjectedLaw,visionExpectedECFError} from '../site/readers/vision-model.js';
 let cases=0;const near=(x,y,t=1e-9)=>assert.ok(Math.abs(x-y)<t,[x,y,t]);const perturb=(x,i,j,delta)=>x.map((row,k)=>row.map((v,l)=>v+(i===k&&j===l?delta:0)));
 const logits=[[2,-1,0],[0,1,3],[-2,2,0],[1,1,1]],teacher=[[.7,.2,.1],[.1,.6,.3],[.2,.3,.5],[0,0,1]];
 for(let mask=0;mask<16;mask++)for(const scope of ['masked','all'])for(const temperature of [.1,.5,1,2,10]){
