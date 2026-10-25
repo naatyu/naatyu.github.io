@@ -12,7 +12,14 @@ const walk=n=>[n,...(n.childNodes||[]).flatMap(walk)];
 const prose=n=>n.nodeName==='#text'?n.value:(n.childNodes||[]).map(prose).join('');
 const normalize=s=>s.replaceAll(' · Local reader draft','').replaceAll(' · Consolidated reader pilot','');
 const svg=await readFile(path.join(result.output,'img/favicon.svg'),'utf8');
-assert(svg.includes('viewBox="0 0 64 64"')&&svg.includes('#702b40')&&svg.includes('#c5e2fa'));
+assert(svg.includes('viewBox="0 0 64 64"')&&svg.includes('fill="#fff"'));
+const image=svg.match(/href="data:image\/png;base64,([A-Za-z0-9+/=]+)"/);
+assert(image,'Approved artwork must be self-contained inside the favicon SVG');
+const embedded=Buffer.from(image[1],'base64');
+assert.equal(embedded.subarray(0,8).toString('hex'),'89504e470d0a1a0a');
+assert.equal(embedded.readUInt32BE(16),256);assert.equal(embedded.readUInt32BE(20),256);
+assert(!/href="https?:|href="\//.test(svg),'Favicon cannot depend on external image requests');
+await assert.rejects(readFile(path.join(result.output,'img/favicon-master.png')),{code:'ENOENT'},'Do not publish the full-resolution source artwork');
 const ico=await readFile(path.join(result.output,'favicon.ico'));
 assert.equal(ico.readUInt16LE(2),1);assert.equal(ico.readUInt16LE(4),3);
 for(let i=0;i<3;i++){
