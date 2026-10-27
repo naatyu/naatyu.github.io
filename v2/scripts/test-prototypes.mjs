@@ -16,7 +16,7 @@ import './test-reader-history.mjs';
 const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8'));
 const sources=catalog.notes.filter(n=>n.tracked&&!n.navigationPage&&!n.draft&&!n.unlisted&&!isRetiredNote(n.slug));
 const canonical=[...readerMetas,...sources.filter(n=>!readerAliases.includes(n.slug)&&!reviewedNavigation[n.slug])];
-assert.equal(canonical.length,54,'The browsable atlas must contain only canonical readers');
+assert.equal(canonical.length,55,'The browsable atlas must contain only canonical readers');
 assert(canonical.every(n=>!isRetiredNote(n.slug)));
 assert.equal(rank(canonical,'two sum').filter(r=>r.note.slug.includes('leetcode/')).length,0);
 const canonicalLatest=latestAtlasPublished(canonical);

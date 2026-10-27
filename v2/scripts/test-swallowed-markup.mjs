@@ -23,4 +23,4 @@ for(const meta of readerMetas){
   }queue.push(...n.childNodes||[]);}
   for(const phrase of captions[meta.slug]||[])assert(text.some(t=>t.includes(phrase)),meta.slug+' parsed caption must retain '+phrase);
 }
-console.log('Swallowed-caption markup: all 54 static readers pass; five broken comparisons detected, escaped/spaced relations and quoted attributes accepted; four affected caption bodies preserved.');
+console.log(`Swallowed-caption markup: all ${readerMetas.length} static readers pass; five broken comparisons detected, escaped/spaced relations and quoted attributes accepted; four affected caption bodies preserved.`);

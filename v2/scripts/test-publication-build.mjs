@@ -6,7 +6,7 @@ import {buildPublication} from './build-publication.mjs';
 import {readerMetas,renderDenseReader} from '../site/readers/index.js';
 const result=await buildPublication();
 assert(readerMetas.every(meta=>meta.prototype===false),'Live readers must not retain prototype metadata');
-assert.equal(result.indexedPages,56);assert.equal(result.deployed,false);
+assert.equal(result.indexedPages,57);assert.equal(result.deployed,false);
 const attr=(n,k)=>n.attrs?.find(a=>a.name===k)?.value;
 const walk=n=>[n,...(n.childNodes||[]).flatMap(walk)];
 const prose=n=>n.nodeName==='#text'?n.value:(n.childNodes||[]).map(prose).join('');
@@ -39,7 +39,7 @@ for(const meta of readerMetas){
   assert(nodes.some(n=>attr(n,'property')==='article:published_time'&&attr(n,'content')===meta.date));
 }
 const sitemap=await readFile(path.join(result.output,'sitemap.xml'),'utf8');
-assert.equal((sitemap.match(/<url>/g)||[]).length,56);
+assert.equal((sitemap.match(/<url>/g)||[]).length,57);
 for(const meta of readerMetas)assert(sitemap.includes(`https://naatyu.github.io/atlas/${meta.slug}/</loc><lastmod>${meta.updated}</lastmod>`));
 assert(!(await readFile(path.join(result.output,'robots.txt'),'utf8')).includes('Disallow: /'));
 assert.equal(await readFile(path.join(result.output,'.nojekyll'),'utf8'),'');
@@ -57,4 +57,4 @@ async function check(dir){for(const e of await readdir(dir,{withFileTypes:true})
   }
 }}
 await check(result.output);assert.equal(protectedPages,232);
-console.log('Publication-format build:56 canonical pages,54 unchanged reader texts/date lineages,sitemap/robots/.nojekyll and232 noindex legacy/retired/404 pages pass. Not release approval or deployment.');
+console.log('Publication-format build:57 canonical pages,55 unchanged reader texts/date lineages,sitemap/robots/.nojekyll and232 noindex legacy/retired/404 pages pass. Not release approval or deployment.');

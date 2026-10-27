@@ -3,11 +3,11 @@ import {staticSceneCandidates,staticSceneInventory} from './audit-static-scenes.
 const raw=staticSceneCandidates('<section id="one"><div class="topic-scene"><output data-value></output><div data-search></div><svg role="img" aria-label="Missing"><title>Not geometry</title></svg><svg role="img"><circle r="2"/></svg><output data-full>0</output><div aria-hidden="true" data-hidden></div></div></section><section id="two"><p data-outside></p><svg role="img"></svg></section>');
 assert.deepEqual(raw.map(r=>[r.section,r.kind]),[['one','empty-scene-data'],['one','empty-scene-data'],['one','empty-image'],['two','empty-image']]);
 assert.equal(raw[2].label,'Missing');
-const rows=staticSceneInventory();assert.equal(rows.length,54);assert.equal(new Set(rows.map(r=>r.slug)).size,54);
+const rows=staticSceneInventory();assert.equal(rows.length,55);assert.equal(new Set(rows.map(r=>r.slug)).size,55);
 assert.deepEqual(rows.find(r=>r.slug==='models/tokenization').candidates,[]);
 assert.deepEqual(rows.find(r=>r.slug==='execution/decoding').candidates,[]);
 assert.deepEqual(rows.find(r=>r.slug==='training/parallelism').candidates,[]);
 assert.deepEqual(rows.find(r=>r.slug==='execution/speculation').candidates,[]);
 assert.deepEqual(rows.find(r=>r.slug==='models/moe').candidates,[]);
 assert(!rows.find(r=>r.slug==='models/attention').candidates.some(r=>r.data.includes('data-attention-svg')));
-console.log('Static teaching inventory: 54 unmounted readers; scoped empty data/image detection and exclusions pass. Candidates need manual review.');
+console.log('Static teaching inventory: 55 unmounted readers; scoped empty data/image detection and exclusions pass. Candidates need manual review.');

@@ -16,7 +16,7 @@ const repo = fileURLToPath(new URL('../../', import.meta.url));
 const prototype = path.join(repo, 'v2/site');
 const imageRoot = path.join(repo, 'static/img');
 const escape = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const styles = ['directions.css','gallery-lab.css','gallery-refinement.css','gallery-soft.css','atlas-workspace.css','atlas-terminal.css','file-explorer.css','dense-reader.css','readers/moe-visuals.css','readers/attention.css','readers/topic-labs.css','vendor/katex/katex.min.css','readers/math.css','reader-utilities.css'];
+const styles = ['directions.css','gallery-lab.css','gallery-refinement.css','gallery-soft.css','atlas-workspace.css','atlas-terminal.css','file-explorer.css','dense-reader.css','readers/moe-visuals.css','readers/attention.css','readers/topic-labs.css','readers/collectives.css','vendor/katex/katex.min.css','readers/math.css','reader-utilities.css'];
 const route = slug => `/atlas/${slug}/`;
 const faviconLinks = '<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48"><link rel="icon" type="image/svg+xml" href="/img/favicon.svg"><link rel="apple-touch-icon" href="/img/apple-touch-icon.png">';
 function moduleReferences(text) {

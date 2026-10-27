@@ -17,7 +17,7 @@ import {reviewedNavigation, reviewedFragments, resolveReviewedNote} from '../sit
 import {retiredNavigation, isRetiredNote, retirementNotice} from '../site/retired-navigation.js';
 
 const result = await buildCandidate();
-assert.equal(result.readers,54);
+assert.equal(result.readers,55);
 const routes = new Map();
 let equations=0, images=0;
 function nodes(root) {
@@ -48,7 +48,7 @@ for(const meta of readerMetas){
   images+=document.filter(node=>node.tagName==='img').length;
   routes.set('/atlas/'+meta.slug+'/',{ids:new Set(ids),document});
 }
-assert.equal(equations,552);
+assert.equal(equations,553);
 let reviewedAnchors=0;
 for(const [legacy, destination] of Object.entries(reviewedNavigation)){
   const source=await readFile(path.join(result.output,'atlas',legacy,'index.html'),'utf8');
@@ -110,7 +110,7 @@ assert(!missing.some(node=>node.tagName==='link'&&attr(node,'rel')==='canonical'
 assert.deepEqual(missing.filter(node=>node.tagName==='a').map(node=>attr(node,'href')).sort(),['#main','/','/atlas/']);
 assert(!missingSource.includes('location.replace')&&!missingSource.includes('http-equiv="refresh"'));
 assert(!atlasIndex.includes('data-retired-slug'));
-assert.equal(nodes(parse(atlasIndex)).filter(node=>node.tagName==='a'&&(attr(node,'href')||'').startsWith('/atlas/')).length,54);
+assert.equal(nodes(parse(atlasIndex)).filter(node=>node.tagName==='a'&&(attr(node,'href')||'').startsWith('/atlas/')).length,55);
 const ledger=JSON.parse(await readFile(new URL('../../.internal/v2/reviewed-route-destinations.json',import.meta.url),'utf8'));
 for(const entry of ledger.entries){
   const old=entry.originalRoute.slice(7);
@@ -142,7 +142,7 @@ for(const [route,{document}] of routes){
   }
 }
 const catalog=JSON.parse(await readFile(path.join(result.output,'search.json'),'utf8'));
-assert.equal(catalog.length,54);
+assert.equal(catalog.length,55);
 assert(catalog.every(item=>item.visibility==='public'&&item.kind==='dense-topic'&&item.searchText.length>1000),'Canonical index must include semantic note bodies, not just titles');
 const home=nodes(parse(await readFile(path.join(result.output,'index.html'),'utf8')));
 assert(home.some(node=>node.tagName==='link'&&attr(node,'rel')==='canonical'&&attr(node,'href')==='https://naatyu.github.io/'));
@@ -173,7 +173,7 @@ for(const meta of readerMetas){
   assert.notEqual(article[1],createHash('sha256').update(runtimeRevision+'\0'+body+' changed').digest('hex'));
   revisions.add(article[1]);
 }
-assert.equal(revisions.size,54);
+assert.equal(revisions.size,55);
 assert(emitted.every(file=>!file.includes('/.internal/')&&!file.includes('/.agents/')&&!file.includes('/docs/')&&!/\.(md|mdx)$/.test(file)));
 assert(!emitted.some(file=>file.endsWith('/catalog.json')),'Historical source index must not leak into the review export');
 assert.deepEqual(result.legacyDependencies,{},'Consolidated readers must not reintroduce old-note dependencies');

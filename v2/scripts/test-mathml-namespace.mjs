@@ -20,4 +20,4 @@ for(const meta of readerMetas){
   assert.deepEqual(foreignMathNodes(html),[],meta.slug+' MathML must retain its namespace');
   if(expected[meta.slug])assert(html.includes(expected[meta.slug]),meta.slug+' exact revised operator annotation');
 }
-console.log(`MathML namespace: ${formulas} static formulas across54 readers have no HTML-namespace math descendants; malformed token/operator fixtures rejected and equivalent operator annotations retained. Not a screen-reader or mathematical correctness certification.`);
+console.log(`MathML namespace: ${formulas} static formulas across ${readerMetas.length} readers have no HTML-namespace math descendants; malformed token/operator fixtures rejected and equivalent operator annotations retained. Not a screen-reader or mathematical correctness certification.`);
