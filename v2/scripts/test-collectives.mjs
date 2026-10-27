@@ -1,3 +1,4 @@
+import {fsdpTimeline} from '../site/readers/fsdp-timeline.js';
 import assert from 'node:assert/strict';
 import {parseFragment} from 'parse5';
 import {collectiveTrace,patterns} from '../site/readers/collectives-model.js';
@@ -65,5 +66,24 @@ for(const [r,row]of rows.entries()){
  assert.deepEqual(cells,[`Rank ${r}`,`w${r} = ${weight}`,String(sum),String(mean),(weight-0.1*mean).toFixed(1)]);
 }
 assert(html.includes('The synchronized gradients remain sharded.'));
+const timeline=assertGeneratedMarkup(fsdpTimeline(),'FSDP timeline');
+const timelineNodes=walk(parseFragment(timeline));
+const hasClass=(n,c)=>n.attrs?.some(a=>a.name==='class'&&a.value.split(' ').includes(c));
+const transfers=timelineNodes.filter(n=>hasClass(n,'fsdp-transfer'));
+assert.equal(transfers.length,6);
+assert.deepEqual(transfers.map(n=>({left:hasClass(n,'fsdp-left'),gradient:hasClass(n,'fsdp-gradient')})),[
+ {left:false,gradient:false},{left:true,gradient:false},
+ {left:false,gradient:false},{left:true,gradient:false},
+ {left:false,gradient:true},{left:true,gradient:true},
+]);
+for(const [i,n]of transfers.entries()){
+ const endpoints=n.childNodes.filter(n=>hasClass(n,'fsdp-endpoint')).map(prose);
+ assert.deepEqual(endpoints,i%2===0?['Rank 0Sender','Rank 1Receiver']:['Rank 0Receiver','Rank 1Sender']);
+}
+assert(prose(transfers[4]).includes('gA1 · gradient from batch A for W01'));
+assert(prose(transfers[5]).includes('gB0 · gradient from batch B for W00'));
+assert.equal(timelineNodes.filter(n=>hasClass(n,'fsdp-phase')).length,5);
+assert.equal(timelineNodes.filter(n=>n.tagName==='math').length,2);
+assert(html.includes('id="fsdp-timeline"'));
 assert.equal(collectivesMeta.date,'2026-10-27');assert.equal(collectivesMeta.visibility,'public');assert.equal(collectivesMeta.prototype,false);
 console.log(`Collectives: ${states} exact intermediate states, seven contracts, source provenance, ownership, markup, registry and search pass.`);
