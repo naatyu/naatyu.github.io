@@ -5,7 +5,7 @@ body[data-atlas-full=true] .topbar{width:100%;max-width:none;margin:0;border-rad
 body[data-atlas-full=true] .brand span{display:none}
 body[data-atlas-full=true] .gallery-lab-controls,body[data-atlas-full=true] footer,body[data-atlas-full=true] .atlas-page>.prototype-label{display:none}
 body[data-atlas-full=true] .atlas-page{padding:0;margin:0;max-width:none;width:100%;flex:1;min-height:0;display:flex}
-body[data-atlas-full=true] .terminal-workbench{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);height:100%;width:100%;flex:1;min-height:0;border:0;border-radius:0;box-shadow:none}
+body[data-atlas-full=true] .terminal-workbench{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);height:100%;width:100%;flex:1;min-height:0;border:0;border-radius:0;box-shadow:none}
 body[data-atlas-full=true] .explorer-pane{height:auto;min-width:0;min-height:0;border-right:1px solid #ffffff14}
 body[data-atlas-full=true] .console .explorer-pane{--bg:#171c25;--surface:#202735;--tint:#202735;--ink:#e5eaf2;--deep:#e5eaf2;--muted:#a1adc2;--accent:#a9c9ed;--line:#ffffff18;background:var(--bg)}
 body[data-atlas-full=true] .explorer-toolbar{height:64px;flex-shrink:0;padding:12px 18px;gap:10px;background:#202735}
