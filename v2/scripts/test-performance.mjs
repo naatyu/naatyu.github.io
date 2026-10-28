@@ -9,7 +9,7 @@ import {readerMetas,renderDenseReader} from '../site/readers/index.js';
 import {rank} from '../site/search.js';
 import {reviewedNavigation,resolveReviewedNote} from '../site/reviewed-navigation.js';
 const html=performanceReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(x=>x[1]);
-assert.equal(ids.length,new Set(ids).size);assert.equal(performanceSections.length,35);for(const[id]of performanceSections)assert.ok(ids.includes(id));
+assert.equal(ids.length,new Set(ids).size);assert.equal(performanceSections.length,36);for(const[id]of performanceSections)assert.ok(ids.includes(id));
 assert.deepEqual(performanceAliases,[]);assert.equal(performanceMeta.date,'2026-04-08');assert.equal(performanceMeta.visibility,'public');assert.equal(performanceMeta.prototype,false);assert.equal(renderDenseReader(performanceMeta.slug,s=>s),performanceReader(s=>s));assert.equal((html.match(/data-performance-lab=/g)||[]).length,3);assert.ok(!/NaN|undefined/.test(html));
 for(const text of ['Little’s law','p99','0.5 ns','150,000,000','6PT','8PT','3DF','Causal attention has','GQA','MoE','Iridge','1,555','129.6','388.8','1,365','375%','37.5%','46.9%','989','7.875','5.906','14.1T','7.6T','3.28T','1.41T','563,000','820,000','4,194,304','FP32 master','480 GB','1.12 TB','GiB','24 s','3.23%','26.8','13.12','552,960','1.66M','3.32M','5.53M','largest uncertainty'])assert.ok(html.includes(text),text);
 assert.ok(html.includes(String.raw`C_{\rm lifetime}=C_{\rm train}+V\,c_{\rm inference}(P)`));

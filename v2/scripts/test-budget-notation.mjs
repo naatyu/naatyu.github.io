@@ -52,7 +52,7 @@ for(const[r,key,total,inline]of[[scaling,'scaling.js',119,84],[practice,'practic
  assert(!r.prose.includes('inlineMath(String.raw'));
 }
 assert.equal(expected['scaling.js'].length,15);assert.equal(expected['practice.js'].length,14);
-assert.equal((scaling.html.match(/<table style="min-width:640px">/g)||[]).length,2);
+assert.equal((scaling.html.match(/<table style="min-width:640px">/g)||[]).length,6);
 for(const s of ['not feasibility guarantees','about 21.9B parameters and 438B tokens','Active TPP is not a fitted dense-model optimum','not controlled cross-model comparisons','historical observations'])assert(scaling.prose.includes(s),s);
 for(const s of ['same target loss','not a measured model','not measured true entropy','outside the fit range','not GPU-hours'])assert(practice.prose.includes(s),s);
 const table=practice.nodes.find(n=>n.tagName==='table'&&n.childNodes.some(c=>c.tagName==='caption'&&text(c)==='One cost difference, two percentage denominators'));

@@ -8,8 +8,8 @@ import {reviewedFragments,resolveReviewedNote} from '../site/reviewed-navigation
 const root=new URL('../../',import.meta.url);
 const ledger=JSON.parse(readFileSync(new URL('.internal/v2/attention-core-closure.json',root),'utf8'));
 const html=attentionReader(s=>s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);
-assert.equal((html.match(/class="inline-math"/g)||[]).length,45);
-assert.equal((html.match(/<math /g)||[]).length,64);
+assert.equal((html.match(/class="inline-math"/g)||[]).length,47);
+assert.equal((html.match(/<math /g)||[]).length,70);
 assert(!html.includes('${inlineMath'));
 for(const tex of [String.raw`\mathbb E[q_i k_i]=0`,String.raw`\mathbb E[q_i^2 k_i^2]=\sigma_q^2\sigma_k^2`,String.raw`c=\frac{1}{\sqrt{d_k}}`,String.raw`\frac{n-1}{n^2}`,String.raw`-\frac{1}{n^2}`,String.raw`H(p)=-\sum_j p_j\log p_j`,String.raw`\frac{q}{\|q\|_2}`,String.raw`\frac{k}{\|k\|_2}`])assert(html.includes(tex),tex);
 let headings=0;

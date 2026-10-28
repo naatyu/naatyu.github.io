@@ -21,6 +21,6 @@ const html=performanceReader(s=>'/atlas/'+s);
 assert.ok(html.includes('id="cache-payload"'));
 assert.ok(html.includes('tabindex="0" role="region" aria-label="Assigned cache comparison:'));
 for(const text of ['524288 B','131072 B','16384 B','4 GiB','1 GiB','0.125 GiB','not allocated device memory','does not claim equal model quality'])assert.ok(html.includes(text),text);
-assert.equal((html.match(/class="dense-equation typeset-equation"/g)||[]).length,23);
+assert.equal((html.match(/class="dense-equation typeset-equation"/g)||[]).length,24);
 assert.ok(!html.includes('katex-error'));
 console.log(`KV logical payload: ${cases} scalar-enumerated cases, zero lengths, invalid dimensions, exact MHA/GQA/MQA values and rendered conditions pass.`);

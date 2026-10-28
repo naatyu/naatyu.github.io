@@ -7,7 +7,7 @@ const annotations=[],text=[],tables=[];
 const content=n=>(n.nodeName==='#text'?n.value:'')+(n.childNodes||[]).map(content).join('');
 function walk(n){if(n.tagName==='annotation')annotations.push(content(n));if(n.nodeName==='#text')text.push(n.value);if(n.tagName==='table')tables.push(n);for(const c of n.childNodes||[])walk(c);}
 walk(parseFragment(html));
-assert.equal((html.match(/<math /g)||[]).length,80);
+assert.equal((html.match(/<math /g)||[]).length,82);
 for(const tex of [String.raw`\operatorname{softmax}\left(\frac{QK^\top}{\sqrt p}+M\right)V`,'M',String.raw`x_L=x_0+\sum_{\ell=0}^{L-1}F_\ell(x_\ell)`,String.raw`\varepsilon=10^{-5},\ \gamma=1,\ \beta=0`,String.raw`x+F(\operatorname{Norm}(x))`,String.raw`\operatorname{Norm}(x+F(x))`,String.raw`\operatorname{Norm}(x_L)`,String.raw`\operatorname{LN}(\alpha x+F(x))`,String.raw`\alpha=(2M)^{1/4}`,String.raw`\beta=(8M)^{-1/4}`,String.raw`\frac1d`,String.raw`\frac1{\sqrt L}`,'d=768',String.raw`\frac1{\sqrt d}\approx0.036`,String.raw`\sqrt p`,String.raw`\max(0,x)`,String.raw`\begin{cases}x&x\ge0\\ax&x<0\end{cases}`,String.raw`\sigma(x)=\dfrac1{1+e^{-x}}`,String.raw`\tanh(x)`,String.raw`x\Phi(x)`,String.raw`x\sigma(\beta x)`,String.raw`\beta=1`,String.raw`\operatorname{clamp}(x,-1,1)`])assert(annotations.includes(tex),tex);
 for(const phrase of ['not a sum of independent random variables','selected Xavier gains','Q/K gains remain 1','uncorrelated model','not the DeepNorm formula','Real queries and keys can be correlated','endpoints nondifferentiable'])assert(text.join(' ').includes(phrase),phrase);
 for(const caption of ['Same normalization family, different placement','Scalar activations; x is a preactivation']){

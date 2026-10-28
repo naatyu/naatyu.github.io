@@ -27,7 +27,7 @@ for(let n=1;n<=100;n++){
 }
 for(const T of [.01,.1,1,10,100])assert.deepEqual(softmaxRow([2/T,2/T]),[.5,.5]);
 const html=attentionReader(s=>'/atlas/'+s);
-assert.equal(attentionMeta.updated,'2026-10-14');
+assert.equal(attentionMeta.updated,'2026-10-28');
 assert(html.indexOf('id="mechanism"')<html.indexOf('id="residual-write"'));
 assert(html.indexOf('id="residual-write"')<html.indexOf('id="scaling"'));
 assert(html.indexOf('id="scaling"')<html.indexOf('id="scale-assumptions"'));

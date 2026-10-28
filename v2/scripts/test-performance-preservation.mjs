@@ -37,7 +37,7 @@ assert.equal(256*24*90,552960);
 assert.deepEqual([3,6,10].map(price=>552960*price),[1658880,3317760,5529600]);
 assert.ok(Math.abs((3.28e12*4/(67*86400)/1e6)-2.27)<0.01);
 assert.equal((html.match(/class="inline-math"/g)||[]).length,33);
-assert.equal((html.match(/<math /g)||[]).length,56);
+assert.equal((html.match(/<math /g)||[]).length,57);
 assert(!html.includes('${'));
 const escapeTex=s=>s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 for(const tex of [String.raw`Y=XW`,String.raw`dX=dY\,W^\top`,String.raw`dW=X^\top dY`,String.raw`6MKN`,String.raw`D=H_qK`,String.raw`3DF`,String.raw`F=4D`,String.raw`P_{\rm layer}\approx16D^2`,String.raw`\frac S{8D}`,String.raw`\frac{S(S+1)}2`,String.raw`\frac{S^2}2`,String.raw`2BP`,String.raw`2P`,String.raw`I\approx B`,String.raw`\frac{16P}D`,String.raw`B_{\rm micro}SLW`,String.raw`\frac{60}{1860}\approx3.23\%`,String.raw`\sqrt{720}\approx26.8`,String.raw`\frac I2`])assert(html.includes(`<annotation encoding="application/x-tex">${escapeTex(tex)}</annotation>`),tex);

@@ -22,8 +22,8 @@ for(const entry of ledger.sources){
   for(const url of new Set([...source.matchAll(/https:\/\/[^\s)]+/g)].map(m=>m[0])))assert(html.includes(url),url);
 }
 assert.equal(headings,98);
-assert.equal((html.match(/class="katex-display"/g)||[]).length,18);
-assert.equal((html.match(/<math /g)||[]).length,83);
+assert.equal((html.match(/class="katex-display"/g)||[]).length,19);
+assert.equal((html.match(/<math /g)||[]).length,84);
 assert.equal((html.match(/class="inline-math"/g)||[]).length,65);
 assert(!html.includes('${inlineMath'));
 for(const tex of [String.raw`\frac{1}{1-\beta}`,String.raw`-\frac{1}{\log\beta}`,String.raw`X_0=\frac{M}{\|M\|_F}`,String.raw`\operatorname{SNR}=\frac{\|g\|_2^2}{\operatorname{tr}(\Sigma)/B}`,String.raw`\frac{D\eta^2\Sigma}{B^2}`,String.raw`\|\Delta\theta\|_2\le\eta\tau`])assert(html.includes(tex),tex);

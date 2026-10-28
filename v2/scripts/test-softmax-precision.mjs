@@ -54,7 +54,7 @@ const gradientFigure=walk(parseFragment(renderDenseReader('training/objectives',
 assert(gradientFigure);assert.equal(walk(gradientFigure).filter(n=>n.tagName==='mtr').length,3,'Target, non-target and zero-sum identities need distinct equation rows');
 for(const [slug,id]of [['training/objectives','softmax-precision'],['post-training/distillation','softmax-cancellation'],['training/numerics','softmax-resolution'],['training/stability','softmax-slingshot']]){
   const html=renderDenseReader(slug,s=>'/atlas/'+s),meta=readerMetas.find(m=>m.slug===slug);
-  assert(html.includes(`id="${id}"`));assert(html.includes(`href="#${id}"`));assert.equal(meta.updated,'2026-10-25');
+  assert(html.includes(`id="${id}"`));assert(html.includes(`href="#${id}"`));assert.equal(meta.updated,slug==='training/stability'?'2026-10-28':'2026-10-25');
   assertGeneratedMarkup(html,'softmax-topic-'+slug);
   assert(meta.searchText.toLowerCase().includes(slug==='post-training/distillation'?'cancellation':slug==='training/numerics'?'resolution':slug==='training/stability'?'slingshot':'precision cliff'));
 }

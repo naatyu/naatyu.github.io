@@ -48,7 +48,7 @@ for(const meta of readerMetas){
   images+=document.filter(node=>node.tagName==='img').length;
   routes.set('/atlas/'+meta.slug+'/',{ids:new Set(ids),document});
 }
-assert.equal(equations,553);
+assert.equal(equations,561);
 let reviewedAnchors=0;
 for(const [legacy, destination] of Object.entries(reviewedNavigation)){
   const source=await readFile(path.join(result.output,'atlas',legacy,'index.html'),'utf8');

@@ -6,7 +6,7 @@ const html=assertGeneratedMarkup(attentionReader(s=>s),'Attention notation');
 const annotations=[],captions=[],tables=[],parts=[];
 const text=n=>(n.nodeName==='#text'?n.value:'')+(n.childNodes||[]).map(text).join('');
 function walk(n){if(n.tagName==='annotation')annotations.push(text(n));if(n.tagName==='figcaption')captions.push(text(n));if(n.tagName==='table')tables.push(n);if(n.nodeName==='#text')parts.push(n.value);for(const c of n.childNodes||[])walk(c);}walk(parseFragment(html));
-assert.equal((html.match(/<math /g)||[]).length,64);
+assert.equal((html.match(/<math /g)||[]).length,70);
 for(const tex of ["v_1=[1,0]","v_2=[0,1]","v_3=[1,1]","v_4=[-1,0]","c_1=[1,0],\\quad c_2=[0,2]","W_V=\\begin{bmatrix}1&2\\\\3&0\\end{bmatrix}","v_1=[1,2],\\quad v_2=[6,0]","0.25v_1+0.75v_2=[4.75,0.5]","W_O=\\begin{bmatrix}1&0\\\\0&2\\end{bmatrix}","[4.75,0.5]W_O=[4.75,1]","0.25c_1+0.75c_2=[0.25,1.5]","W_VW_O=\\begin{bmatrix}1&4\\\\3&0\\end{bmatrix}","[0.25,1.5](W_VW_O)=[4.75,1]","V=K","\\beta=1","x=[1,-1]","[1,0]","[2,0]","[0,-1]","[0,-3]","\\Delta x=[2,-3]","x\\prime=[3,-4]"])assert(annotations.includes(tex),tex);
 const table=tables.find(t=>text(t).includes('Synthetic two-token'));assert(table);
 assert(table.attrs.some(a=>a.name==='style'&&a.value==='min-width:720px'));
