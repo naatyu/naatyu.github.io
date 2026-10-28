@@ -1,3 +1,4 @@
+import {inflateSync} from 'node:zlib';
 import assert from 'node:assert/strict';
 import {readFile,readdir} from 'node:fs/promises';
 import path from 'node:path';
@@ -12,12 +13,34 @@ const walk=n=>[n,...(n.childNodes||[]).flatMap(walk)];
 const prose=n=>n.nodeName==='#text'?n.value:(n.childNodes||[]).map(prose).join('');
 const normalize=s=>s.replaceAll(' · Local reader draft','').replaceAll(' · Consolidated reader pilot','');
 const svg=await readFile(path.join(result.output,'img/favicon.svg'),'utf8');
-assert(svg.includes('viewBox="0 0 64 64"')&&svg.includes('fill="#fff"'));
+assert(svg.includes('viewBox="0 0 64 64"')&&!/<rect\b/.test(svg),'Favicon must have no opaque SVG backdrop');
+// Check real alpha values, not merely an RGBA declaration around opaque pixels.
+function assertTransparentPng(png,size,label){
+  assert.equal(png.subarray(0,8).toString('hex'),'89504e470d0a1a0a',label);
+  assert.equal(png.readUInt32BE(16),size,label);assert.equal(png.readUInt32BE(20),size,label);
+  assert.equal(png[24],8,label+' must use 8-bit channels');assert.equal(png[25],6,label+' must preserve RGBA');
+  assert.equal(png[28],0,label+' must be noninterlaced');
+  const chunks=[];for(let p=8;p<png.length;){const n=png.readUInt32BE(p);if(png.toString('ascii',p+4,p+8)==='IDAT')chunks.push(png.subarray(p+8,p+8+n));p+=n+12;}
+  const raw=inflateSync(Buffer.concat(chunks)),stride=size*4,pixels=Buffer.alloc(size*stride);
+  const paeth=(a,b,c)=>{const p=a+b-c,da=Math.abs(p-a),db=Math.abs(p-b),dc=Math.abs(p-c);return da<=db&&da<=dc?a:db<=dc?b:c;};
+  assert.equal(raw.length,size*(stride+1));
+  for(let y=0;y<size;y++){
+    const filter=raw[y*(stride+1)];assert(filter<=4,label+' invalid PNG filter');
+    for(let x=0;x<stride;x++){
+      const i=y*stride+x,a=x>=4?pixels[i-4]:0,b=y?pixels[i-stride]:0,c=y&&x>=4?pixels[i-stride-4]:0;
+      const prediction=[0,a,b,Math.floor((a+b)/2),paeth(a,b,c)][filter];
+      pixels[i]=(raw[y*(stride+1)+x+1]+prediction)&255;
+    }
+  }
+  const alpha=(x,y)=>pixels[(y*size+x)*4+3];
+  for(const [x,y]of [[0,0],[size-1,0],[0,size-1],[size-1,size-1],[Math.floor(size/2),Math.floor(size/2)]])assert.equal(alpha(x,y),0,label+' background/interior must be transparent');
+  assert(pixels.some((v,i)=>i%4===3&&v>0),label+' must retain the logo');
+}
 const image=svg.match(/href="data:image\/png;base64,([A-Za-z0-9+/=]+)"/);
 assert(image,'Approved artwork must be self-contained inside the favicon SVG');
 const embedded=Buffer.from(image[1],'base64');
 assert.equal(embedded.subarray(0,8).toString('hex'),'89504e470d0a1a0a');
-assert.equal(embedded.readUInt32BE(16),256);assert.equal(embedded.readUInt32BE(20),256);
+assertTransparentPng(embedded,256,'SVG embedded icon');
 assert(!/href="https?:|href="\//.test(svg),'Favicon cannot depend on external image requests');
 await assert.rejects(readFile(path.join(result.output,'img/favicon-master.png')),{code:'ENOENT'},'Do not publish the full-resolution source artwork');
 const ico=await readFile(path.join(result.output,'favicon.ico'));
@@ -26,10 +49,10 @@ for(let i=0;i<3;i++){
   const entry=6+16*i,size=[16,32,48][i];
   assert.equal(ico[entry],size);assert.equal(ico[entry+1],size);
   const offset=ico.readUInt32LE(entry+12),length=ico.readUInt32LE(entry+8);
-  assert(offset+length<=ico.length);assert.equal(ico.subarray(offset,offset+8).toString('hex'),'89504e470d0a1a0a');
+  assert(offset+length<=ico.length);assertTransparentPng(ico.subarray(offset,offset+length),size,`ICO ${size}px`);
 }
 const touch=await readFile(path.join(result.output,'img/apple-touch-icon.png'));
-assert.equal(touch.readUInt32BE(16),180);assert.equal(touch.readUInt32BE(20),180);
+assertTransparentPng(touch,180,'Touch icon');
 for(const meta of readerMetas){
   const html=await readFile(path.join(result.output,'atlas',meta.slug,'index.html'),'utf8');
   const nodes=walk(parse(html)),article=nodes.find(n=>n.tagName==='article');assert(article);
