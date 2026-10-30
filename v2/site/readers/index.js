@@ -1,3 +1,4 @@
+import {cudaMeta,cudaAliases,cudaReader,mountCuda} from './cuda.js';
 import {collectivesMeta,collectivesAliases,collectivesReader,mountCollectives} from './collectives.js';
 import {moeMeta,moeAliases,moeReader,mountMoe} from './moe.js';
 import {mountScrollRegions} from './scroll-regions.js';
@@ -104,6 +105,7 @@ readers.push({meta:communicationMeta,aliases:communicationAliases,render:communi
 readers.push({meta:servingMeta,aliases:servingAliases,render:servingReader,mount:mountServing});
 readers.push({meta:servicesMeta,aliases:servicesAliases,render:servicesReader,mount:mountServices});
 readers.push({meta:collectivesMeta,aliases:collectivesAliases,render:collectivesReader,mount:mountCollectives});
+readers.push({meta:cudaMeta,aliases:cudaAliases,render:cudaReader,mount:mountCuda});
 export const readerMetas=readers.map(r=>r.meta);
 export const readerAliases=readers.flatMap(r=>r.aliases);
 export function canonicalReaderSlug(slug){return reviewedNavigation[slug]?.slug||readers.find(r=>r.meta.slug===slug||r.aliases.includes(slug))?.meta.slug||slug;}
