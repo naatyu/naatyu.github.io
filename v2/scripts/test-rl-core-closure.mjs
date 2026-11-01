@@ -22,8 +22,8 @@ for(const entry of ledger.sources){
   for(const url of new Set([...source.matchAll(/https:\/\/[^\s)]+/g)].map(m=>m[0])))assert(html.includes(url),url);
 }
 assert.equal(headings,184);
-assert.equal((html.match(/class="katex-display"/g)||[]).length,37);
-assert.equal((html.match(/<math /g)||[]).length,55);
+assert.equal((html.match(/class="katex-display"/g)||[]).length,38);
+assert.equal((html.match(/<math /g)||[]).length,56);
 for(const detail of ['hard outer ratio clip','where this clipped ratio enters','population standard deviation','not mathematically guarantee higher entropy','/no_think experiment','Scalar reward bandwidth alone does not determine adapter capacity','tool semantics and environment behavior','fixed entropy bonus','matched budgets'])assert(html.includes(detail),detail);
 for(const [observed,expected] of [[.4,.25],[.5,.2],[.6,.15]])assert(Math.abs(Math.max(0,Math.min(.25,.2+.05*Math.sign(.5-observed)))-expected)<1e-12);
 assert(!html.includes('On-Policy Distillation note remains a reference'));
@@ -48,4 +48,4 @@ for(const p of [0,1e-20,.001,.1,.5,1])for(const k of [1,2,3,4,8,16,32,64,100,128
 assert.equal(rareCases,66);
 assert.equal((-Math.expm1(100*Math.log1p(-.001))*100).toFixed(2),'9.52');
 assert.equal((-Math.expm1(1000*Math.log1p(-.001))*100).toFixed(2),'63.23');
-console.log('RL closure: nine further Git-equal sources,184 headings,37 displays/55 MathML,all citations,640 completion thresholds and66 rare-success cases pass. All ten core bodies reconciled; full primary/production gates remain.');
+console.log('RL closure: nine further Git-equal sources,184 headings,38 displays/56 MathML,all citations,640 completion thresholds and66 rare-success cases pass. All ten core bodies reconciled; full primary/production gates remain.');

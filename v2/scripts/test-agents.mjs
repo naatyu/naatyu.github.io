@@ -10,7 +10,7 @@ import {reviewedNavigation} from "../site/reviewed-navigation.js";
 import {recoveryBody,mixtureBody,gradingBody,completionBody,captureBody} from "../site/readers/agents-scenes.js";
 const html=agentsReader(s=>"directions.html?slug="+s);
 const ids=[...html.matchAll(/ id="([^"]+)"/g)].map(x=>x[1]);
-assert.equal(agentsSections.length,45);assert.equal(ids.length,new Set(ids).size);
+assert.equal(agentsSections.length,46);assert.equal(ids.length,new Set(ids).size);
 for(const[id]of agentsSections)assert.ok(ids.includes(id),id);
 assert.equal(agentsMeta.date,"2026-07-25");assert.equal(agentsMeta.prototype,false);assert.equal(agentsMeta.visibility,"public");assert.deepEqual(agentsAliases,["ai/training/optimization/multi-harness-agentic-rl"]);
 assert.equal(renderDenseReader(agentsMeta.slug,s=>s),agentsReader(s=>s));
@@ -33,4 +33,4 @@ for(const[,slug]of html.matchAll(/href='directions\.html\?slug=([^'#]+)'/g))asse
 for(const q of ["harness","GRS","GAR","recovery masking","task synthesis","token-in token-out"])assert.ok(rank(notes,q).some(r=>r.note===agentsMeta),q);
 const words=html.replace(/<[^>]*>/g," ").split(/\s+/).length;assert.ok(words>4500,words);
 assertGeneratedMarkupCount("test-agents.mjs",states);
-console.log("Agents: 45 unique sections, five scenes, 208 rendered analytical states, historical dates, scoped evidence, links and semantic search pass.");
+console.log("Agents: 46 unique sections, five scenes, 208 rendered analytical states, historical dates, scoped evidence, links and semantic search pass.");

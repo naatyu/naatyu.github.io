@@ -43,8 +43,8 @@ const sft=renderDenseReader('post-training/sft',s=>'/atlas/'+s),sftRow=rows.find
 const information=renderDenseReader('math/information',s=>'/atlas/'+s);
 assert.equal((information.match(/class="inline-math"/g)||[]).length,9); // Coding proof,unit conversion,mixture,log ratio and incremental cost.
 const rl=renderDenseReader('post-training/rl',s=>'/atlas/'+s),rlRow=rows.find(r=>r.slug==='post-training/rl');
-assert.equal(rlRow.typeset,37);assert.equal(rlRow.legacy,0);assert.equal(rlRow.errors,0);
-assert.equal((rl.match(/<math /g)||[]).length,55); // 37 displays and 18 reviewed inline formulas.
+assert.equal(rlRow.typeset,38);assert.equal(rlRow.legacy,0);assert.equal(rlRow.errors,0);
+assert.equal((rl.match(/<math /g)||[]).length,56); // 38 displays, including IcePop, and 18 reviewed inline formulas.
 const probability=renderDenseReader('math/probability',s=>'/atlas/'+s),probabilityRow=rows.find(r=>r.slug==='math/probability');
 assert.equal(probabilityRow.typeset,14);assert.equal(probabilityRow.legacy,0);assert.equal(probabilityRow.errors,0);
 assert.equal((probability.match(/<math /g)||[]).length,32);

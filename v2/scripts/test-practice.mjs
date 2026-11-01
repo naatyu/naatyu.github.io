@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import './test-training-methods.mjs';
 import './test-practice-core-closure.mjs';
 import './test-budget-notation.mjs';
 import {readFile} from 'node:fs/promises';
@@ -18,7 +19,7 @@ assert.deepEqual(truth[6],{step:6,cursor:6,rng:11,m:715,w:1350});
 for(const c of [0,1,30,90])for(const mtbf of [600,3600,21600])for(const interval of [60,300,1200,3600]){const h=checkpointOverhead(interval,c,mtbf);near(h.total,c/interval+interval/(2*mtbf));near(h.optimum*h.optimum,2*c*mtbf);if(c>0){const best=checkpointOverhead(h.optimum,c,mtbf);assert(best.total<=h.total+1e-12);near(best.checkpoint,best.replay);}}
 for(let d=0;d<=900;d+=10)for(let f=0;f<=100;f+=5){const e=elasticWork(600,d,f/100);near(e.useful,Math.max(0,600-d)*f/100);near(e.lost+e.useful,600);}
 for(const f of [()=>runBudget({gpus:1.5}),()=>runBudget({goodput:0}),()=>runBudget({rate:Infinity}),()=>efficiency(1,4),()=>efficiency(NaN,4),()=>contextCost(-1),()=>contextCost(.5,0),()=>recoveryTrace('weights'),()=>checkpointOverhead(0,1,10),()=>elasticWork(600,20,2)])assert.throws(f);
-const html=practiceReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const[id]of practiceSections)assert(ids.includes(id));assert.equal(practiceSections.length,36);assert.equal(practiceMeta.date,'2026-06-02');assert.equal(practiceMeta.prototype,false);assert.equal(practiceMeta.visibility,'public');assert(html.includes('m=715'));assert(html.includes('1.115'));assert(!html.includes('>undefined<'));
+const html=practiceReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(m=>m[1]);assert.equal(ids.length,new Set(ids).size);for(const[id]of practiceSections)assert(ids.includes(id));assert.equal(practiceSections.length,38);assert.equal(practiceMeta.date,'2026-06-02');assert.equal(practiceMeta.prototype,false);assert.equal(practiceMeta.visibility,'public');assert(html.includes('m=715'));assert(html.includes('1.115'));assert(!html.includes('>undefined<'));
 const catalog=JSON.parse(await readFile(new URL('../site/catalog.json',import.meta.url),'utf8')),notes=[...readerMetas,...catalog.notes];for(const[,s,anchor]of html.matchAll(/href="directions\.html\?slug=([^"#]+)(?:#([^"]+))?"/g)){assert(notes.some(n=>n.slug===s),s);if(anchor)assert(renderDenseReader(s,x=>'directions.html?slug='+x)?.includes(`id="${anchor}"`),`${s}#${anchor}`);}
 for(const q of ['pretraining','goodput','scaling ladder','context extension','run design'])assert(rank(notes,q).some(r=>r.note===practiceMeta),q);
 const framework=html.split('id="framework"')[1].split('id="rehearsal"')[0];

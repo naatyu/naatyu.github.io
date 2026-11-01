@@ -7,7 +7,7 @@ import {readerMetas,renderDenseReader} from '../site/readers/index.js';
 import {reviewedNavigation} from '../site/reviewed-navigation.js';
 import {rank} from '../site/search.js';
 const html=sftReader(s=>'directions.html?slug='+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(x=>x[1]);
-assert.equal(sftSections.length,24);assert.equal(ids.length,new Set(ids).size);
+assert.equal(sftSections.length,25);assert.equal(ids.length,new Set(ids).size);
 for(const [id]of sftSections)assert(ids.includes(id));
 assert.equal(sftMeta.date,'2026-06-08');assert.equal(sftMeta.prototype,false);assert.equal(sftMeta.visibility,'public');assert.deepEqual(sftAliases,[]);
 for(const s of ['pointwise minima','−100','not the attention mask','B_bins','not literally one bit','before registration','not a universal constant','t−1'])assert(html.includes(s),s);
@@ -17,4 +17,4 @@ for(const [,s]of html.matchAll(/href='directions\.html\?slug=([^'#]+)'/g))assert
 assert.equal(renderDenseReader(sftMeta.slug,s=>s),sftReader(s=>s));
 for(const q of ['LoRA','chat templates','assistant masks','special tokens','SFT'])assert(rank(notes,q).some(r=>r.note===sftMeta),q);
 assert(html.includes('r&lt;\\frac N6'));assert(!html.includes('Complete original notes'));for(const marker of ['&lt;eos&gt;','&lt;turn|&gt;','&lt;|think|&gt;'])assert(html.includes(marker),marker);
-console.log('SFT: 24 unique sections, original/canonical destinations, lineage, semantic search and conditioned claims pass.');
+console.log('SFT: 25 unique sections, original/canonical destinations, lineage, semantic search and conditioned claims pass.');
