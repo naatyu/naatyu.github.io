@@ -47,7 +47,7 @@ const link=s=>'/atlas/'+s.split('#')[0]+'/' +(s.includes('#')?'#'+s.split('#')[1
 for(const [slug,anchors] of Object.entries(expected)){
  const html=renderDenseReader(slug,link),nodes=flat(parseFragment(html)),ids=nodes.map(n=>attr(n,'id')).filter(Boolean);
  for(const id of anchors){assert.equal(ids.filter(x=>x===id).length,1);assert(nodes.some(n=>n.tagName==='a'&&attr(n,'href')==='#'+id));}
- assert(html.includes('tech_report.pdf'));assert(html.includes('Updated 2026-10-28'));
+ assert(html.includes('tech_report.pdf'));assert(html.includes('Updated '+(['models/attention','training/frontier-recipes'].includes(slug)?'2026-11-03':'2026-10-28')));
  assert(!html.includes('>undefined<'));
  for(const n of nodes.filter(n=>n.tagName==='a')){
   const href=attr(n,'href')||'',match=href.match(/^\/atlas\/([^#]+)\/#(.+)$/);

@@ -35,8 +35,8 @@ const expected=[
 ];
 for(const a of expected)assert(annotations.includes(a),a);
 assert.equal(expected.length,24);
-assert.equal(nodes.filter(n=>n.tagName==='math').length,54);
-assert.equal((html.match(/class="inline-math"/g)||[]).length,25);
+assert.equal(nodes.filter(n=>n.tagName==='math').length,55);
+assert.equal((html.match(/class="inline-math"/g)||[]).length,26);
 assert.equal(frontierMeta.date,'2026-04-08');
 const prose=text(parseFragment(html));
 for(const condition of ['not the universal Chinchilla ratio','total-parameter denominator','before actual processor resizing','analytic finite-input rule','does not establish stability','not mHC\'s forward mixing matrix','denominator must be positive','zero-advantage all-pass group','Predicting from the old state would give 2 instead'])assert(prose.includes(condition),condition);
@@ -51,4 +51,4 @@ for(let old=-4;old<=4;old++)for(const decay of [.25,.5,.75])for(const value of [
 }
 assert.equal(.5*2+(3-.5*2),3);
 assert.equal(.5*2+(3-2),2);
-console.log('Frontier notation:24 inline additions,exact parsed annotations/conditions,54 MathML and'+cases+' independent scalar update identities pass;source/native scopes remain separate.');
+console.log('Frontier notation:24 inline additions,exact parsed annotations/conditions,55 MathML and'+cases+' independent scalar update identities pass;source/native scopes remain separate.');

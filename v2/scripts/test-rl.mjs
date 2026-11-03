@@ -10,7 +10,7 @@ import {readerMetas,renderDenseReader} from "../site/readers/index.js";
 import {reviewedNavigation} from "../site/reviewed-navigation.js";
 import {rank} from "../site/search.js";
 const html=rlReader(s=>"directions.html?slug="+s),ids=[...html.matchAll(/ id="([^"]+)"/g)].map(x=>x[1]);
-assert.equal(rlSections.length,45);assert.equal(ids.length,new Set(ids).size);
+assert.equal(rlSections.length,46);assert.equal(ids.length,new Set(ids).size);
 for(const[id]of rlSections)assert(ids.includes(id),id);
 assert.equal(rlMeta.date,"2026-04-08");assert.equal(rlMeta.prototype,false);assert.equal(rlMeta.visibility,"public");assert.equal(rlAliases.length,9);
 assert.equal(renderDenseReader(rlMeta.slug,s=>s),rlReader(s=>s));assert.equal(Object.keys(rlScenes()).length,5);
@@ -29,4 +29,4 @@ for(let i=0;i<=4;i++)assert(!/NaN|undefined/.test(assertGeneratedMarkup(groupBod
 for(let k=1;k<=128;k++)assert(!/NaN|undefined/.test(assertGeneratedMarkup(coverageBody(k),"RL")));
 for(const q of [.25,.5,.75])for(const tau of [1,1.5,3])for(let draw=0;draw<=100;draw++)assert(!/NaN|undefined/.test(assertGeneratedMarkup(ptgsBody(draw/100,q,tau),"RL")));
 assertGeneratedMarkupCount("RL",1166);
-console.log("RL: 45 stable sections, five exact scenes, 1,166 rendered control states, original/canonical links, search and date pass.");
+console.log("RL: 46 stable sections, five core scenes plus ML4 lineage, 1,166 rendered control states, original/canonical links, search and date pass.");

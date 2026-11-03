@@ -35,7 +35,7 @@ for(const [slug,anchors]of Object.entries(expected)){
    assert.equal(attr(wrapper,'tabindex'),'0');assert.equal(attr(wrapper,'role'),'region');assert(attr(wrapper,'aria-label'));
   }
  }
- const meta=readerMetas.find(m=>m.slug===slug);assert.equal(meta.updated,'2026-11-01');
+ const meta=readerMetas.find(m=>m.slug===slug);assert.equal(meta.updated,['post-training/rl','post-training/agents'].includes(slug)?'2026-11-03':'2026-11-01');
  for(const [,target,anchor]of html.matchAll(/href="\/atlas\/([^"#]+)\/#([^" ]+)"/g))
   assert(renderDenseReader(target,()=> '')?.includes(`id="${anchor}"`),target+'#'+anchor);
 }

@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {frontierProfiles,recipeProfile,parameterBudget,recipeStep,hybridLayout,rlBatchAccounting,sparseConversionBudget,prefillBlockRatio} from '../site/readers/frontier-model.js';
 const near=(a,b)=>assert(Math.abs(a-b)<1e-10*Math.max(1,Math.abs(a),Math.abs(b)));
-assert.equal(frontierProfiles.length,9);assert.equal(new Set(frontierProfiles.map(p=>p.original)).size,8);
+assert.equal(frontierProfiles.length,10);assert.equal(new Set(frontierProfiles.map(p=>p.original)).size,9);
 for(const p of frontierProfiles){assert(p.active<=p.total);for(const phase of ['prefill','decode']){const b=parameterBudget(p.id,phase);near(b.stored,b.backbone+b.lookup);near(b.storedBF16Bytes,b.stored*2e9);assert(b.backboneFraction>0&&b.backboneFraction<=1);}for(let i=0;i<p.phases.length;i++){const t=recipeStep(p.id,i);assert.deepEqual(t.current,p.phases[i]);assert.equal(t.completed.length,i);assert.equal(t.remaining.length,p.phases.length-i-1);}assert.throws(()=>recipeStep(p.id,p.phases.length));}
 assert.equal(recipeProfile('kimi').tokens,null);assert.equal(recipeProfile('mimo-pro').tokens,27+3);assert.equal(recipeProfile('mimo-flash').tokens,26+22);
 assert.equal(parameterBudget('deepseek').stored,748);assert.equal(parameterBudget('deepseek','prefill').active,8);assert.equal(parameterBudget('deepseek','decode').active,16);assert.equal(parameterBudget('mai').backbone,1000);
@@ -10,4 +10,4 @@ let batches=0;for(const prompts of [1,16,128,1568])for(const group of [1,8,16,32
 assert.equal(sparseConversionBudget().warmupTokens,2838528000);assert.equal(sparseConversionBudget().adaptationTokens,20e9);near((27e12+1e12+.5e12+50e9)/1e12,28.55);
 for(const n of [128,256,1024,32768,1048576]){near(prefillBlockRatio(n),.5+64/n);assert(prefillBlockRatio(n)>.5&&prefillBlockRatio(n)<=1);}
 for(const f of [()=>recipeProfile('foo'),()=>parameterBudget('kimi','train'),()=>recipeStep('kimi',.5),()=>recipeStep('kimi',-1),()=>hybridLayout('mai'),()=>rlBatchAccounting(0),()=>rlBatchAccounting(1,1,-1),()=>rlBatchAccounting(Number.MAX_SAFE_INTEGER,2),()=>prefillBlockRatio(64)])assert.throws(f);
-console.log(`Frontier recipe foundation: nine scoped profiles/eight originals, phase partitions, stored/active/lookup categories, 138 hybrid blocks, ${batches} rollout budgets, sparse warm-up and bounded-replay identities pass.`);
+console.log(`Frontier recipe foundation: ten scoped profiles/nine originals, phase partitions, stored/active/lookup categories, 138 hybrid blocks, ${batches} rollout budgets, sparse warm-up and bounded-replay identities pass.`);
