@@ -19,9 +19,9 @@ for(const e of ledger.sources){
   for(const old of ids){const d=resolveReviewedNote(e.slug+'#'+old);assert.equal(d.slug,'models/vision');assert(html.includes('id="'+d.anchor+'"'));}
   for(const url of new Set([...body.matchAll(/https:\/\/[^\s)]+/g)].map(m=>m[0])))assert(html.includes(url),url);
 }
-assert.equal(headings,37);assert.equal((html.match(/class="katex-display"/g)||[]).length,17);
-assert.equal((html.match(/<math /g)||[]).length,30);assert(!html.includes('Original notes'));
+assert.equal(headings,37);assert.equal((html.match(/class="katex-display"/g)||[]).length,19);
+assert.equal((html.match(/<math /g)||[]).length,32);assert(!html.includes('Original notes'));
 for(const text of ['valid cross-view class-token pairs','nonnegative loss weights','same-view spatial correspondence','categorical','not the original categorical iBOT objective','incorrect to describe iBOT as requiring neither','82.3','87.8','ImageNet-22K','512-resolution','17.6','19.1','100k','20 datasets','head-only EMA','global-view variance','fixed positive-definite covariance',String.raw`\frac{D^2}{T}`,'not an unconditional all-task','without an EMA teacher','center remains differentiable','256-direction','not a Cramér–Wold guarantee','O(BDM)','O(BMT)','endpoint weights','approximately 50 lines','not a universal ranking'])assert(html.includes(text),text);
 // The combined loss weights are independent; an absent branch contributes zero.
 let combinations=0;for(const patch of [0,.1,2,20])for(const cls of [0,.4,4])for(const lp of [0,.25,1])for(const lc of [0,.5,1]){const loss=lp*patch+lc*cls;assert(loss>=0);if(lp===0)assert.equal(loss,lc*cls);if(lc===0)assert.equal(loss,lp*patch);combinations++;}
-console.log('Vision core closure: three remaining Git-equal bodies,37 exact headings,all citations,no embedded assets,no public originals,17 display equations and'+combinations+' combined-loss cases pass. Earlier DINOv2 closure and full primary/production checks remain separate.');
+console.log('Vision core closure: three remaining Git-equal bodies,37 exact headings,all citations,no embedded assets,no public originals,19 display equations and'+combinations+' combined-loss cases pass. Earlier DINOv2 closure and full primary/production checks remain separate.');
